@@ -14,18 +14,18 @@ jobs:
       - name: Deploy marketing files via rsync
         uses: easingthemes/ssh-deploy@v5
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.DO_HOST }}
-          REMOTE_USER: ${{ secrets.DO_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
           SOURCE: "public/"
           TARGET: "/opt/moddrum/marketing/"
           ARGS: "--archive --delete --checksum"
           EXCLUDE: ".DS_Store, .git*, Thumbs.db"
 
-      - name: Reload nginx (pick up any new files)
+      - name: Reload nginx
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USER }}
-          key: ${{ secrets.DO_SSH_KEY }}
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
           script: docker exec moddrum-proxy nginx -s reload
