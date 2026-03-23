@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum — avtomatizacija dokumentnega in finančnega podatkovnega sloja za računovodje, razvijalce in podjetja. Avtomatiziraj rutino. Opolnomoči strokovnjake.">
+  <title>Moddrum — Avtomatiziraj rutino. Opolnomoči strokovnjake.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231e293b'/><path transform='translate(4,4)' fill='white' d='m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z'/></svg>">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #135bec; --blue-dark: #0d47c7; --blue-light: #e8effe; --blue-mid: #3b77f0;
+      --green: #16a34a; --green-light: #dcfce7;
+      --amber: #d97706; --amber-light: #fef3c7;
+      --purple: #7c3aed; --purple-light: #ede9fe;
+      --teal: #0d9488; --teal-light: #ccfbf1;
+      --orange: #ea580c; --orange-light: #fff7ed;
+      --red: #dc2626; --red-light: #fee2e2;
+      --slate-900: #0f172a; --slate-800: #1e293b; --slate-700: #334155;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px; --radius-sm: 8px; --radius-lg: 20px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08); --shadow-lg: 0 12px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--slate-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Header ─── */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--slate-900); }
+    .logo-icon { width: 30px; height: 30px; color: var(--blue); }
+    .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .nav { display: flex; gap: 32px; align-items: center; }
+    .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
+    .nav a:hover { color: var(--blue); }
+    .nav-products { position: relative; }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher { display: flex; align-items: center; background: var(--slate-100); border-radius: 6px; padding: 3px; gap: 2px; }
+    .lang-btn { font-family: var(--font); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; color: var(--slate-500); background: transparent; transition: all .15s; letter-spacing: .3px; }
+    .lang-btn.active { background: var(--white); color: var(--blue); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .lang-btn:not(.active):hover { color: var(--slate-800); }
+
+    /* ─── Buttons ─── */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 11px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(19,91,236,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue-light); }
+    .btn-white { background: var(--white); color: var(--blue); }
+    .btn-white:hover { background: var(--blue-light); transform: translateY(-1px); }
+    .btn-ghost { background: rgba(255,255,255,.12); color: white; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); }
+    .btn-lg { font-size: 17px; padding: 15px 32px; }
+    .btn-sm { font-size: 13px; padding: 8px 18px; }
+
+    /* ─── Hero ─── */
+    .hero { background: linear-gradient(160deg, #0a1628 0%, #0d1b3e 40%, #1a2f6b 100%); color: var(--white); padding: 80px 0 72px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 60% 30%, rgba(59,119,240,.2) 0%, transparent 65%); pointer-events: none; }
+    .hero-split { display: grid; grid-template-columns: 52% 1fr; gap: 56px; align-items: center; position: relative; }
+    .hero-content { text-align: left; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.85); font-size: 12px; font-weight: 600; padding: 6px 16px; border-radius: 100px; margin-bottom: 32px; letter-spacing: .3px; }
+    .hero h1 { font-size: clamp(30px, 3.2vw, 52px); font-weight: 900; line-height: 1.06; letter-spacing: -2px; margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: #7eb8ff; }
+    .hero-tagline { font-size: 18px; color: rgba(255,255,255,.7); max-width: 520px; margin: 0 0 40px; line-height: 1.6; }
+    .hero-cta-group { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 0; }
+
+    /* platform illustration */
+    .hero-viz { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; overflow: hidden; }
+    .hviz-bar { background: rgba(0,0,0,.25); padding: 10px 16px; display: flex; align-items: center; gap: 5px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .hviz-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .hviz-dot-r { background: #ff5f57; } .hviz-dot-y { background: #febc2e; } .hviz-dot-g { background: #28c840; }
+    .hviz-title { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 600; flex: 1; margin-left: 8px; }
+    .pviz-steps { padding: 10px 16px 14px; }
+    .pviz-step { display: flex; gap: 11px; position: relative; }
+    .pviz-step:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 30px; bottom: 0; width: 1px; background: rgba(255,255,255,.07); }
+    .pviz-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 3px; position: relative; z-index: 1; font-weight: 700; }
+    .pi-done { background: rgba(16,163,74,.2); border: 1.5px solid rgba(74,222,128,.5); color: #4ade80; }
+    .pi-active { background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.3); }
+    .pi-pend { background: transparent; border: 1.5px solid rgba(255,255,255,.1); color: rgba(255,255,255,.25); font-size: 10px; }
+    .pviz-body { flex: 1; padding-bottom: 14px; }
+    .pviz-step:last-child .pviz-body { padding-bottom: 2px; }
+    .pviz-title { font-size: 12px; font-weight: 700; line-height: 1.2; margin-bottom: 2px; }
+    .pviz-step.done .pviz-title { color: rgba(255,255,255,.5); }
+    .pviz-step.active .pviz-title { color: rgba(255,255,255,.92); }
+    .pviz-step.pend .pviz-title { color: rgba(255,255,255,.22); }
+    .pviz-detail { font-size: 10px; }
+    .pviz-step.done .pviz-detail { color: rgba(255,255,255,.3); }
+    .pviz-step.active .pviz-detail { color: rgba(255,255,255,.45); }
+    .pviz-step.pend .pviz-detail { color: rgba(255,255,255,.15); }
+    .pviz-bar { height: 3px; background: rgba(255,255,255,.08); border-radius: 2px; margin-top: 7px; overflow: hidden; }
+    .pviz-bar-fill { height: 100%; border-radius: 2px; animation: pviz-grow 2.8s ease-in-out infinite; }
+    @keyframes pviz-grow { 0%,100%{width:12%} 45%{width:80%} }
+    @media (max-width: 900px) { .hero-split { grid-template-columns: 1fr; } .hero-viz { display: none; } .hero-content { text-align: center; } .hero-tagline { margin: 0 auto 40px; } .hero-cta-group { justify-content: center; } }
+
+    /* ─── Section header ─── */
+    .section-tag { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; color: var(--slate-900); }
+    .section-sub { font-size: 18px; color: var(--slate-600); line-height: 1.65; max-width: 640px; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── Product Rows — full-bleed alternating ─── */
+    .pr-section { padding: 0; }
+    .pr-section-header { text-align: center; padding: 96px 0 64px; background: var(--slate-50); width: 100%; }
+    .pr-row { display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; border-bottom: 1px solid var(--slate-100); }
+    /* LEFT panels: push inner wrapper toward the center divide (align right) */
+    .pr-accent { display: flex; flex-direction: column; justify-content: center; align-items: flex-end; padding: 72px 56px 72px clamp(24px, 4vw, 56px); }
+    .pr-accent-inner { max-width: 500px; width: 100%; text-align: center; }
+    /* RIGHT panels: push inner wrapper toward the center divide (align left) */
+    .pr-content { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 72px clamp(24px, 4vw, 56px) 72px 56px; background: var(--white); }
+    .pr-content-inner { max-width: 500px; width: 100%; }
+    /* Flip rows — Biz & MCP have accent on RIGHT, content on LEFT: swap anchor sides */
+    .pr-biz .pr-accent, .pr-mcp .pr-accent { align-items: flex-start; padding: 72px clamp(24px, 4vw, 56px) 72px 56px; }
+    .pr-biz .pr-content, .pr-mcp .pr-content { align-items: flex-end; padding: 72px 56px 72px clamp(24px, 4vw, 56px); }
+    /* Accent backgrounds */
+    .pr-practice .pr-accent { background: linear-gradient(140deg, #0a2a7a 0%, #0f47c8 55%, #3b77f0 100%); }
+    .pr-biz      .pr-accent { background: linear-gradient(140deg, #6b2d0a 0%, #c96d05 55%, #f59e0b 100%); }
+    .pr-connect  .pr-accent { background: linear-gradient(140deg, #083d38 0%, #0a7a6e 55%, #0d9488 100%); }
+    .pr-mcp      .pr-accent { background: linear-gradient(140deg, #2d0557 0%, #6b20d9 55%, #8b5cf6 100%); }
+    /* Status pill */
+    .pr-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; padding: 4px 14px; border-radius: 100px; margin-bottom: 24px; width: fit-content; }
+    .pr-pill-live { background: rgba(22,163,74,.2); color: #4ade80; border: 1px solid rgba(74,222,128,.35); }
+    .pr-pill-soon { background: rgba(255,255,255,.1); color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.18); }
+    /* Icon box */
+    .pr-icon { width: 76px; height: 76px; border-radius: 20px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center; font-size: 38px; margin-bottom: 22px; }
+    /* Name + audience */
+    .pr-name { font-size: clamp(28px, 3.2vw, 44px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; color: var(--white); margin-bottom: 10px; }
+    .pr-audience { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.5); margin-bottom: 0; }
+    .pr-engine-tag { margin-top: 20px; display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; color: rgba(255,255,255,.6); letter-spacing: .6px; text-transform: uppercase; border: 1px solid rgba(255,255,255,.25); border-radius: 20px; padding: 4px 12px; background: rgba(255,255,255,.06); }
+    .pr-engine-tag::before { content: '⚙'; font-size: 9px; }
+    /* Mini stats (Practice only) */
+    .pr-mini-stats { display: flex; gap: 32px; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); justify-content: center; }
+    .pr-ms-n { font-size: 28px; font-weight: 900; color: var(--white); line-height: 1; }
+    .pr-ms-l { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 3px; }
+    /* Content panel elements */
+    .pr-tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 20px; }
+    .pr-practice .pr-tag  { background: var(--blue-light);   color: var(--blue);   }
+    .pr-biz      .pr-tag  { background: var(--amber-light);  color: var(--amber);  }
+    .pr-connect  .pr-tag  { background: var(--teal-light);   color: var(--teal);   }
+    .pr-mcp      .pr-tag  { background: var(--purple-light); color: var(--purple); }
+    .pr-desc { font-size: 16px; color: var(--slate-600); line-height: 1.7; margin-bottom: 24px; }
+    .pr-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .pr-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--slate-700); line-height: 1.55; }
+    .pr-features li::before { content: '→'; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .pr-practice .pr-features li::before { color: var(--blue);   }
+    .pr-biz      .pr-features li::before { color: var(--amber);  }
+    .pr-connect  .pr-features li::before { color: var(--teal);   }
+    .pr-mcp      .pr-features li::before { color: var(--purple); }
+    /* CTAs */
+    .pr-cta-btn { display: inline-flex; align-items: center; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 13px 28px; border: none; border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; transition: all .15s; }
+    .pr-practice .pr-cta-btn { background: var(--blue);   color: var(--white); }
+    .pr-practice .pr-cta-btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(19,91,236,.3); }
+    .pr-notify-wrap { display: flex; flex-direction: column; gap: 12px; }
+    .pr-notify-form { display: flex; gap: 8px; }
+    .pr-notify-input { flex: 1; font-family: var(--font); font-size: 14px; padding: 11px 14px; border: 1.5px solid var(--slate-200); border-radius: var(--radius-sm); outline: none; color: var(--slate-800); transition: border-color .15s; }
+    .pr-biz     .pr-notify-input:focus { border-color: var(--amber);  }
+    .pr-connect .pr-notify-input:focus { border-color: var(--teal);   }
+    .pr-mcp     .pr-notify-input:focus { border-color: var(--purple); }
+    .pr-notify-btn { font-family: var(--font); font-size: 13px; font-weight: 600; padding: 11px 20px; border: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: background .15s; color: var(--white); }
+    .pr-biz     .pr-notify-btn { background: var(--amber);  }
+    .pr-biz     .pr-notify-btn:hover { background: #b45309; }
+    .pr-connect .pr-notify-btn { background: var(--teal);   }
+    .pr-connect .pr-notify-btn:hover { background: #0b7a70; }
+    .pr-mcp     .pr-notify-btn { background: var(--purple); }
+    .pr-mcp     .pr-notify-btn:hover { background: #6d28d9; }
+    .pr-page-link { display: inline-flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; text-decoration: none; color: var(--slate-400); transition: color .15s; }
+    .pr-page-link:hover { color: var(--slate-700); }
+
+    /* ─── One engine section ─── */
+    .engine-section { background: var(--slate-900); color: var(--white); }
+    .engine-section .section-tag { background: rgba(59,119,240,.2); color: #7eb8ff; }
+    .engine-section .section-title { color: var(--white); }
+    .engine-section .section-sub { color: rgba(255,255,255,.6); max-width: 700px; margin: 0 auto 48px; text-align: center; }
+    .engine-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .engine-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding: 24px 20px; text-align: center; }
+    .engine-card-icon { font-size: 28px; margin-bottom: 12px; }
+    .engine-card h4 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .engine-card p { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+    /* ─── Practice deep-dive ─── */
+    .practice-section { background: var(--slate-50); }
+    .practice-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .practice-content .section-tag { display: block; width: fit-content; margin-bottom: 16px; }
+    .practice-content h2 { font-size: clamp(28px, 3.5vw, 40px); font-weight: 900; letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 16px; color: var(--slate-900); }
+    .practice-content p { font-size: 16px; color: var(--slate-600); line-height: 1.7; margin-bottom: 28px; }
+    .practice-pain-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .practice-pain-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--slate-700); }
+    .pain-bullet { width: 28px; height: 28px; border-radius: 7px; background: var(--red-light); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .practice-visual { background: var(--white); border-radius: var(--radius-lg); border: 1.5px solid var(--slate-200); padding: 32px; box-shadow: var(--shadow-lg); }
+    .pv-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .pv-logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--slate-900); }
+    .pv-logo-icon { width: 20px; height: 20px; color: var(--blue); }
+    .pv-badge { font-size: 11px; font-weight: 600; background: var(--green-light); color: var(--green); padding: 3px 10px; border-radius: 100px; }
+    .pv-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .pv-stat { background: var(--slate-50); border-radius: var(--radius-sm); padding: 14px 16px; }
+    .pv-stat-num { font-size: 24px; font-weight: 900; color: var(--slate-900); line-height: 1; }
+    .pv-stat-lbl { font-size: 11px; color: var(--slate-500); margin-top: 2px; }
+    .pv-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--slate-100); }
+    .pv-row:last-child { border-bottom: none; }
+    .pv-row-icon { font-size: 18px; flex-shrink: 0; }
+    .pv-row-text { flex: 1; font-size: 13px; color: var(--slate-700); }
+    .pv-row-status { font-size: 11px; font-weight: 600; }
+    .s-done { color: var(--green); }
+    .s-ready { color: var(--blue); }
+    .s-wait { color: var(--amber); }
+
+    /* ─── Trust ─── */
+    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .trust-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
+    .trust-icon { font-size: 32px; margin-bottom: 12px; }
+    .trust-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .trust-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── CTA ─── */
+    .cta-section { background: linear-gradient(160deg, #0d1b3e 0%, #1a2f6b 60%, #0f47a8 100%); padding: 96px 0; text-align: center; color: var(--white); }
+    .cta-section h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; }
+    .cta-section p { font-size: 20px; color: rgba(255,255,255,.7); max-width: 560px; margin: 0 auto 40px; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .cta-note { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,.4); }
+
+    /* ─── Footer ─── */
+    .footer { background: var(--slate-900); padding: 56px 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 280px 1fr; gap: 64px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 14px; }
+    .footer-logo-icon { width: 26px; height: 26px; color: #7eb8ff; }
+    .footer-logo-text { font-size: 18px; font-weight: 800; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.4); line-height: 1.65; margin-bottom: 24px; }
+    .footer-links-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+    .footer-col h5 { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.55); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-col a .soon { font-size: 10px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.4); padding: 1px 6px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.3); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,.3); text-decoration: none; }
+    .footer-legal a:hover { color: rgba(255,255,255,.6); }
+
+    @media (max-width: 1024px) {
+      .engine-grid { grid-template-columns: 1fr 1fr; }
+      .practice-inner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav { display: none; }
+      .pr-row { grid-template-columns: 1fr; }
+      .pr-accent,
+      .pr-biz .pr-accent, .pr-mcp .pr-accent { min-height: 240px; padding: 48px 32px; align-items: center; }
+      .pr-accent-inner { max-width: 100%; text-align: center; }
+      .pr-accent-inner .pr-pill { margin: 0 auto 20px !important; }
+      .pr-accent-inner .pr-icon { margin: 0 auto 18px !important; }
+      .pr-content,
+      .pr-biz .pr-content, .pr-mcp .pr-content { padding: 48px 32px; align-items: center; }
+      .pr-content-inner { max-width: 100%; text-align: center; }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; gap: 40px; }
+      .footer-links-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .trust-grid, .footer-links-grid { grid-template-columns: 1fr; }
+      .engine-grid { grid-template-columns: 1fr 1fr; }
+      .pr-notify-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.style.visibility='hidden';</script>
+
+<!-- ═══════════ HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
+        </svg>
+        <span class="logo-text">Moddrum</span>
+      </a>
+      <nav class="nav">
+        <a href="#products" data-i18n="nav_products"></a>
+        <a href="#one-engine" data-i18n="nav_platform"></a>
+        <a href="#practice-deep" data-i18n="nav_practice"></a>
+      </nav>
+      <div class="header-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-sl" onclick="setLang('sl')">SL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="/login" class="btn btn-outline btn-sm" data-i18n="nav_login"></a>
+        <a href="/practice" class="btn btn-primary btn-sm" data-i18n="nav_try_practice"></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-split">
+      <!-- LEFT: copy -->
+      <div class="hero-content">
+        <div class="hero-eyebrow" data-i18n="hero_eyebrow"></div>
+        <h1 data-i18n-html="hero_h1"></h1>
+        <p class="hero-tagline" data-i18n="hero_tagline"></p>
+        <div class="hero-cta-group">
+          <a href="/practice" class="btn btn-white btn-lg" data-i18n="hero_cta_primary"></a>
+          <a href="#products" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary"></a>
+        </div>
+      </div>
+      <!-- RIGHT: platform live illustration -->
+      <div class="hero-viz">
+        <div class="hviz-bar">
+          <span class="hviz-dot hviz-dot-r"></span><span class="hviz-dot hviz-dot-y"></span><span class="hviz-dot hviz-dot-g"></span>
+          <span class="hviz-title">Moddrum Platform — v živo</span>
+        </div>
+        <div class="pviz-steps">
+          <div class="pviz-step active">
+            <div class="pviz-icon pi-active" style="border-color:#93c5fd;background:rgba(59,119,240,.25)">📋</div>
+            <div class="pviz-body">
+              <div class="pviz-title">Practice — Ujemanje transakcij</div>
+              <div class="pviz-detail">Telekom faktura ↔ NLB •••7234</div>
+              <div class="pviz-bar"><div class="pviz-bar-fill" style="background:#93c5fd;animation-delay:0s"></div></div>
+            </div>
+          </div>
+          <div class="pviz-step active">
+            <div class="pviz-icon pi-active" style="border-color:#fcd34d;background:rgba(217,119,6,.2)">🏢</div>
+            <div class="pviz-body">
+              <div class="pviz-title">Biz — Podjetnik nalaga</div>
+              <div class="pviz-detail">J. Novak → faktura januar 2026</div>
+              <div class="pviz-bar"><div class="pviz-bar-fill" style="background:#fcd34d;animation-delay:.9s"></div></div>
+            </div>
+          </div>
+          <div class="pviz-step active">
+            <div class="pviz-icon pi-active" style="border-color:#5eead4;background:rgba(13,148,136,.2)">🔗</div>
+            <div class="pviz-body">
+              <div class="pviz-title">Connect — Mapiranje XML</div>
+              <div class="pviz-detail">D365 eSLog → Minimax struktura</div>
+              <div class="pviz-bar"><div class="pviz-bar-fill" style="background:#5eead4;animation-delay:1.8s"></div></div>
+            </div>
+          </div>
+          <div class="pviz-step active">
+            <div class="pviz-icon pi-active" style="border-color:#c4b5fd;background:rgba(124,58,237,.2)">🤖</div>
+            <div class="pviz-body">
+              <div class="pviz-title">MCP — AI ekstrakcija</div>
+              <div class="pviz-detail">extract_fields() · 4 dokumenti</div>
+              <div class="pviz-bar"><div class="pviz-bar-fill" style="background:#c4b5fd;animation-delay:2.7s"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCT PORTFOLIO — full-bleed alternating rows -->
+<section class="pr-section" id="products">
+  <div class="pr-section-header">
+    <div class="container">
+      <div class="section-tag" data-i18n="portfolio_tag"></div>
+      <h2 class="section-title" data-i18n="portfolio_title"></h2>
+      <p class="section-sub" style="margin:0 auto" data-i18n="portfolio_sub"></p>
+    </div>
+  </div>
+
+  <!-- ── Practice: blue left, white right ── -->
+  <div class="pr-row pr-practice">
+    <div class="pr-accent">
+      <div class="pr-accent-inner">
+        <div class="pr-pill pr-pill-live" style="margin:0 auto 24px" data-i18n="status_live"></div>
+        <div class="pr-icon" style="margin:0 auto 22px">📋</div>
+        <div class="pr-name">Moddrum<br>Practice</div>
+        <div class="pr-audience" data-i18n="practice_for"></div>
+        <div class="pr-engine-tag" data-i18n="engine_badge"></div>
+        <div class="pr-mini-stats">
+          <div><div class="pr-ms-n">1 500+</div><div class="pr-ms-l" data-i18n="pr_docs_month"></div></div>
+          <div><div class="pr-ms-n">35–50</div><div class="pr-ms-l" data-i18n="pr_hrs_saved"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="pr-content">
+      <div class="pr-content-inner">
+        <div class="pr-tag" data-i18n="practice_for"></div>
+        <p class="pr-desc" data-i18n="practice_desc"></p>
+        <ul class="pr-features">
+          <li data-i18n="practice_f1"></li>
+          <li data-i18n="practice_f2"></li>
+          <li data-i18n="practice_f3"></li>
+          <li data-i18n="practice_f4"></li>
+        </ul>
+        <a href="/practice" class="pr-cta-btn" data-i18n="practice_cta"></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Biz: white left, amber right ── -->
+  <div class="pr-row pr-biz">
+    <div class="pr-content">
+      <div class="pr-content-inner">
+        <div class="pr-tag" data-i18n="biz_for"></div>
+        <p class="pr-desc" data-i18n="biz_desc"></p>
+        <ul class="pr-features">
+          <li data-i18n="biz_f1"></li>
+          <li data-i18n="biz_f2"></li>
+          <li data-i18n="biz_f3"></li>
+        </ul>
+        <div class="pr-notify-wrap">
+          <div class="pr-notify-form">
+            <input type="email" class="pr-notify-input" data-i18n-placeholder="notify_placeholder" id="biz-email-pr">
+            <button class="pr-notify-btn" onclick="handleNotify('biz-email-pr', this)" data-i18n="notify_btn"></button>
+          </div>
+          <a href="/biz" class="pr-page-link" data-i18n="card_see_page"></a>
+        </div>
+      </div>
+    </div>
+    <div class="pr-accent">
+      <div class="pr-accent-inner">
+        <div class="pr-icon" style="margin:0 auto 22px">🏢</div>
+        <div class="pr-name">Moddrum<br>Biz</div>
+        <div class="pr-audience" data-i18n="biz_for"></div>
+        <div class="pr-engine-tag" data-i18n="engine_badge"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Connect: teal left, white right ── -->
+  <div class="pr-row pr-connect">
+    <div class="pr-accent">
+      <div class="pr-accent-inner">
+        <div class="pr-icon" style="margin:0 auto 22px">🔗</div>
+        <div class="pr-name">Moddrum<br>Connect</div>
+        <div class="pr-audience" data-i18n="connect_for"></div>
+        <div class="pr-engine-tag" data-i18n="engine_badge"></div>
+      </div>
+    </div>
+    <div class="pr-content">
+      <div class="pr-content-inner">
+        <div class="pr-tag" data-i18n="connect_for"></div>
+        <p class="pr-desc" data-i18n="connect_desc"></p>
+        <ul class="pr-features">
+          <li data-i18n="connect_f1"></li>
+          <li data-i18n="connect_f2"></li>
+          <li data-i18n="connect_f3"></li>
+        </ul>
+        <div class="pr-notify-wrap">
+          <div class="pr-notify-form">
+            <input type="email" class="pr-notify-input" data-i18n-placeholder="notify_placeholder" id="connect-email-pr">
+            <button class="pr-notify-btn" onclick="handleNotify('connect-email-pr', this)" data-i18n="notify_btn"></button>
+          </div>
+          <a href="/connect" class="pr-page-link" data-i18n="card_see_page"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MCP: white left, purple right ── -->
+  <div class="pr-row pr-mcp">
+    <div class="pr-content">
+      <div class="pr-content-inner">
+        <div class="pr-tag" data-i18n="mcp_for"></div>
+        <p class="pr-desc" data-i18n="mcp_desc"></p>
+        <ul class="pr-features">
+          <li data-i18n="mcp_f1"></li>
+          <li data-i18n="mcp_f2"></li>
+          <li data-i18n="mcp_f3"></li>
+        </ul>
+        <div class="pr-notify-wrap">
+          <div class="pr-notify-form">
+            <input type="email" class="pr-notify-input" data-i18n-placeholder="notify_placeholder" id="mcp-email-pr">
+            <button class="pr-notify-btn" onclick="handleNotify('mcp-email-pr', this)" data-i18n="notify_btn"></button>
+          </div>
+          <a href="/mcp" class="pr-page-link" data-i18n="card_see_page"></a>
+        </div>
+      </div>
+    </div>
+    <div class="pr-accent">
+      <div class="pr-accent-inner">
+        <div class="pr-icon" style="margin:0 auto 22px">🤖</div>
+        <div class="pr-name">Moddrum<br>MCP</div>
+        <div class="pr-audience" data-i18n="mcp_for"></div>
+        <div class="pr-engine-tag" data-i18n="engine_badge"></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════ ONE ENGINE SECTION -->
+<section class="section engine-section" id="one-engine">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="engine_tag"></div>
+      <h2 class="section-title" style="color:white" data-i18n="engine_title"></h2>
+      <p class="section-sub" data-i18n="engine_sub"></p>
+    </div>
+    <div class="engine-grid">
+      <div class="engine-card">
+        <div class="engine-card-icon">🧠</div>
+        <h4 data-i18n="eng1_title"></h4>
+        <p data-i18n="eng1_body"></p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-icon">🔬</div>
+        <h4 data-i18n="eng2_title"></h4>
+        <p data-i18n="eng2_body"></p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-icon">🔌</div>
+        <h4 data-i18n="eng3_title"></h4>
+        <p data-i18n="eng3_body"></p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-icon">🛡️</div>
+        <h4 data-i18n="eng4_title"></h4>
+        <p data-i18n="eng4_body"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRACTICE DEEP-DIVE -->
+<section class="section practice-section" id="practice-deep">
+  <div class="container">
+    <div class="practice-inner">
+      <div class="practice-content">
+        <div class="section-tag" data-i18n="pd_tag"></div>
+        <h2 data-i18n="pd_title"></h2>
+        <p data-i18n="pd_body"></p>
+        <ul class="practice-pain-list">
+          <li><div class="pain-bullet">📨</div><span data-i18n="pd_p1"></span></li>
+          <li><div class="pain-bullet">📋</div><span data-i18n="pd_p2"></span></li>
+          <li><div class="pain-bullet">🔍</div><span data-i18n="pd_p3"></span></li>
+        </ul>
+        <a href="/practice" class="btn btn-primary btn-lg" data-i18n="pd_cta"></a>
+      </div>
+      <div class="practice-visual">
+        <div class="pv-header">
+          <div class="pv-logo">
+            <svg class="pv-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+            </svg>
+            <span>Moddrum Practice</span>
+          </div>
+          <div class="pv-badge" data-i18n="pv_live_badge"></div>
+        </div>
+        <div class="pv-stats">
+          <div class="pv-stat">
+            <div class="pv-stat-num">0</div>
+            <div class="pv-stat-lbl" data-i18n="pv_stat1"></div>
+          </div>
+          <div class="pv-stat">
+            <div class="pv-stat-num">100%</div>
+            <div class="pv-stat-lbl" data-i18n="pv_stat2"></div>
+          </div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">📨</div>
+          <div class="pv-row-text" data-i18n="pv_row1"></div>
+          <div class="pv-row-status s-done" data-i18n="pv_status_auto"></div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">⚡</div>
+          <div class="pv-row-text" data-i18n="pv_row2"></div>
+          <div class="pv-row-status s-done" data-i18n="pv_status_auto"></div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">🔍</div>
+          <div class="pv-row-text" data-i18n="pv_row3"></div>
+          <div class="pv-row-status s-done" data-i18n="pv_status_auto"></div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">✅</div>
+          <div class="pv-row-text" data-i18n="pv_row4"></div>
+          <div class="pv-row-status s-ready" data-i18n="pv_status_you"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TRUST -->
+<section class="section-sm">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-icon">🇸🇮</div><h4 data-i18n="t1_title"></h4><p data-i18n="t1_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🔐</div><h4 data-i18n="t2_title"></h4><p data-i18n="t2_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🏠</div><h4 data-i18n="t3_title"></h4><p data-i18n="t3_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">📋</div><h4 data-i18n="t4_title"></h4><p data-i18n="t4_body"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 data-i18n-html="cta_h2"></h2>
+    <p data-i18n="cta_sub"></p>
+    <div class="cta-actions">
+      <a href="/practice" class="btn btn-white btn-lg" data-i18n="cta_try"></a>
+      <a href="/login" class="btn btn-ghost btn-lg" data-i18n="cta_login"></a>
+    </div>
+    <p class="cta-note" data-i18n="cta_note"></p>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a href="/" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
+          </svg>
+          <span class="footer-logo-text">Moddrum</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline"></p>
+      </div>
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_products"></h5>
+          <a href="/practice">Moddrum Practice</a>
+          <a href="/biz">Moddrum Biz <span class="soon" data-i18n="soon_label"></span></a>
+
+          <a href="/connect">Moddrum Connect <span class="soon" data-i18n="soon_label"></span></a>
+          <a href="/mcp">Moddrum MCP <span class="soon" data-i18n="soon_label"></span></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_practice"></h5>
+          <a href="/practice#how-it-works" data-i18n="footer_how"></a>
+          <a href="/practice#pricing" data-i18n="footer_pricing"></a>
+          <a href="/practice#faq">FAQ</a>
+          <a href="/docs" data-i18n="footer_docs"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_access"></h5>
+          <a href="/signup" data-i18n="footer_signup"></a>
+          <a href="/login" data-i18n="footer_login"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_company"></h5>
+          <a href="/about" data-i18n="footer_about"></a>
+          <a href="/contact" data-i18n="footer_contact"></a>
+          <a href="/privacy" data-i18n="footer_privacy"></a>
+          <a href="/terms" data-i18n="footer_terms"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-i18n="footer_copy"></div>
+      <div class="footer-legal">
+        <a href="/privacy" data-i18n="footer_privacy"></a>
+        <a href="/terms" data-i18n="footer_terms"></a>
+        <a href="/gdpr">GDPR</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TRANSLATIONS = {
+  sl: {
+    nav_products: 'Produkti',
+    nav_platform: 'Platforma',
+    nav_practice: 'Practice',
+    nav_login: 'Prijava',
+    nav_try_practice: 'Preizkusi Practice →',
+
+    hero_eyebrow: '🇸🇮 Slovenija · Predobračunska avtomatizacija',
+    hero_h1: 'Avtomatiziraj rutino.<br><em>Opolnomoči strokovnjake.</em>',
+    hero_tagline: 'Moddrum je inteligentni vmesni sloj med dokumenti in računovodskimi sistemi. Zbira, obdeluje, ujema in izvozi — strokovnjak samo pregleduje in potrjuje.',
+    hero_cta_primary: 'Preizkusi Moddrum Practice →',
+    hero_cta_secondary: 'Spoznaj vse produkte',
+    stat1: 'produkti, en ekosistem',
+    stat2: 'skupni Moddrum Engine',
+    stat3: 'Moddrum Engine',
+    stat4: 'ročnih vnosov za vas',
+
+    portfolio_tag: 'Portfolio produktov',
+    portfolio_title: 'Ena platforma, štiri produkti',
+    portfolio_sub: 'Vsak produkt rešuje isto osnovno težavo z drugega zornega kota: avtomatizacija dokumentnega in finančnega podatkovnega sloja. Skupni Moddrum Engine, skupna filozofija.',
+    pr_docs_month: 'dokumentov / mesec',
+    pr_hrs_saved: 'ur prihrankov / mesec',
+    status_live: '✅ V živo',
+    status_planned: '🔜 Prihaja',
+    notify_placeholder: 'vaš@email.com',
+    notify_btn: 'Obvestite me',
+    card_see_page: 'Oglejte si stran produkta →',
+
+    practice_for: 'Za računovodje',
+    practice_desc: 'Upravljanje računovodske prakse — od zbiranja dokumentov pri strankah do izvoza v računovodski sistem. Zbiraš manj. Tipkaš nič.',
+    practice_f1: 'Zbiranje dokumentov od strank z avtomatskimi opomniki',
+    practice_f2: 'Moddrum Engine OCR ekstrakcija vseh polj iz faktur, izpiskov, bonov',
+    practice_f3: 'Samodejno ujemanje faktur z bančnimi transakcijami',
+    practice_f4: 'En klik izvoz v MiniMax SI, e-računi in prihodnje sisteme',
+    practice_cta: 'Preizkusi Moddrum Practice →',
+
+    biz_for: 'Za podjetja (stranke računovodij)',
+    biz_desc: 'Portal za pošiljanje dokumentov računovodji. Poslovodja fotografira račun — Moddrum Practice ga prejme samodejno, razpozna in pripiše.',
+    biz_f1: 'Enostavni portal za nalaganje računov in dokumentov',
+    biz_f2: 'Neposredna pot do vašega računovodje — brez WhatsAppa',
+    biz_f3: 'Pregled statusa: kaj ste poslali, kaj čaka obdelavo',
+
+    api_for: 'Za razvijalce',
+    api_desc: 'OCR in ekstrakcija dokumentov kot API. Integrira AI procesiranje dokumentov v katero koli aplikacijo z enim klicem.',
+    api_f1: 'REST API — PDF, slike, XML v strukturirane podatke',
+    api_f2: 'Podpira eSLog 2.00, CAMT.053, splošne fakture',
+    api_f3: 'Pay-per-call model, brez minimalnih naročil',
+
+    connect_for: 'Za razvijalce',
+    connect_desc: 'REST API in webhook storitev za ekstrakcijo podatkov iz finančnih dokumentov. Pošljite PDF ali sliko — dobite strukturiran JSON nazaj.',
+    connect_f1: 'POST dokument → strukturirani JSON podatki',
+    connect_f2: '12+ vrst dokumentov, 98% točnost ekstrakcije',
+    connect_f3: 'Specializirano za slovensko finančno okolje (eSLog, DDV, IBAN)',
+
+    mcp_for: 'Za LLM graditelje',
+    mcp_desc: 'Model Context Protocol server za LLM aplikacije. LLM agenti dobijo dostop do finančnih dokumentov, transakcij in računovodskih podatkov.',
+    mcp_f1: 'MCP server — standardni protokol za LLM integracije',
+    mcp_f2: 'Finančni kontekst za LLM agente in copilote',
+    mcp_f3: 'Varna, revizijsko sledena dostopna plast',
+
+    engine_tag: 'Moddrum Engine',
+    engine_title: 'En engine. Štirje produkti.',
+    engine_sub: 'Pod vsakim Moddrum produktom teče isti procesni engine. Prepozna vsak format, ekstrahira vsako polje, se poveže z vsakim računovodskim sistemom — samodejno, zanesljivo, brez ročnega dela.',
+    engine_badge: 'Powered by Moddrum Engine',
+
+    eng1_title: 'Dokumentni razum',
+    eng1_body: 'Moddrum Engine prepozna vsak format: PDF, JPG, XML eSLog, CAMT.053, Excel. Brez predlog, brez ročnih pravil.',
+    eng2_title: 'Ekstrakcija polj',
+    eng2_body: 'Prebere: znesek, DDV, datum, IBAN, davčno številko, sklic. Zanesljivo za katerikoli dokument v kateremkoli jeziku.',
+    eng3_title: 'Sistemske integracije',
+    eng3_body: 'MiniMax SI, e-računi, CAMT.053 bančni izpiski, eSLog 2.00 XML — danes. Dynamics 365, Xero, SAP — jutri.',
+    eng4_title: 'Varnost in skladnost',
+    eng4_body: 'AES-256 šifriranje, strežniki v EU, popolna GDPR skladnost, revizijska sled vseh dostopov.',
+
+    pd_tag: 'Moddrum Practice — Zdaj v živo',
+    pd_title: 'Računovodska praksa brez dokumentne kaotike',
+    pd_body: 'Računovodja pri 20–30 strankah sprejme na stotine dokumentov mesečno. Zbiranje, obdelava in vnos zahtevajo 35–50 ur mesečno. Moddrum Practice ta čas vrne.',
+    pd_p1: 'Zbiranje od strank — vsaka stranka pošilja na svojevrsten način, celo leto',
+    pd_p2: 'Ročni vnos — vsako fakturo pretipkate polje za poljem',
+    pd_p3: 'Ujemanje — 100+ transakcij na stranko vsak mesec',
+    pd_cta: 'Preizkusi Moddrum Practice brezplačno →',
+
+    pv_live_badge: '✅ V živo',
+    pv_stat1: 'ročnih vnosov',
+    pv_stat2: 'samodejno prepoznano',
+    pv_row1: 'Dokument prejet od stranke',
+    pv_row2: 'Moddrum Engine ekstrakcija in kategorizacija',
+    pv_row3: 'Ujemanje z bančno transakcijo',
+    pv_row4: 'Vi pregledate in potrdite izvoz',
+    pv_status_auto: '⚡ Samodejno',
+    pv_status_you: '👤 Vaša vloga',
+
+    t1_title: 'Narejen za Slovenijo', t1_body: 'eSLog 2.00, CAMT.053, MiniMax SI, DDV-O — vse po slovenskem standardu.',
+    t2_title: 'AES-256 šifriranje', t2_body: 'Dokumenti šifrirani v mirovanju in prenosu. GDPR standard za računovodske podatke.',
+    t3_title: 'Podatki v EU', t3_body: 'Strežniki v EU. Vaši podatki ne zapustijo Evropske unije.',
+    t4_title: 'Revizijska sled', t4_body: 'Vsaka akcija zabeležena: kdo, kdaj, kaj. Popolna preglednost.',
+
+    cta_h2: 'Začni z Moddrum Practice.<br><em>Zberi brez kaosa. Izvozi brez tipkanja.</em>',
+    cta_sub: 'Edini produkt v živo. Preizkusi 14 dni brezplačno.',
+    cta_try: 'Preizkusi brezplačno →',
+    cta_login: 'Že imate račun? Prijava',
+    cta_note: '14 dni brezplačno · Ni potrebna kartica · Prekini kadarkoli',
+
+    footer_tagline: 'Avtomatizacija dokumentnega in finančnega podatkovnega sloja za računovodje, razvijalce in podjetja.',
+    footer_col_products: 'Produkti',
+    footer_col_practice: 'Practice',
+    footer_col_access: 'Dostop',
+    footer_col_company: 'Podjetje',
+    soon_label: 'kmalu',
+    footer_how: 'Kako deluje',
+    footer_pricing: 'Cena',
+    footer_docs: 'Dokumentacija',
+    footer_signup: 'Registracija',
+    footer_login: 'Prijava',
+    footer_about: 'O nas',
+    footer_contact: 'Kontakt',
+    footer_privacy: 'Zasebnost',
+    footer_terms: 'Pogoji',
+    footer_copy: '© 2026 Moddrum d.o.o. Vse pravice pridržane.',
+  },
+
+  en: {
+    nav_products: 'Products',
+    nav_platform: 'Platform',
+    nav_practice: 'Practice',
+    nav_login: 'Log in',
+    nav_try_practice: 'Try Practice →',
+
+    hero_eyebrow: '🇸🇮 Slovenia · Pre-accounting automation',
+    hero_h1: 'Automate the routine.<br><em>Empower the expert.</em>',
+    hero_tagline: 'Moddrum is the intelligent layer between documents and accounting systems. It collects, processes, matches, and exports — the expert only reviews and confirms.',
+    hero_cta_primary: 'Try Moddrum Practice →',
+    hero_cta_secondary: 'See all products',
+    stat1: 'products, one ecosystem',
+    stat2: 'shared Moddrum Engine',
+    stat3: 'Moddrum Engine',
+    stat4: 'manual entries for you',
+
+    portfolio_tag: 'Product portfolio',
+    portfolio_title: 'One platform, four products',
+    portfolio_sub: 'Each product solves the same core problem from a different angle: automating the document and financial data layer. Shared Moddrum Engine, shared philosophy.',
+    pr_docs_month: 'documents / month',
+    pr_hrs_saved: 'hrs saved / month',
+    status_live: '✅ Live',
+    status_planned: '🔜 Coming soon',
+    notify_placeholder: 'your@email.com',
+    notify_btn: 'Notify me',
+    card_see_page: 'See product page →',
+
+    practice_for: 'For accountants',
+    practice_desc: 'Accounting practice management — from collecting documents from clients to exporting to your accounting system. You collect less. You type nothing.',
+    practice_f1: 'Document collection from clients with automatic reminders',
+    practice_f2: 'Moddrum Engine OCR extraction of all fields from invoices, statements, receipts',
+    practice_f3: 'Automatic matching of invoices to bank transactions',
+    practice_f4: 'One-click export to MiniMax SI, e-računi, and future systems',
+    practice_cta: 'Try Moddrum Practice →',
+
+    biz_for: 'For businesses (accountant\'s clients)',
+    biz_desc: 'A portal for sending documents to your accountant. A business owner photographs an invoice — Moddrum Practice receives it automatically, recognises it, and assigns it.',
+    biz_f1: 'Simple portal for uploading invoices and documents',
+    biz_f2: 'Direct route to your accountant — no WhatsApp',
+    biz_f3: 'Status overview: what you sent, what is waiting',
+
+    api_for: 'For developers',
+    api_desc: 'Document OCR and extraction as an API. Integrate AI document processing into any application with a single call.',
+    api_f1: 'REST API — PDF, images, XML to structured data',
+    api_f2: 'Supports eSLog 2.00, CAMT.053, general invoices',
+    api_f3: 'Pay-per-call model, no minimum orders',
+
+    connect_for: 'For developers',
+    connect_desc: 'REST API and webhook service for financial document data extraction. POST a PDF or image — get structured JSON back.',
+    connect_f1: 'POST document → structured JSON data',
+    connect_f2: '12+ document types, 98% extraction accuracy',
+    connect_f3: 'Specialised for the Slovenian financial environment (eSLog, VAT, IBAN)',
+
+    mcp_for: 'For LLM builders',
+    mcp_desc: 'Model Context Protocol server for LLM applications. LLM agents get access to financial documents, transactions, and accounting data.',
+    mcp_f1: 'MCP server — standard protocol for LLM integrations',
+    mcp_f2: 'Financial context for LLM agents and copilots',
+    mcp_f3: 'Secure, audit-traced access layer',
+
+    engine_tag: 'Moddrum Engine',
+    engine_title: 'One engine. Four products.',
+    engine_sub: 'The same processing engine runs under every Moddrum product. It recognises every format, extracts every field, and connects to every accounting system — automatically, reliably, without manual work.',
+    engine_badge: 'Powered by Moddrum Engine',
+
+    eng1_title: 'Document intelligence',
+    eng1_body: 'Moddrum Engine recognises every format: PDF, JPG, XML eSLog, CAMT.053, Excel. No templates, no manual rules.',
+    eng2_title: 'Field extraction',
+    eng2_body: 'Reads: amount, VAT, date, IBAN, tax number, payment reference. Reliable for any document in any language.',
+    eng3_title: 'System integrations',
+    eng3_body: 'MiniMax SI, e-računi, CAMT.053 bank statements, eSLog 2.00 XML — today. Dynamics 365, Xero, SAP — tomorrow.',
+    eng4_title: 'Security and compliance',
+    eng4_body: 'AES-256 encryption, EU-based servers, full GDPR compliance, audit trail of all access.',
+
+    pd_tag: 'Moddrum Practice — Live now',
+    pd_title: 'Accounting practice without the document chaos',
+    pd_body: 'An accountant serving 20–30 clients receives hundreds of documents every month. Collection, processing, and entry take 35–50 hours per month. Moddrum Practice gives that time back.',
+    pd_p1: 'Collecting from clients — every client sends differently, all year long',
+    pd_p2: 'Manual entry — every invoice retyped field by field',
+    pd_p3: 'Matching — 100+ transactions per client every month',
+    pd_cta: 'Try Moddrum Practice for free →',
+
+    pv_live_badge: '✅ Live',
+    pv_stat1: 'manual entries',
+    pv_stat2: 'recognised automatically',
+    pv_row1: 'Document received from client',
+    pv_row2: 'Moddrum Engine extraction and classification',
+    pv_row3: 'Matched to bank transaction',
+    pv_row4: 'You review and confirm export',
+    pv_status_auto: '⚡ Automatic',
+    pv_status_you: '👤 Your role',
+
+    t1_title: 'Built for Slovenia', t1_body: 'eSLog 2.00, CAMT.053, MiniMax SI, VAT forms — all compliant with Slovenian standards.',
+    t2_title: 'AES-256 encryption', t2_body: 'Documents encrypted at rest and in transit. GDPR standard for accounting data.',
+    t3_title: 'Data in the EU', t3_body: 'EU-based servers. Your data never leaves the European Union.',
+    t4_title: 'Audit trail', t4_body: 'Every action logged: who, when, what. Full transparency.',
+
+    cta_h2: 'Start with Moddrum Practice.<br><em>Collect without chaos. Export without typing.</em>',
+    cta_sub: 'The only live product. Try it free for 14 days.',
+    cta_try: 'Try for free →',
+    cta_login: 'Already have an account? Log in',
+    cta_note: '14 days free · No card required · Cancel any time',
+
+    footer_tagline: 'Automation of the document and financial data layer for accountants, developers, and businesses.',
+    footer_col_products: 'Products',
+    footer_col_practice: 'Practice',
+    footer_col_access: 'Access',
+    footer_col_company: 'Company',
+    soon_label: 'soon',
+    footer_how: 'How it works',
+    footer_pricing: 'Pricing',
+    footer_docs: 'Documentation',
+    footer_signup: 'Sign up',
+    footer_login: 'Log in',
+    footer_about: 'About',
+    footer_contact: 'Contact',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms',
+    footer_copy: '© 2026 Moddrum d.o.o. All rights reserved.',
+  }
+};
+
+function setLang(lang) {
+  const t = TRANSLATIONS[lang];
+  if (!t) return;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById('btn-' + lang);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  try { localStorage.setItem('moddrum_lang', lang); } catch(e) {}
+}
+
+function handleNotify(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = '#dc2626';
+    setTimeout(() => { input.style.borderColor = ''; }, 1500);
+    return;
+  }
+  // In production: POST email to waitlist endpoint
+  btn.textContent = '✓';
+  btn.style.background = '#16a34a';
+  btn.disabled = true;
+  input.value = '';
+  input.placeholder = 'Hvala! / Thank you!';
+}
+
+// Init: stored preference → browser language → default 'sl'
+(function() {
+  let lang = 'sl';
+  try {
+    const stored = localStorage.getItem('moddrum_lang');
+    if (stored && TRANSLATIONS[stored]) { lang = stored; }
+    else {
+      const browser = (navigator.language || '').toLowerCase();
+      if (browser.startsWith('en')) lang = 'en';
+    }
+  } catch(e) {}
+  setLang(lang);
+  document.documentElement.style.visibility='';
+})();
+</script>
+</body>
+</html>

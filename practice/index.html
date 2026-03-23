@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum Practice — upravljanje računovodske prakse od zbiranja dokumentov do izvoza v računovodski sistem. Zbirari manj. Tipkaš nič. Fokus na računovodstvo.">
+  <title>Moddrum Practice — Dokumenti na avtopilotu, vaša praksa na enem mestu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23135bec'/><path transform='translate(4,4)' fill='white' d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z'/></svg>">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #135bec; --blue-dark: #0d47c7; --blue-light: #e8effe; --blue-mid: #3b77f0;
+      --green: #16a34a; --green-light: #dcfce7;
+      --amber: #d97706; --amber-light: #fef3c7;
+      --red: #dc2626; --red-light: #fee2e2;
+      --slate-900: #0f172a; --slate-800: #1e293b; --slate-700: #334155;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08); --shadow-lg: 0 12px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--slate-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Header ─── */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 30px; height: 30px; color: var(--blue); }
+    .logo-names { display: flex; flex-direction: column; gap: 0; }
+    .logo-parent { font-size: 11px; font-weight: 600; color: var(--slate-400); text-decoration: none; line-height: 1.4; letter-spacing: .1px; transition: color .15s; }
+    .logo-parent:hover { color: var(--blue); }
+    .logo-product { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--slate-900); text-decoration: none; line-height: 1.1; }
+    .logo-product:hover { color: var(--slate-700); }
+    .nav { display: flex; gap: 28px; }
+    .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
+    .nav a:hover { color: var(--blue); }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher {
+      display: flex; align-items: center;
+      background: var(--slate-100); border-radius: 6px;
+      padding: 3px; gap: 2px;
+    }
+    .lang-btn {
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer;
+      color: var(--slate-500); background: transparent; transition: all .15s;
+      letter-spacing: .3px;
+    }
+    .lang-btn.active { background: var(--white); color: var(--blue); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .lang-btn:not(.active):hover { color: var(--slate-800); }
+
+    /* ─── Buttons ─── */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 11px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(19,91,236,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue-light); }
+    .btn-white { background: var(--white); color: var(--blue); }
+    .btn-white:hover { background: var(--blue-light); transform: translateY(-1px); }
+    .btn-ghost { background: rgba(255,255,255,.12); color: white; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); }
+    .btn-lg { font-size: 17px; padding: 15px 32px; }
+    .btn-sm { font-size: 13px; padding: 8px 18px; }
+
+    /* ─── Practice Intro (replaces hero) ─── */
+    .practice-intro-section { background: linear-gradient(160deg, #0a1628 0%, #0d1b3e 40%, #1a2f6b 100%); padding: 80px 0 96px; position: relative; overflow: hidden; }
+    .practice-intro-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 30% 50%, rgba(59,119,240,.18) 0%, transparent 65%); pointer-events: none; }
+    .practice-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; }
+    .practice-content .section-tag { display: block; width: fit-content; margin-bottom: 16px; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.15); color: rgba(255,255,255,.8); }
+    .practice-content h2 { font-size: clamp(28px, 3.5vw, 40px); font-weight: 900; letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 16px; color: var(--white); }
+    .practice-content p { font-size: 16px; color: rgba(255,255,255,.7); line-height: 1.7; margin-bottom: 28px; }
+    .practice-pain-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .practice-pain-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: rgba(255,255,255,.75); }
+    .pain-bullet { width: 28px; height: 28px; border-radius: 7px; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .practice-visual { background: var(--white); border-radius: var(--radius-lg); border: 1.5px solid var(--slate-200); padding: 32px; box-shadow: var(--shadow-lg); }
+    .pv-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .pv-logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--slate-900); }
+    .pv-logo-icon { width: 20px; height: 20px; color: var(--blue); }
+    .pv-badge { font-size: 11px; font-weight: 600; background: var(--green-light); color: var(--green); padding: 3px 10px; border-radius: 100px; }
+    .pv-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .pv-stat { background: var(--slate-50); border-radius: var(--radius-sm); padding: 14px 16px; }
+    .pv-stat-num { font-size: 24px; font-weight: 900; color: var(--slate-900); line-height: 1; }
+    .pv-stat-lbl { font-size: 11px; color: var(--slate-500); margin-top: 2px; }
+    .pv-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--slate-100); }
+    .pv-row:last-child { border-bottom: none; }
+    .pv-row-icon { font-size: 18px; flex-shrink: 0; }
+    .pv-row-text { flex: 1; font-size: 13px; color: var(--slate-700); }
+    .pv-row-status { font-size: 11px; font-weight: 600; }
+    .s-done { color: var(--green); }
+    .s-ready { color: var(--blue); }
+    @media (max-width: 860px) { .practice-inner { grid-template-columns: 1fr; } }
+
+    /* ─── Section common ─── */
+    .section-tag { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .section-sub { font-size: 18px; color: var(--slate-600); max-width: 640px; line-height: 1.65; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── Flow ─── */
+    .flow-section { background: var(--slate-50); }
+    .flow-steps { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; margin-bottom: 48px; }
+    .flow-arrow { display: flex; align-items: flex-start; padding-top: 36px; color: var(--slate-400); font-size: 28px; }
+    .flow-step { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; text-align: center; box-shadow: var(--shadow); }
+    .flow-step.step-auto { border-color: var(--blue); background: linear-gradient(135deg, var(--blue-light), #f0f5ff); }
+    .flow-step-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
+    .icon-human { background: #fef3c7; } .icon-auto { background: var(--blue-light); }
+    .flow-step-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--slate-400); margin-bottom: 8px; }
+    .flow-step h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--slate-900); }
+    .flow-step p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+    .flow-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--blue); color: var(--white); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; margin-top: 12px; text-transform: uppercase; }
+    .flow-badge-human { background: var(--amber-light); color: var(--amber); }
+
+    /* ─── Pain points ─── */
+    .pains-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pain-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; position: relative; overflow: hidden; transition: box-shadow .2s, transform .2s; }
+    .pain-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .pain-card.p0 { border-color: #fca5a5; background: #fff8f8; }
+    .pain-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .pain-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .pain-time { display: flex; flex-direction: column; align-items: flex-end; }
+    .pain-time-num { font-size: 22px; font-weight: 800; color: var(--red); line-height: 1; }
+    .pain-time-label { font-size: 11px; color: var(--slate-500); }
+    .pain-p0-badge { position: absolute; top: 16px; right: -28px; background: var(--red); color: var(--white); font-size: 10px; font-weight: 800; padding: 3px 36px; transform: rotate(45deg); text-transform: uppercase; }
+    .pain-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .pain-problem { font-size: 14px; color: var(--slate-600); margin-bottom: 16px; }
+    .pain-solution { background: var(--green-light); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--green); font-weight: 500; line-height: 1.5; }
+    .pain-solution::before { content: '✓ '; font-weight: 700; }
+
+    /* ─── HIW dark ─── */
+    .hiw-section { background: var(--slate-900); color: var(--white); }
+    .hiw-section .section-tag { background: rgba(59,119,240,.2); color: #7eb8ff; }
+    .hiw-section .section-title { color: var(--white); }
+    .hiw-section .section-sub { color: rgba(255,255,255,.6); }
+    .hiw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-bottom: 72px; }
+    .hiw-grid:last-child { margin-bottom: 0; }
+    .hiw-grid.reverse { direction: rtl; }
+    .hiw-grid.reverse > * { direction: ltr; }
+    .hiw-step-num { width: 32px; height: 32px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 16px; }
+    .hiw-content h3 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--white); }
+    .hiw-content p { font-size: 16px; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 20px; }
+    .hiw-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .hiw-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: rgba(255,255,255,.7); }
+    .hiw-list li::before { content: '→'; color: var(--blue-mid); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* ─── Mock UI ─── */
+    .hiw-visual { background: var(--slate-800); border-radius: var(--radius); border: 1px solid rgba(255,255,255,.08); padding: 24px; min-height: 280px; }
+    .mock-bar { display: flex; gap: 6px; margin-bottom: 20px; align-items: center; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+    .mock-title-bar { font-size: 12px; color: rgba(255,255,255,.4); margin-left: 8px; }
+    .mock-upload-zone { border: 2px dashed rgba(59,119,240,.5); border-radius: var(--radius-sm); padding: 28px 20px; text-align: center; color: rgba(255,255,255,.5); font-size: 13px; margin-bottom: 16px; }
+    .mock-files { display: flex; flex-direction: column; gap: 8px; }
+    .mock-file { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.05); border-radius: 6px; padding: 8px 12px; }
+    .mock-file-name { flex: 1; font-size: 12px; color: rgba(255,255,255,.8); }
+    .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+    .badge-inv { background: rgba(59,119,240,.25); color: #7eb8ff; }
+    .badge-bs { background: rgba(16,163,74,.2); color: #4ade80; }
+    .badge-xml { background: rgba(168,85,247,.2); color: #d8b4fe; }
+    .mock-doc-list { display: flex; flex-direction: column; gap: 8px; }
+    .mock-doc-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.04); border-radius: 6px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.06); }
+    .dt { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+    .dt-i { background: rgba(59,119,240,.2); color: #93c5fd; }
+    .dt-b { background: rgba(16,163,74,.2); color: #86efac; }
+    .dt-r { background: rgba(168,85,247,.2); color: #d8b4fe; }
+    .mock-doc-name { flex: 1; font-size: 12px; color: rgba(255,255,255,.7); }
+    .mock-doc-biz { font-size: 11px; color: rgba(255,255,255,.35); }
+    .mock-match-header { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; padding: 0 8px 8px; font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .3px; border-bottom: 1px solid rgba(255,255,255,.06); margin-bottom: 8px; }
+    .mock-match-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; padding: 8px; background: rgba(255,255,255,.04); border-radius: 6px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,.04); }
+    .mock-match-row.matched { border-color: rgba(16,163,74,.25); background: rgba(16,163,74,.06); }
+    .mock-txn { font-size: 11px; color: rgba(255,255,255,.75); }
+    .mock-inv { font-size: 11px; color: rgba(255,255,255,.55); }
+    .mock-score { font-size: 11px; font-weight: 700; }
+    .s-high { color: #4ade80; } .s-med { color: #fbbf24; }
+    .mock-export-form { background: rgba(255,255,255,.04); border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,.08); padding: 16px; margin-bottom: 12px; }
+    .mock-export-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.8); margin-bottom: 12px; }
+    .mock-field { margin-bottom: 8px; }
+    .mock-label { font-size: 10px; color: rgba(255,255,255,.4); margin-bottom: 3px; }
+    .mock-value { background: rgba(255,255,255,.08); border-radius: 4px; padding: 6px 10px; font-size: 12px; color: rgba(255,255,255,.75); }
+    .mock-value.v-filled { color: #93c5fd; }
+    .mock-export-btn { width: 100%; background: var(--blue); color: var(--white); border: none; border-radius: 6px; padding: 10px; font-size: 13px; font-weight: 600; cursor: default; font-family: var(--font); }
+
+    /* ─── Features ─── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; transition: box-shadow .2s; }
+    .feature-card:hover { box-shadow: var(--shadow); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .feature-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── Pricing ─── */
+    .pricing-section { background: var(--slate-50); }
+    .pricing-center { max-width: 860px; margin: 0 auto; }
+    .pricing-main { display: grid; grid-template-columns: 1fr 1fr; background: var(--white); border-radius: var(--radius); border: 2px solid var(--blue); overflow: hidden; box-shadow: 0 0 0 4px var(--blue-light), var(--shadow-lg); margin-bottom: 24px; }
+    .pricing-left { padding: 40px 36px; border-right: 2px solid var(--slate-100); }
+    .pricing-right { padding: 40px 36px; background: var(--slate-50); }
+    .pricing-plan-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--blue); margin-bottom: 12px; }
+    .pricing-amount { display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px; }
+    .pricing-cur { font-size: 22px; font-weight: 700; color: var(--slate-900); }
+    .pricing-num { font-size: 60px; font-weight: 900; color: var(--slate-900); line-height: 1; letter-spacing: -2px; }
+    .pricing-per { font-size: 15px; color: var(--slate-500); }
+    .pricing-tagline { font-size: 14px; color: var(--slate-600); margin-bottom: 28px; line-height: 1.5; }
+    .included-credit { background: var(--blue-light); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 24px; }
+    .included-credit-num { font-size: 28px; font-weight: 900; color: var(--blue); line-height: 1; }
+    .included-credit-label { font-size: 13px; color: var(--blue); font-weight: 500; }
+    .included-credit-sub { font-size: 12px; color: var(--slate-500); margin-top: 4px; }
+    .pricing-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-list li { display: flex; gap: 10px; font-size: 14px; color: var(--slate-700); }
+    .pricing-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pricing-right-title { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px; }
+    .pricing-right-sub { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; line-height: 1.5; }
+    .flat-rate-display { background: var(--white); border-radius: var(--radius-sm); border: 2px solid var(--blue); padding: 24px 20px; margin-bottom: 16px; text-align: center; }
+    .flat-rate-amount { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin-bottom: 4px; }
+    .flat-rate-cur { font-size: 20px; font-weight: 700; color: var(--slate-900); }
+    .flat-rate-num { font-size: 48px; font-weight: 900; color: var(--blue); line-height: 1; letter-spacing: -1px; }
+    .flat-rate-cents { font-size: 28px; font-weight: 900; color: var(--blue); line-height: 1; }
+    .flat-rate-label { font-size: 14px; color: var(--slate-600); font-weight: 500; }
+    .flat-rate-badge { display: inline-block; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 100px; margin-top: 10px; }
+    .credit-calc { background: var(--amber-light); border-radius: var(--radius-sm); border: 1px solid #fde68a; padding: 14px 16px; margin-top: 16px; }
+    .credit-calc p { font-size: 13px; color: var(--amber); font-weight: 500; line-height: 1.6; }
+    .pricing-note { text-align: center; font-size: 13px; color: var(--slate-500); margin-top: 8px; }
+
+    /* ─── Quote ─── */
+    .quote-section { background: var(--blue); padding: 72px 0; }
+    .quote-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+    blockquote { font-size: clamp(20px, 3vw, 26px); font-weight: 600; line-height: 1.55; color: var(--white); font-style: italic; margin-bottom: 24px; }
+    .quote-attribution { font-size: 15px; color: rgba(255,255,255,.7); font-weight: 500; }
+
+    /* ─── Trust ─── */
+    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .trust-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
+    .trust-icon { font-size: 32px; margin-bottom: 12px; }
+    .trust-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .trust-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── FAQ ─── */
+    .faq-section { background: var(--slate-50); }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+    .faq-item { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px; }
+    .faq-q { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 10px; }
+    .faq-a { font-size: 14px; color: var(--slate-600); line-height: 1.65; }
+
+    /* ─── CTA ─── */
+    .cta-section { background: linear-gradient(160deg, #0d1b3e 0%, #1a2f6b 60%, #0f47a8 100%); padding: 96px 0; text-align: center; color: var(--white); }
+    .cta-section h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 20px; }
+    .cta-section p { font-size: 19px; color: rgba(255,255,255,.7); max-width: 560px; margin: 0 auto 40px; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .cta-note { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,.45); }
+
+    /* ─── Products portfolio (standard) ─── */
+    .products-section { background: var(--slate-50); }
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; text-align: center; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; align-items: center; }
+    .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .product-card.current { border-color: var(--blue); background: var(--blue-light); }
+    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-name { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
+    .product-desc { font-size: 12px; color: var(--slate-500); margin-bottom: 10px; line-height: 1.4; flex: 1; }
+    .product-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge-live { background: var(--green-light); color: var(--green); }
+    .badge-soon { background: var(--slate-100); color: var(--slate-500); }
+    .badge-here { background: var(--blue-light); color: var(--blue); }
+    @media (max-width: 860px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* ─── Footer ─── */
+    .footer { background: var(--slate-900); padding: 48px 0 32px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer-brand { max-width: 280px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 12px; }
+    .footer-logo-icon { width: 26px; height: 26px; color: #7eb8ff; }
+    .footer-logo-text { font-size: 18px; font-weight: 800; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .footer-links { display: flex; gap: 64px; }
+    .footer-col h5 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.6); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-col a.current-page { color: #7eb8ff; font-weight: 600; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; }
+    .footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .flow-steps { grid-template-columns: 1fr; }
+      .flow-arrow { display: none; }
+      .pains-grid { grid-template-columns: 1fr 1fr; }
+      .hiw-grid, .hiw-grid.reverse { grid-template-columns: 1fr; direction: ltr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-main { grid-template-columns: 1fr; }
+      .pricing-left { border-right: none; border-bottom: 2px solid var(--slate-100); }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pains-grid, .features-grid { grid-template-columns: 1fr; }
+      .footer-top { flex-direction: column; gap: 40px; }
+      .footer-links { flex-direction: column; gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.style.visibility='hidden';</script>
+
+<!-- ═══════════ HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+        </svg>
+        <div class="logo-names">
+          <a href="/" class="logo-parent">moddrum.com ↗</a>
+          <a href="/practice" class="logo-product">Moddrum Practice</a>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#how-it-works" data-i18n="nav_how"></a>
+        <a href="#pain-points" data-i18n="nav_challenges"></a>
+        <a href="#features" data-i18n="nav_features"></a>
+        <a href="#pricing" data-i18n="nav_pricing"></a>
+        <a href="#faq" data-i18n="nav_faq"></a>
+      </nav>
+      <div class="header-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-sl" onclick="setLang('sl')">SL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="/login" class="btn btn-outline btn-sm" data-i18n="nav_login"></a>
+        <a href="/signup" class="btn btn-primary btn-sm" data-i18n="nav_signup"></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ INTRO -->
+<section class="practice-intro-section">
+  <div class="container">
+    <div class="practice-inner">
+      <div class="practice-content">
+        <div class="section-tag" data-i18n="pd_tag"></div>
+        <h2 data-i18n="pd_title"></h2>
+        <p data-i18n="pd_body"></p>
+        <ul class="practice-pain-list">
+          <li><div class="pain-bullet">📨</div><span data-i18n="pd_p1"></span></li>
+          <li><div class="pain-bullet">📋</div><span data-i18n="pd_p2"></span></li>
+          <li><div class="pain-bullet">🔍</div><span data-i18n="pd_p3"></span></li>
+        </ul>
+        <a href="/signup" class="btn btn-white btn-lg" data-i18n="pd_cta"></a>
+      </div>
+      <div class="practice-visual">
+        <div class="pv-header">
+          <div class="pv-logo">
+            <svg class="pv-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+            </svg>
+            <span>Moddrum Practice</span>
+          </div>
+          <div class="pv-badge" data-i18n="pv_live_badge"></div>
+        </div>
+        <div class="pv-stats">
+          <div class="pv-stat">
+            <div class="pv-stat-num">0</div>
+            <div class="pv-stat-lbl" data-i18n="pv_stat1"></div>
+          </div>
+          <div class="pv-stat">
+            <div class="pv-stat-num">100%</div>
+            <div class="pv-stat-lbl" data-i18n="pv_stat2"></div>
+          </div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">📨</div>
+          <div class="pv-row-text" data-i18n="pv_row1"></div>
+          <div class="pv-row-status s-done" data-i18n="pv_status_auto"></div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">⚡</div>
+          <div class="pv-row-text" data-i18n="pv_row2"></div>
+          <div class="pv-row-status s-done" data-i18n="pv_status_auto"></div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">🔍</div>
+          <div class="pv-row-text" data-i18n="pv_row3"></div>
+          <div class="pv-row-status s-done" data-i18n="pv_status_auto"></div>
+        </div>
+        <div class="pv-row">
+          <div class="pv-row-icon">✅</div>
+          <div class="pv-row-text" data-i18n="pv_row4"></div>
+          <div class="pv-row-status s-ready" data-i18n="pv_status_you"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ NORTH STAR FLOW -->
+<section class="section flow-section" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="flow_tag"></div>
+      <h2 class="section-title" data-i18n="flow_title"></h2>
+      <p class="section-sub" data-i18n="flow_sub"></p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-icon icon-human">📬</div>
+        <div class="flow-step-num" data-i18n="flow1_num"></div>
+        <h3 data-i18n="flow1_title"></h3>
+        <p data-i18n="flow1_body"></p>
+        <div class="flow-badge flow-badge-human" data-i18n="flow_role_you"></div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step step-auto">
+        <div class="flow-step-icon icon-auto">⚡</div>
+        <div class="flow-step-num" data-i18n="flow2_num"></div>
+        <h3 data-i18n="flow2_title"></h3>
+        <p data-i18n="flow2_body"></p>
+        <div class="flow-badge" data-i18n="flow_auto_badge"></div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon icon-human">✅</div>
+        <div class="flow-step-num" data-i18n="flow3_num"></div>
+        <h3 data-i18n="flow3_title"></h3>
+        <p data-i18n="flow3_body"></p>
+        <div class="flow-badge flow-badge-human" data-i18n="flow_role_you"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PAIN POINTS -->
+<section class="section" id="pain-points">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="pain_tag"></div>
+      <h2 class="section-title" data-i18n="pain_title"></h2>
+      <p class="section-sub" data-i18n="pain_sub"></p>
+    </div>
+    <div class="pains-grid">
+
+      <!-- P0: Killer Feature A — Document collection -->
+      <div class="pain-card p0">
+        <div class="pain-p0-badge">P0</div>
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fee2e2">📨</div>
+          <div class="pain-time"><span class="pain-time-num">5–10</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
+        </div>
+        <h3 data-i18n="p1_title"></h3>
+        <p class="pain-problem" data-i18n="p1_problem"></p>
+        <div class="pain-solution" data-i18n="p1_solution"></div>
+      </div>
+
+      <!-- P0: Killer Feature B — Accounting system export -->
+      <div class="pain-card p0">
+        <div class="pain-p0-badge">P0</div>
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fee2e2">📋</div>
+          <div class="pain-time"><span class="pain-time-num">20–30</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
+        </div>
+        <h3 data-i18n="p2_title"></h3>
+        <p class="pain-problem" data-i18n="p2_problem"></p>
+        <div class="pain-solution" data-i18n="p2_solution"></div>
+      </div>
+
+      <!-- P0: Transaction matching -->
+      <div class="pain-card p0">
+        <div class="pain-p0-badge">P0</div>
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fee2e2">🔍</div>
+          <div class="pain-time"><span class="pain-time-num">15–20</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
+        </div>
+        <h3 data-i18n="p3_title"></h3>
+        <p class="pain-problem" data-i18n="p3_problem"></p>
+        <div class="pain-solution" data-i18n="p3_solution"></div>
+      </div>
+
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fef3c7">📷</div>
+          <div class="pain-time"><span class="pain-time-num">2–5</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
+        </div>
+        <h3 data-i18n="p4_title"></h3>
+        <p class="pain-problem" data-i18n="p4_problem"></p>
+        <div class="pain-solution" data-i18n="p4_solution"></div>
+      </div>
+
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#f3e8ff">📄</div>
+          <div class="pain-time"><span class="pain-time-num">1–3</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
+        </div>
+        <h3 data-i18n="p5_title"></h3>
+        <p class="pain-problem" data-i18n="p5_problem"></p>
+        <div class="pain-solution" data-i18n="p5_solution"></div>
+      </div>
+
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#ecfdf5">🗓️</div>
+          <div class="pain-time"><span class="pain-time-num" data-i18n="p6_time_num"></span><span class="pain-time-label" data-i18n="p6_time_label"></span></div>
+        </div>
+        <h3 data-i18n="p6_title"></h3>
+        <p class="pain-problem" data-i18n="p6_problem"></p>
+        <div class="pain-solution" data-i18n="p6_solution"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS DETAIL -->
+<section class="section hiw-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="hiw_tag"></div>
+      <h2 class="section-title" style="color:white" data-i18n="hiw_title"></h2>
+      <p class="section-sub" data-i18n="hiw_sub"></p>
+    </div>
+
+    <div class="hiw-grid">
+      <div class="hiw-content">
+        <div class="hiw-step-num">1</div>
+        <h3 data-i18n="hiw1_title"></h3>
+        <p data-i18n="hiw1_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw1_l1"></li><li data-i18n="hiw1_l2"></li>
+          <li data-i18n="hiw1_l3"></li><li data-i18n="hiw1_l4"></li><li data-i18n="hiw1_l5"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock1_title"></span></div>
+        <div class="mock-upload-zone">
+          <div style="font-size:32px;margin-bottom:8px">☁️</div>
+          <div data-i18n="mock_upload_text"></div>
+          <div style="font-size:11px;margin-top:6px;color:rgba(255,255,255,.3)">PDF · XML · JPG · PNG · CSV · XLSX</div>
+        </div>
+        <div class="mock-files">
+          <div class="mock-file"><span style="font-size:16px">📄</span><span class="mock-file-name">racun_dobavitelj_03-2026.pdf</span><span class="badge badge-inv" data-i18n="mock_badge_inv"></span></div>
+          <div class="mock-file"><span style="font-size:16px">📊</span><span class="mock-file-name">izpisek_nlb_mar2026.csv</span><span class="badge badge-bs" data-i18n="mock_badge_bs"></span></div>
+          <div class="mock-file"><span style="font-size:16px">🧾</span><span class="mock-file-name">eslog_20260314_001.xml</span><span class="badge badge-xml">eSLog →</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:64px"></div>
+
+    <div class="hiw-grid reverse">
+      <div class="hiw-content">
+        <div class="hiw-step-num">2</div>
+        <h3 data-i18n="hiw2_title"></h3>
+        <p data-i18n="hiw2_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw2_l1"></li><li data-i18n="hiw2_l2"></li>
+          <li data-i18n="hiw2_l3"></li><li data-i18n="hiw2_l4"></li><li data-i18n="hiw2_l5"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock2_title"></span></div>
+        <div class="mock-doc-list">
+          <div class="mock-doc-row"><span class="dt dt-i" data-i18n="dt_invoice"></span><span class="mock-doc-name">racun_dobavitelj_03-2026.pdf</span><span class="mock-doc-biz">Stranka d.o.o.</span></div>
+          <div class="mock-doc-row"><span class="dt dt-i">eSLog</span><span class="mock-doc-name">eslog_20260314_001.xml</span><span class="mock-doc-biz">Drugi posli s.p.</span></div>
+          <div class="mock-doc-row"><span class="dt dt-b" data-i18n="dt_bs"></span><span class="mock-doc-name">izpisek_nlb_mar2026.csv</span><span class="mock-doc-biz">NLB · mar 2026</span></div>
+          <div class="mock-doc-row"><span class="dt dt-r" data-i18n="dt_receipt"></span><span class="mock-doc-name">blagajniski_bon_2403.pdf</span><span class="mock-doc-biz">Stranka d.o.o.</span></div>
+        </div>
+        <div style="margin-top:12px;padding:10px;background:rgba(16,163,74,.08);border-radius:6px;border:1px solid rgba(16,163,74,.2);font-size:12px;color:#4ade80" data-i18n="mock2_result"></div>
+      </div>
+    </div>
+
+    <div style="height:64px"></div>
+
+    <div class="hiw-grid">
+      <div class="hiw-content">
+        <div class="hiw-step-num">3</div>
+        <h3 data-i18n="hiw3_title"></h3>
+        <p data-i18n="hiw3_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw3_l1"></li><li data-i18n="hiw3_l2"></li>
+          <li data-i18n="hiw3_l3"></li><li data-i18n="hiw3_l4"></li><li data-i18n="hiw3_l5"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock3_title"></span></div>
+        <div class="mock-match-header"><span data-i18n="mock3_col1"></span><span data-i18n="mock3_col2"></span><span data-i18n="mock3_col3"></span></div>
+        <div class="mock-match-row matched">
+          <span class="mock-txn">€240,00<br><span style="font-size:10px;color:rgba(255,255,255,.4)">SI00 12345-20260301</span></span>
+          <span class="mock-inv">Dobavitelj d.o.o.<br><span style="font-size:10px">Faktura #2026-031</span></span>
+          <span class="mock-score s-high">98%</span>
+        </div>
+        <div class="mock-match-row matched">
+          <span class="mock-txn">€1.440,00<br><span style="font-size:10px;color:rgba(255,255,255,.4)">RF18 9876543210</span></span>
+          <span class="mock-inv">Najem d.o.o.<br><span style="font-size:10px">Faktura #R-0234</span></span>
+          <span class="mock-score s-high">95%</span>
+        </div>
+        <div class="mock-match-row">
+          <span class="mock-txn">€85,50<br><span style="font-size:10px;color:rgba(255,255,255,.4)" data-i18n="mock3_no_ref"></span></span>
+          <span class="mock-inv" style="color:rgba(255,255,255,.3)" data-i18n="mock3_no_match"></span>
+          <span class="mock-score s-med">—</span>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.4);text-align:center" data-i18n="mock3_result"></div>
+      </div>
+    </div>
+
+    <div style="height:64px"></div>
+
+    <div class="hiw-grid reverse">
+      <div class="hiw-content">
+        <div class="hiw-step-num">4</div>
+        <h3 data-i18n="hiw4_title"></h3>
+        <p data-i18n="hiw4_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw4_l1"></li><li data-i18n="hiw4_l2"></li>
+          <li data-i18n="hiw4_l3"></li><li data-i18n="hiw4_l4"></li><li data-i18n="hiw4_l5"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock4_title"></span></div>
+        <div class="mock-export-form">
+          <div class="mock-export-title" data-i18n="mock4_form_title"></div>
+          <div class="mock-field"><div class="mock-label" data-i18n="mock4_f1"></div><div class="mock-value v-filled">Dobavitelj d.o.o. · ID 42318</div></div>
+          <div class="mock-field"><div class="mock-label" data-i18n="mock4_f2"></div><div class="mock-value v-filled">Faktura #2026-031</div></div>
+          <div class="mock-field"><div class="mock-label" data-i18n="mock4_f3"></div><div class="mock-value v-filled">€240,00</div></div>
+          <div class="mock-field"><div class="mock-label" data-i18n="mock4_f4"></div><div class="mock-value v-filled">01.03.2026 · 31.03.2026</div></div>
+        </div>
+        <button class="mock-export-btn" data-i18n="mock4_btn"></button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ QUOTE -->
+<section class="quote-section">
+  <div class="container">
+    <div class="quote-inner">
+      <blockquote data-i18n="quote_text"></blockquote>
+      <div class="quote-attribution" data-i18n="quote_attr"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="feat_tag"></div>
+      <h2 class="section-title" data-i18n="feat_title"></h2>
+      <p class="section-sub" data-i18n="feat_sub"></p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">📬</div><h3 data-i18n="f1_title"></h3><p data-i18n="f1_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🔬</div><h3 data-i18n="f2_title"></h3><p data-i18n="f2_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🔗</div><h3 data-i18n="f3_title"></h3><p data-i18n="f3_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><h3 data-i18n="f4_title"></h3><p data-i18n="f4_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🔌</div><h3 data-i18n="f5_title"></h3><p data-i18n="f5_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">📨</div><h3 data-i18n="f6_title"></h3><p data-i18n="f6_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🏢</div><h3 data-i18n="f7_title"></h3><p data-i18n="f7_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">📋</div><h3 data-i18n="f8_title"></h3><p data-i18n="f8_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">⚡</div><h3 data-i18n="f9_title"></h3><p data-i18n="f9_body"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="price_tag"></div>
+      <h2 class="section-title" data-i18n="price_title"></h2>
+      <p class="section-sub" data-i18n="price_sub"></p>
+    </div>
+    <div class="pricing-center">
+      <div class="pricing-main">
+        <div class="pricing-left">
+          <div class="pricing-plan-name" data-i18n="plan_name"></div>
+          <div class="pricing-amount">
+            <span class="pricing-cur">€</span>
+            <span class="pricing-num">19</span>
+            <span class="pricing-per" data-i18n="per_month"></span>
+          </div>
+          <p class="pricing-tagline" data-i18n="plan_tagline"></p>
+          <div class="included-credit">
+            <div class="included-credit-num">100</div>
+            <div class="included-credit-label" data-i18n="credits_included_label"></div>
+            <div class="included-credit-sub" data-i18n="credits_included_sub"></div>
+          </div>
+          <ul class="pricing-list">
+            <li data-i18n="pl1"></li><li data-i18n="pl2"></li><li data-i18n="pl3"></li>
+            <li data-i18n="pl4"></li><li data-i18n="pl5"></li><li data-i18n="pl6"></li><li data-i18n="pl7"></li>
+          </ul>
+          <a href="/signup" class="btn btn-primary" style="width:100%;justify-content:center" data-i18n="cta_trial"></a>
+        </div>
+        <div class="pricing-right">
+          <div class="pricing-right-title" data-i18n="extra_title"></div>
+          <p class="pricing-right-sub" data-i18n="extra_sub"></p>
+          <div class="flat-rate-display">
+            <div class="flat-rate-amount">
+              <span class="flat-rate-cur">€</span>
+              <span class="flat-rate-num">0</span>
+              <span class="flat-rate-cents">,20</span>
+            </div>
+            <div class="flat-rate-label" data-i18n="per_doc_label"></div>
+            <div class="flat-rate-badge" data-i18n="per_doc_badge"></div>
+          </div>
+          <div class="credit-calc"><p data-i18n-html="credit_example"></p></div>
+        </div>
+      </div>
+      <p class="pricing-note" data-i18n="pricing_note"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TRUST -->
+<section class="section-sm">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-icon">🇸🇮</div><h4 data-i18n="t1_title"></h4><p data-i18n="t1_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🔐</div><h4 data-i18n="t2_title"></h4><p data-i18n="t2_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🏠</div><h4 data-i18n="t3_title"></h4><p data-i18n="t3_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">📋</div><h4 data-i18n="t4_title"></h4><p data-i18n="t4_body"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ -->
+<section class="section faq-section" id="faq">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="faq_tag"></div>
+      <h2 class="section-title" data-i18n="faq_title"></h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q" data-i18n="faq1_q"></div><div class="faq-a" data-i18n="faq1_a"></div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="faq2_q"></div><div class="faq-a" data-i18n="faq2_a"></div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="faq3_q"></div><div class="faq-a" data-i18n="faq3_a"></div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="faq4_q"></div><div class="faq-a" data-i18n="faq4_a"></div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="faq5_q"></div><div class="faq-a" data-i18n="faq5_a"></div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="faq6_q"></div><div class="faq-a" data-i18n="faq6_a"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 data-i18n-html="cta_h2"></h2>
+    <p data-i18n="cta_sub"></p>
+    <div class="cta-actions">
+      <a href="/signup" class="btn btn-white btn-lg" data-i18n="cta_trial"></a>
+      <a href="/login" class="btn btn-ghost btn-lg" data-i18n="cta_login"></a>
+    </div>
+    <p class="cta-note" data-i18n="pricing_note"></p>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS PORTFOLIO -->
+<section class="section products-section">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:32px">
+      <div class="section-tag" data-i18n="products_tag"></div>
+      <h2 class="section-title" data-i18n="products_title"></h2>
+    </div>
+    <div class="products-grid">
+      <a href="/practice" class="product-card current">
+        <span class="product-icon">📋</span>
+        <div class="product-name" data-i18n="pc_practice_name"></div>
+        <div class="product-desc"  data-i18n="pc_practice_desc"></div>
+        <span class="product-badge badge-here" data-i18n="pc_badge_here"></span>
+      </a>
+      <a href="/biz" class="product-card">
+        <span class="product-icon">🏢</span>
+        <div class="product-name" data-i18n="pc_biz_name"></div>
+        <div class="product-desc"  data-i18n="pc_biz_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="/connect" class="product-card">
+        <span class="product-icon">🔗</span>
+        <div class="product-name" data-i18n="pc_connect_name"></div>
+        <div class="product-desc"  data-i18n="pc_connect_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="/mcp" class="product-card">
+        <span class="product-icon">🤖</span>
+        <div class="product-name" data-i18n="pc_mcp_name"></div>
+        <div class="product-desc"  data-i18n="pc_mcp_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/practice" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+          </svg>
+          <span class="footer-logo-text">Moddrum Practice</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline"></p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5 data-i18n="footer_col1_title"></h5>
+          <a href="/practice" class="current-page">Moddrum Practice</a>
+          <a href="/biz">Moddrum Biz</a>
+          <a href="/connect">Moddrum Connect</a>
+          <a href="/mcp">Moddrum MCP</a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col2_title"></h5>
+          <a href="#how-it-works" data-i18n="nav_how"></a>
+          <a href="#features" data-i18n="nav_features"></a>
+          <a href="#pricing" data-i18n="nav_pricing"></a>
+          <a href="#faq" data-i18n="nav_faq"></a>
+          <a href="/signup" data-i18n="footer_signup"></a>
+          <a href="/docs" data-i18n="footer_docs"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col3_title"></h5>
+          <a href="/about" data-i18n="footer_about"></a>
+          <a href="/contact" data-i18n="footer_contact"></a>
+          <a href="/privacy" data-i18n="footer_privacy"></a>
+          <a href="/terms" data-i18n="footer_terms"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-i18n="footer_copy"></div>
+      <div class="footer-legal">
+        <a href="/privacy" data-i18n="footer_privacy"></a>
+        <a href="/terms" data-i18n="footer_terms"></a>
+        <a href="/gdpr">GDPR</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TRANSLATIONS = {
+  sl: {
+    nav_how: 'Kako deluje',
+    nav_challenges: 'Izzivi',
+    nav_features: 'Funkcije',
+    nav_pricing: 'Cena',
+    nav_faq: 'FAQ',
+    nav_login: 'Prijava',
+    nav_signup: 'Začni brezplačno',
+
+    pd_tag: 'Moddrum Practice — Zdaj v živo',
+    pd_title: 'Računovodska praksa brez dokumentne kaotike',
+    pd_body: 'Računovodja pri 20–30 strankah sprejme na stotine dokumentov mesečno. Zbiranje, obdelava in vnos zahtevajo 35–50 ur mesečno. Moddrum Practice ta čas vrne.',
+    pd_p1: 'Zbiranje od strank — vsaka stranka pošilja na svojevrsten način, celo leto',
+    pd_p2: 'Ročni vnos — vsako fakturo pretipkate polje za poljem',
+    pd_p3: 'Ujemanje — 100+ transakcij na stranko vsak mesec',
+    pd_cta: 'Preizkusi Moddrum Practice brezplačno →',
+    pv_live_badge: '✅ V živo',
+    pv_stat1: 'ročnih vnosov',
+    pv_stat2: 'samodejno prepoznano',
+    pv_row1: 'Dokument prejet od stranke',
+    pv_row2: 'Moddrum Engine ekstrakcija in kategorizacija',
+    pv_row3: 'Ujemanje z bančno transakcijo',
+    pv_row4: 'Vi pregledate in potrdite izvoz',
+    pv_status_auto: '⚡ Samodejno',
+    pv_status_you: '👤 Vaša vloga',
+    hero_label: '🇸🇮 Moddrum Practice — za računovodsko stroko',
+    hero_h1: 'Upravljanje prakse vas stane<br><span class="accent">35–50 ur časa vsak mesec.</span><br>Moddrum Practice ta čas vrne vam.',
+    hero_sub: 'Moddrum Practice zbira dokumente od vaših strank, jih samodejno obdela in pripravi za izvoz v računovodski sistem. Vi pregledate rezultat in potrdite. Vse vmes naredi Moddrum Practice.',
+    hero_cta_primary: 'Začni brezplačno →',
+    hero_cta_secondary: 'Oglej si kako deluje',
+    stat1: 'ur/mesec manj na administraciji',
+    stat2: 'ročnih vnosov v računovodski sistem',
+    stat3: 'samodejno prepoznavanje vrst dokumentov',
+    stat4: 'izvoz v računovodski sistem, brez tipkanja',
+
+    flow_tag: 'Filozofija produkta',
+    flow_title: 'Vaši dve vlogi. Vse ostalo naredi Moddrum Practice.',
+    flow_sub: 'Zbiranje in obdelava dokumentov je najdolgočasnejši del računovodskega dela. Moddrum Practice prevzame ta del — vi ostanete pri tistem, za kar ste izobraženi.',
+    flow1_num: 'Korak 1 — Vi',
+    flow1_title: 'Dokumenti prispejo',
+    flow1_body: 'E-pošta, ročna naložitev, Google Drive, WhatsApp foto — katerakoli pot je prava. Moddrum Practice sprejme vse.',
+    flow2_num: 'Moddrum Practice — samodejno',
+    flow2_title: 'Moddrum Practice obdela vse',
+    flow2_body: 'Prepozna vrsto dokumenta, prebere polja, pripiše stranki, ujema s transakcijami, pripravi za izvoz.',
+    flow3_num: 'Korak 2 — Vi',
+    flow3_title: 'Vi pregledate in potrdite',
+    flow3_body: 'En pregled, en klik za izvoz. Vi ste odgovorni za točnost — Moddrum Practice nikoli ne izvozi brez vaše potrditve.',
+    flow_role_you: '👤 Vaša vloga',
+    flow_auto_badge: '⚡ Brez vaše intervencije',
+
+    pain_tag: '6 glavnih izzivov',
+    pain_title: 'Kje gre čas pri upravljanju računovodske prakse',
+    pain_sub: 'Vsak od teh izzivov ima konkreten časovni in energijski strošek. Moddrum Practice naslavlja vsakega posebej.',
+    hrs_month: 'ur/mesec',
+
+    p1_title: 'Zbiranje dokumentov od strank',
+    p1_problem: 'SMS, WhatsApp, e-pošta, naključne mape — vsaka stranka po svojih navadah. Poplava dokumentov tik pred letnim zaključkom, po mesecih tišine. Vi lovite vse niti vse leto.',
+    p1_solution: 'En centraliziran predal. Samodejni opomniki za manjkajoče dokumente. Moddrum Practice pripiše vsak dokument pravi stranki brez vaše intervencije.',
+
+    p2_title: 'Ročni vnos v računovodski sistem',
+    p2_problem: 'Vsako fakturo pretipirate ročno — polje za poljem, stranka za stranko. Vsak nov ali tuj dobavitelj vzame 20–30 minut. To ni računovodsko delo.',
+    p2_solution: 'Moddrum Practice prebere vsa polja in jih prenese v računovodski sistem z enim klikom. Nič pretipkavanja.',
+
+    p3_title: 'Ujemanje faktur z bančnimi transakcijami',
+    p3_problem: '100+ transakcij na stranko. Vsako ročno primerjate med bančnim izpiskom in prejeto fakturo. Iskanje po referenčnih številkah, datum za datumom.',
+    p3_solution: 'Moddrum Practice samodejno ujema po referenci, znesku in datumu. Vi pregledate samo neujemanja.',
+
+    p4_title: 'Slaba kakovost skenov',
+    p4_problem: 'Zamegljene fotografije, obrnjeni posnetki, napol vidni zneski. Vi prosite za ponovni dokument.',
+    p4_solution: 'OCR z zaupanjem — Moddrum Practice oceni kakovost in samodejno zaprosi za ponoven dokument.',
+
+    p5_title: 'Podvojeni dokumenti',
+    p5_problem: 'Ista faktura pride po e-pošti in WhatsApp-u. Dvojni vnos v računovodski sistem je dvojna napaka.',
+    p5_solution: 'Moddrum Practice zazna podvojenost z AI in vas opozori pred vnosom — brez duplikatov.',
+
+    p6_title: 'Dokumentna poplava ob koncu meseca',
+    p6_problem: 'V zadnjem tednu v mesecu pride večina dokumentov naenkrat. Prekovremeno delo in napake grejo skupaj.',
+    p6_solution: 'Moddrum Practice dela 24/7. Dokumenti se procesirajo takoj ko pridejo — ni čakalnih vrst.',
+    p6_time_num: 'stres',
+    p6_time_label: 'ob koncu meseca',
+
+    hiw_tag: 'Štirje koraki',
+    hiw_title: 'Od zbiranja dokumentov do izvoza',
+    hiw_sub: 'Vsak korak med sprejemom in izvozom je avtomatiziran. Vi vidite samo rezultat.',
+    hiw1_title: 'Zbiranje in sprejem — katerakoli pot',
+    hiw1_body: 'Moddrum Practice sprejme dokument ne glede na to, kako je prispel. Vse poti vodijo v isti centraliziran predal vaše prakse.',
+    hiw1_l1: 'Ročna naložitev (PDF, XML eSLog, JPG, PNG, CSV, XLSX)',
+    hiw1_l2: 'Ingestion po e-pošti — stranka pošlje na vaš Moddrum Practice naslov',
+    hiw1_l3: 'Google Drive in cloud integracije (prihaja)',
+    hiw1_l4: 'CAMT.053 bančni izpiski iz katerekoli slovenske banke',
+    hiw1_l5: 'eSLog 2.00 XML — neposredno iz računovodskih sistemov',
+    hiw2_title: 'Samodejna kategorizacija in ekstrakcija',
+    hiw2_body: 'Moddrum Practice prepozna vrsto vsakega dokumenta in izlušči vsa polja brez vaše intervencije.',
+    hiw2_l1: 'Prepozna: faktura, bančni izpisek, potni nalog, bon, pogodba',
+    hiw2_l2: 'Prebere: znesek, DDV, datum, sklic, IBAN, naziv dobavitelja, davčna številka',
+    hiw2_l3: 'Pripiše dokument pravi stranki z AI',
+    hiw2_l4: 'Označi zaupanje — nizko zaupanje gre v vaš pregled',
+    hiw2_l5: 'Podvojenost zazna pred obdelavo',
+    hiw3_title: 'Ujemanje faktur z bančnimi transakcijami',
+    hiw3_body: 'Algoritem primerja vsako transakcijo z uvoženo fakturo. Vi vidite samo tisto, česar algoritem ni mogel ujeti sam.',
+    hiw3_l1: 'Ujemanje po referenčni številki plačila (SI00 / RF)',
+    hiw3_l2: 'Fallback: znesek + datum ±3 dni + naziv stranke',
+    hiw3_l3: 'Samodejno potrjeno pri ujemanju ≥ 80 %',
+    hiw3_l4: 'Rekonciliacijsko delovno okolje za pregled neujemanj',
+    hiw3_l5: 'Oznake: ujeto · ni fakture · ni aplikabilno (davki, plače)',
+    hiw4_title: 'En klik — izvoz prejetega računa v računovodski sistem',
+    hiw4_body: 'Ko je faktura preverjena, jo z enim klikom izvozite. Vsa polja so že izpolnjena — nič pretipkavate.',
+    hiw4_l1: 'Samodejno izpolni: dobavitelj, referenca, datum, znesek, DDV',
+    hiw4_l2: 'Preveri ali dobavitelj že obstaja — sicer ga ustvari',
+    hiw4_l3: 'Status: "Izvoženo ✓" — dvojni izvoz ni mogoč',
+    hiw4_l4: 'Deluje z MiniMax SI, e-računi in prihodnjimi sistemi',
+    hiw4_l5: 'Podpira več strank z različnimi računovodskimi organizacijami',
+
+    mock1_title: 'Moddrum Practice — Naloži dokumente',
+    mock_upload_text: 'Povlecite in spustite datoteke ali kliknite za izbiro',
+    mock_badge_inv: 'Faktura →',
+    mock_badge_bs: 'Bančni izpisek →',
+    mock2_title: 'Moddrum Practice — Dokumenti',
+    dt_invoice: 'Faktura',
+    dt_bs: 'Bančni izpisek',
+    dt_receipt: 'Bon',
+    mock2_result: '✓ 4 dokumenti samodejno kategorizirani in pripisani',
+    mock3_title: 'Moddrum Practice — Ujemanje transakcij',
+    mock3_col1: 'Transakcija',
+    mock3_col2: 'Faktura',
+    mock3_col3: 'Ujemanje',
+    mock3_no_ref: 'brez sklica',
+    mock3_no_match: 'Ni ujemanja',
+    mock3_result: '27 samodejno ujemano · 1 čaka vaš pregled',
+    mock4_title: 'Moddrum Practice — Izvoz',
+    mock4_form_title: 'Prejeti račun — pripravljen za izvoz',
+    mock4_f1: 'Stranka (dobavitelj)',
+    mock4_f2: 'Referenčna številka',
+    mock4_f3: 'Znesek z DDV',
+    mock4_f4: 'Datum izdaje · Rok plačila',
+    mock4_btn: '✓ Izvozi v računovodski sistem',
+
+    quote_text: '"Prej sem cel teden konca meseca lovila dokumente po e-pošti in WhatsApp-u, potem pa vse pretipkavala. Zdaj Moddrum Practice zbere vse samodejno in jaz samo pregledam in potrdim. Imam čas za stranke, ki ga prej nikoli nisem imela."',
+    quote_attr: '— Računovodkinja, Ljubljana · 24 strank · glasnica Moddrum Practice beta',
+
+    feat_tag: 'Funkcije',
+    feat_title: 'Vse kar računovodska praksa potrebuje',
+    feat_sub: 'Od zbiranja dokumentov do izvoza v računovodski sistem — brez preklapljanja med orodji.',
+    f1_title: 'Centraliziran predal', f1_body: 'Dokumenti prihajajo po e-pošti, nalaganju ali integraciji. Vsi na enem mestu z enim vmesnikom.',
+    f2_title: 'AI OCR ekstrakcija', f2_body: 'Prepozna besedilo in polja iz PDF, slik, XML eSLog in CAMT.053 — ne glede na format ali kakovost.',
+    f3_title: 'Avtomatsko ujemanje', f3_body: 'Transakcija ↔ faktura po referenci, znesku in datumu. Vi vidite samo tisto, kar algoritem ni ujel.',
+    f4_title: 'Nadzorna plošča strank', f4_body: 'Pregled stanja vsake stranke: kateri izpiski so prispeli, katere fakture manjkajo, kaj čaka pregled.',
+    f5_title: 'Integracija z računovodskimi sistemi', f5_body: 'Direktni izvoz s vsemi polji. MiniMax SI danes, e-računi in prihodnji sistemi jutri.',
+    f6_title: 'Avtomatski opomniki', f6_body: 'Moddrum Practice zaprosi stranke za manjkajoče dokumente. Vi ne pišete WhatsApp sporočil vsak mesec.',
+    f7_title: 'Neomejeno strank', f7_body: 'Upravljajte poljubno število podjetij-strank brez dodatnih stroškov. En račun, vsa praksa.',
+    f8_title: 'Naloge in opozorila', f8_body: 'Neujeta faktura po 7 dneh → naloga za pregled. Nič ne ostane neopaženo ali pozabljeno.',
+    f9_title: 'Deluje 24/7', f9_body: 'Dokumenti se procesirajo takoj ob prispetju — podnevi, ponoči, ob vikendih. Brez čakalnih vrst.',
+
+    price_tag: 'Transparentna cena',
+    price_title: 'Mesečna naročnina + krediti po fiksni ceni',
+    price_sub: 'Osnovna naročnina vključuje 100 dokumentov na mesec. Za večji obseg dokupite kredite — ista cena na dokument, ne glede na količino.',
+    plan_name: 'Standard — edini paket',
+    per_month: '/mesec',
+    plan_tagline: 'Naročnina vključuje celoten dostop do platforme in 100 kreditov za obdelavo dokumentov vsak mesec.',
+    credits_included_label: 'kreditov vključenih vsak mesec',
+    credits_included_sub: '1 kredit = 1 dokument obdelan (razpoznan, ujeman, pripravljen za izvoz)',
+    pl1: 'Neomejeno strank (managed businesses)',
+    pl2: 'Neomejeno uporabnikov v praksi',
+    pl3: 'Integracija z računovodskimi sistemi',
+    pl4: 'Samodejno ujemanje transakcij',
+    pl5: 'AI OCR ekstrakcija polj',
+    pl6: 'E-poštni ingestion in opomniki',
+    pl7: 'Celotna revizijska sled',
+    cta_trial: 'Začni 14-dnevni preizkus →',
+    extra_title: 'Potrebujete več dokumentov?',
+    extra_sub: 'Dokupite točno toliko kreditov, kot jih potrebujete. Krediti ne potečejo — brez roka veljavnosti.',
+    per_doc_label: 'za vsak dodaten dokument',
+    per_doc_badge: 'Enaka cena za 1 ali 10.000 dokumentov',
+    credit_example: '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača €19 (naročnina + 100 kreditov) + 300 × €0,20 = <strong>€79/mesec skupaj</strong>.',
+    pricing_note: '14 dni brezplačno · Ni potrebna kartica · Prekini kadarkoli',
+
+    t1_title: 'Narejen za Slovenijo', t1_body: 'eSLog 2.00, CAMT.053, MiniMax SI, DDV-O — vse po slovenskem standardu in zakonodaji.',
+    t2_title: 'Šifriranje AES-256', t2_body: 'Vsi dokumenti šifrirani v mirovanju in prenosu. Strogi GDPR standard za računovodske podatke.',
+    t3_title: 'Podatki v EU', t3_body: 'Strežniki v Evropski uniji. Vaši podatki ne zapustijo EU. Vsaka praksa vidi samo svoje stranke.',
+    t4_title: 'Revizijska sled', t4_body: 'Vsaka akcija zabeležena: kdo, kdaj, kaj. Popolna preglednost za revizijo ali spor z DURSom.',
+
+    faq_tag: 'Pogosta vprašanja',
+    faq_title: 'Kar vas zanima',
+    faq1_q: 'Ali Moddrum Practice deluje z MiniMax SI?',
+    faq1_a: 'Da. Moddrum Practice se poveže z MiniMax SI prek uradnega API-ja z OAuth2 avtentikacijo. Podpira tudi e-računi in v prihodnosti ostale sisteme. Vsaka stranka ima svojo organizacijo — Moddrum Practice podpira vse naenkrat.',
+    faq2_q: 'Ali Moddrum Practice samodejno izvozi brez mojega pregleda?',
+    faq2_a: 'Nikoli. Moddrum Practice pripravi vse, vi pa potrdite izvoz z enim klikom. Vi ste odgovorni za točnost podatkov — Moddrum Practice vam prihrani ure iskanja in vnosa, ne odgovornosti.',
+    faq3_q: 'Kaj se šteje kot 1 dokument (1 kredit)?',
+    faq3_a: 'En kredit porabi vsak dokument, ki ga Moddrum Practice uspešno obdela: prebere vsebino, ekstrahira polja in ga pripravi za nadaljnje akcije. Dokumenti, ki jih sistem ne more prepoznati, kreditov ne porabijo.',
+    faq4_q: 'Ali krediti potečejo?',
+    faq4_a: '100 mesečnih kreditov iz naročnine se ponastavi vsak 1. v mesecu. Dokupljeni krediti ne potečejo — veljajo dokler jih ne porabite, brez roka.',
+    faq5_q: 'Kako varni so finančni podatki mojih strank?',
+    faq5_a: 'AES-256 šifriranje v mirovanju, TLS v prenosu, strežniki v EU (GDPR). Vsaka računovodska praksa vidi samo svoje stranke — popolna izolacija med praksami. Revizijska sled vseh dostopov.',
+    faq6_q: 'Kaj če Moddrum Practice ne more prepoznati dokumenta?',
+    faq6_a: 'Dokument gre v pregled z oznako nizko zaupanje. Vi prejmete opozorilo in uredite ročno. Kredit se ne porabi. Moddrum Practice se iz vaših popravkov nauči za prihodnje dokumente.',
+
+    cta_h2: 'Zberite brez preglavic.<br>Izvozite brez tipkanja.',
+    cta_sub: 'Zbiranje in obdelava dokumentov je nujno zlo — ne sme pa jesti polovice vašega delovnega časa. Moddrum Practice to spravi na minimum.',
+    cta_login: 'Že imate račun? Prijava',
+
+    products_tag: 'Moddrum platforma',
+    products_title: 'Ena platforma, štiri produkti',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'Za računovodske prakse',
+    pc_biz_name: 'Moddrum Biz',           pc_biz_desc: 'Za lastnike podjetij',
+    pc_connect_name: 'Moddrum Connect',   pc_connect_desc: 'Za ERP ekipe',
+    pc_mcp_name: 'Moddrum MCP',           pc_mcp_desc: 'Za AI ekipe',
+    pc_badge_live: 'V živo', pc_badge_soon: 'Prihaja kmalu', pc_badge_here: 'Tukaj ste',
+
+    footer_tagline: 'Upravljanje računovodske prakse — od zbiranja dokumentov do izvoza v računovodski sistem.',
+    footer_col1_title: 'Produkti',
+    footer_col2_title: 'Moddrum Practice',
+    footer_col3_title: 'Podjetje',
+    footer_signup: 'Registracija',
+    footer_docs: 'Dokumentacija',
+    footer_about: 'O nas',
+    footer_contact: 'Kontakt',
+    footer_privacy: 'Zasebnost',
+    footer_terms: 'Pogoji',
+    footer_copy: '© 2026 Moddrum d.o.o. Vse pravice pridržane.',
+  },
+
+  en: {
+    nav_how: 'How it works',
+    nav_challenges: 'Challenges',
+    nav_features: 'Features',
+    nav_pricing: 'Pricing',
+    nav_faq: 'FAQ',
+    nav_login: 'Log in',
+    nav_signup: 'Start for free',
+
+    pd_tag: 'Moddrum Practice — Live now',
+    pd_title: 'Accounting practice without the document chaos',
+    pd_body: 'An accountant serving 20–30 clients receives hundreds of documents every month. Collection, processing, and entry take 35–50 hours per month. Moddrum Practice gives that time back.',
+    pd_p1: 'Collecting from clients — every client sends differently, all year long',
+    pd_p2: 'Manual entry — every invoice retyped field by field',
+    pd_p3: 'Matching — 100+ transactions per client every month',
+    pd_cta: 'Try Moddrum Practice for free →',
+    pv_live_badge: '✅ Live',
+    pv_stat1: 'manual entries',
+    pv_stat2: 'recognised automatically',
+    pv_row1: 'Document received from client',
+    pv_row2: 'Moddrum Engine extraction and classification',
+    pv_row3: 'Matched to bank transaction',
+    pv_row4: 'You review and confirm export',
+    pv_status_auto: '⚡ Automatic',
+    pv_status_you: '👤 Your role',
+    hero_label: '🇸🇮 Moddrum Practice — for accounting professionals',
+    hero_h1: 'Running your practice costs you<br><span class="accent">35–50 hours every month.</span><br>Moddrum Practice gives that time back.',
+    hero_sub: 'Moddrum Practice collects documents from your clients, processes them automatically, and prepares them for export to your accounting system. You review and confirm. Everything in between is handled by Moddrum Practice.',
+    hero_cta_primary: 'Start for free →',
+    hero_cta_secondary: 'See how it works',
+    stat1: 'hrs/month saved on document admin',
+    stat2: 'manual entries to your accounting system',
+    stat3: 'automatic document type recognition',
+    stat4: 'export to accounting system, zero typing',
+
+    flow_tag: 'Product philosophy',
+    flow_title: 'Your two roles. Moddrum Practice handles everything else.',
+    flow_sub: 'Collecting and processing documents is the most tedious part of accounting work. Moddrum Practice takes that part — you stay focused on what you were trained for.',
+    flow1_num: 'Step 1 — You',
+    flow1_title: 'Documents arrive',
+    flow1_body: 'Email, manual upload, Google Drive, WhatsApp photo — any channel works. Moddrum Practice accepts them all.',
+    flow2_num: 'Moddrum Practice — automatic',
+    flow2_title: 'Moddrum Practice processes everything',
+    flow2_body: 'Identifies document type, reads fields, assigns to client, matches with transactions, prepares for export.',
+    flow3_num: 'Step 2 — You',
+    flow3_title: 'You review and confirm',
+    flow3_body: 'One review, one click to export. You are responsible for accuracy — Moddrum Practice never exports without your confirmation.',
+    flow_role_you: '👤 Your role',
+    flow_auto_badge: '⚡ No intervention needed',
+
+    pain_tag: '6 key challenges',
+    pain_title: 'Where the time goes in running an accounting practice',
+    pain_sub: 'Each of these challenges has a concrete time and energy cost. Moddrum Practice addresses each one individually.',
+    hrs_month: 'hrs/month',
+
+    p1_title: 'Collecting documents from clients',
+    p1_problem: 'SMS, WhatsApp, email, random folders — every client does it differently. A flood of documents just before year-end, after months of silence. You chase every thread all year long.',
+    p1_solution: 'One centralized inbox. Automatic reminders for missing documents. Moddrum Practice assigns every document to the right client without your intervention.',
+
+    p2_title: 'Manual entry into your accounting system',
+    p2_problem: 'Every invoice retyped manually — field by field, client by client. A new or foreign supplier takes 20–30 minutes each. This is not accounting work.',
+    p2_solution: 'Moddrum Practice reads all fields and transfers them to your accounting system in one click. Zero retyping.',
+
+    p3_title: 'Matching invoices to bank transactions',
+    p3_problem: '100+ transactions per client. Each one manually compared between the bank statement and received invoices. Searching by reference number, date by date.',
+    p3_solution: 'Moddrum Practice auto-matches by payment reference, amount and date. You only review unmatched items.',
+
+    p4_title: 'Poor quality scans',
+    p4_problem: 'Blurry photos, rotated images, half-visible amounts. You have to ask for documents to be resent.',
+    p4_solution: 'OCR with confidence scoring — Moddrum Practice evaluates quality and automatically requests a replacement.',
+
+    p5_title: 'Duplicate documents',
+    p5_problem: 'Same invoice arrives by email and WhatsApp. Double entry in your accounting system means double the errors.',
+    p5_solution: 'Moddrum Practice detects duplicates with AI and warns you before processing — no duplicates.',
+
+    p6_title: 'End-of-month document flood',
+    p6_problem: 'Most documents arrive in the last week of the month at once. Overtime and errors go hand in hand.',
+    p6_solution: 'Moddrum Practice runs 24/7. Documents are processed as soon as they arrive — no backlogs.',
+    p6_time_num: 'stress',
+    p6_time_label: 'end of month',
+
+    hiw_tag: 'Four steps',
+    hiw_title: 'From collecting documents to export',
+    hiw_sub: 'Every step between receipt and export is automated. You only see the result.',
+    hiw1_title: 'Collection and intake — any channel',
+    hiw1_body: 'Moddrum Practice accepts documents regardless of how they arrived. All paths lead to the same centralized inbox for your practice.',
+    hiw1_l1: 'Manual upload (PDF, XML eSLog, JPG, PNG, CSV, XLSX)',
+    hiw1_l2: 'Email ingestion — client sends to your Moddrum Practice address',
+    hiw1_l3: 'Google Drive and cloud integrations (coming soon)',
+    hiw1_l4: 'CAMT.053 bank statements from any Slovenian bank',
+    hiw1_l5: 'eSLog 2.00 XML — directly from accounting systems',
+    hiw2_title: 'Automatic classification and extraction',
+    hiw2_body: 'Moddrum Practice identifies the type of every document and extracts all fields without your intervention.',
+    hiw2_l1: 'Identifies: invoice, bank statement, travel order, receipt, contract',
+    hiw2_l2: 'Reads: amount, VAT, date, reference, IBAN, supplier name, tax number',
+    hiw2_l3: 'Assigns document to the correct client with AI',
+    hiw2_l4: 'Flags confidence — low confidence goes to your review queue',
+    hiw2_l5: 'Detects duplicates before processing',
+    hiw3_title: 'Matching invoices to bank transactions',
+    hiw3_body: 'The algorithm compares every transaction against imported invoices. You only see what it could not match automatically.',
+    hiw3_l1: 'Matching by payment reference number (SI00 / RF)',
+    hiw3_l2: 'Fallback: amount + date ±3 days + company name',
+    hiw3_l3: 'Auto-confirmed at match score ≥ 80%',
+    hiw3_l4: 'Reconciliation workspace for reviewing unmatched items',
+    hiw3_l5: 'Labels: matched · no invoice · not applicable (taxes, salaries)',
+    hiw4_title: 'One click — export to your accounting system',
+    hiw4_body: 'Once an invoice is verified, one click exports it. All fields are already filled — nothing to retype.',
+    hiw4_l1: 'Auto-fills: supplier, reference, date, amount, VAT',
+    hiw4_l2: 'Checks if supplier exists — creates them if not',
+    hiw4_l3: 'Status: "Exported ✓" — double-export is blocked',
+    hiw4_l4: 'Works with MiniMax SI, e-računi, and future systems',
+    hiw4_l5: 'Supports multiple clients with different accounting organisations',
+
+    mock1_title: 'Moddrum Practice — Upload documents',
+    mock_upload_text: 'Drag and drop files or click to select',
+    mock_badge_inv: 'Invoice →',
+    mock_badge_bs: 'Bank statement →',
+    mock2_title: 'Moddrum Practice — Documents',
+    dt_invoice: 'Invoice',
+    dt_bs: 'Bank statement',
+    dt_receipt: 'Receipt',
+    mock2_result: '✓ 4 documents automatically classified and assigned',
+    mock3_title: 'Moddrum Practice — Transaction matching',
+    mock3_col1: 'Transaction',
+    mock3_col2: 'Invoice',
+    mock3_col3: 'Match',
+    mock3_no_ref: 'no reference',
+    mock3_no_match: 'No match',
+    mock3_result: '27 auto-matched · 1 awaiting your review',
+    mock4_title: 'Moddrum Practice — Export',
+    mock4_form_title: 'Received invoice — ready for export',
+    mock4_f1: 'Supplier',
+    mock4_f2: 'Reference number',
+    mock4_f3: 'Amount incl. VAT',
+    mock4_f4: 'Issue date · Due date',
+    mock4_btn: '✓ Export to accounting system',
+
+    quote_text: '"I used to spend the entire last week of the month chasing documents by email and WhatsApp, then retyping everything. Now Moddrum Practice collects everything automatically and I just review and confirm. I finally have time for my clients."',
+    quote_attr: '— Accountant, Ljubljana · 24 clients · Moddrum Practice beta participant',
+
+    feat_tag: 'Features',
+    feat_title: 'Everything an accounting practice needs',
+    feat_sub: 'From collecting documents to export to your accounting system — without switching between tools.',
+    f1_title: 'Centralized inbox', f1_body: 'Documents arrive by email, upload or integration. All in one place with one interface.',
+    f2_title: 'AI OCR extraction', f2_body: 'Reads text and fields from PDF, images, XML eSLog and CAMT.053 — regardless of format or quality.',
+    f3_title: 'Automatic matching', f3_body: 'Transaction ↔ invoice by reference, amount and date. You only see what the algorithm missed.',
+    f4_title: 'Client dashboard', f4_body: 'Overview of each client\'s status: which statements arrived, which invoices are missing, what needs review.',
+    f5_title: 'Accounting system integration', f5_body: 'Direct export with all fields populated. MiniMax SI today, e-računi and future systems as you need them.',
+    f6_title: 'Automatic reminders', f6_body: 'Moddrum Practice requests missing documents from clients. No more WhatsApp messages every month.',
+    f7_title: 'Unlimited clients', f7_body: 'Manage any number of client companies with no extra cost. One account, your whole practice.',
+    f8_title: 'Tasks & alerts', f8_body: 'Unmatched invoice after 7 days → task for review. Nothing goes unnoticed or forgotten.',
+    f9_title: 'Runs 24/7', f9_body: 'Documents are processed immediately on arrival — day, night, weekends. No backlogs.',
+
+    price_tag: 'Transparent pricing',
+    price_title: 'Monthly subscription + credits at a fixed rate',
+    price_sub: 'The base subscription includes 100 documents per month. For higher volumes, purchase additional credits — the same price per document, regardless of quantity.',
+    plan_name: 'Standard — single plan',
+    per_month: '/month',
+    plan_tagline: 'Subscription includes full platform access and 100 document processing credits every month.',
+    credits_included_label: 'credits included every month',
+    credits_included_sub: '1 credit = 1 document processed (recognised, matched, ready for export)',
+    pl1: 'Unlimited clients (managed businesses)',
+    pl2: 'Unlimited users in your practice',
+    pl3: 'Accounting system integration',
+    pl4: 'Automatic transaction matching',
+    pl5: 'AI OCR field extraction',
+    pl6: 'Email ingestion and reminders',
+    pl7: 'Full audit trail',
+    cta_trial: 'Start 14-day trial →',
+    extra_title: 'Need more documents?',
+    extra_sub: 'Purchase exactly as many credits as you need. Credits never expire — they last until you use them.',
+    per_doc_label: 'per additional document',
+    per_doc_badge: 'Same price for 1 or 10,000 documents',
+    credit_example: '<strong>Example:</strong> A practice with 400 documents/month pays €19 (subscription + 100 credits) + 300 × €0.20 = <strong>€79/month total</strong>.',
+    pricing_note: '14 days free · No card required · Cancel any time',
+
+    t1_title: 'Built for Slovenia', t1_body: 'eSLog 2.00, CAMT.053, MiniMax SI, VAT forms — all compliant with Slovenian standards and regulations.',
+    t2_title: 'AES-256 encryption', t2_body: 'All documents encrypted at rest and in transit. Strict GDPR standard for accounting data.',
+    t3_title: 'Data in the EU', t3_body: 'Servers in the European Union. Your data never leaves the EU. Each practice sees only their own clients.',
+    t4_title: 'Audit trail', t4_body: 'Every action logged: who, when, what. Full transparency for audits or tax authority disputes.',
+
+    faq_tag: 'Frequently asked questions',
+    faq_title: 'What you want to know',
+    faq1_q: 'Does Moddrum Practice work with MiniMax SI?',
+    faq1_a: 'Yes. Moddrum Practice connects to MiniMax SI via the official API with OAuth2 authentication. It also supports e-računi and future accounting systems. Each client can have their own organisation — Moddrum Practice supports all of them at once.',
+    faq2_q: 'Does Moddrum Practice automatically export without my review?',
+    faq2_a: 'Never. Moddrum Practice prepares everything, and you confirm the export with one click. You remain responsible for data accuracy — Moddrum Practice saves you hours of searching and entry, not the responsibility.',
+    faq3_q: 'What counts as 1 document (1 credit)?',
+    faq3_a: 'One credit is used for each document that Moddrum Practice successfully processes: reads content, extracts fields, and prepares it for further actions. Documents that cannot be recognised do not consume credits.',
+    faq4_q: 'Do credits expire?',
+    faq4_a: 'The 100 monthly credits from the subscription reset on the 1st of each month. Purchased credits never expire — they remain valid until used, with no deadline.',
+    faq5_q: 'How secure is my clients\' financial data?',
+    faq5_a: 'AES-256 encryption at rest, TLS in transit, EU-based servers (GDPR). Each accounting practice sees only their own clients — complete isolation between practices. Full audit trail of all access.',
+    faq6_q: 'What if Moddrum Practice cannot recognise a document?',
+    faq6_a: 'The document enters a review queue flagged as low confidence. You receive an alert and can edit it manually. No credit is consumed. Moddrum Practice learns from your corrections for future documents.',
+
+    cta_h2: 'Collect without the chaos.<br>Export without the typing.',
+    cta_sub: 'Document collection and processing is a necessary evil — but it should not consume half your working time. Moddrum Practice reduces it to a minimum.',
+    cta_login: 'Already have an account? Log in',
+
+    products_tag: 'Moddrum platform',
+    products_title: 'One platform, four products',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'For accounting practices',
+    pc_biz_name: 'Moddrum Biz',           pc_biz_desc: 'For business owners',
+    pc_connect_name: 'Moddrum Connect',   pc_connect_desc: 'For ERP teams',
+    pc_mcp_name: 'Moddrum MCP',           pc_mcp_desc: 'For AI teams',
+    pc_badge_live: 'Live', pc_badge_soon: 'Coming soon', pc_badge_here: 'You are here',
+
+    footer_tagline: 'Practice management for accountants — from collecting documents to exporting to your accounting system.',
+    footer_col1_title: 'Products',
+    footer_col2_title: 'Moddrum Practice',
+    footer_col3_title: 'Company',
+    footer_signup: 'Sign up',
+    footer_docs: 'Documentation',
+    footer_about: 'About',
+    footer_contact: 'Contact',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms',
+    footer_copy: '© 2026 Moddrum d.o.o. All rights reserved.',
+  }
+};
+
+function setLang(lang) {
+  const t = TRANSLATIONS[lang];
+  if (!t) return;
+
+  // Update text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  // Update innerHTML nodes (for embedded HTML like <br>, <strong>, <span>)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  // Update html lang attribute
+  document.documentElement.lang = lang;
+
+  // Update switcher active state
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById('btn-' + lang);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // Persist
+  try { localStorage.setItem('moddrum_lang', lang); } catch(e) {}
+}
+
+// Init: use stored preference, then browser language, then default to 'sl'
+(function() {
+  let lang = 'sl';
+  try {
+    const stored = localStorage.getItem('moddrum_lang');
+    if (stored && TRANSLATIONS[stored]) { lang = stored; }
+    else {
+      const browser = (navigator.language || '').toLowerCase();
+      if (browser.startsWith('en')) lang = 'en';
+    }
+  } catch(e) {}
+  setLang(lang);
+  document.documentElement.style.visibility='';
+})();
+</script>
+</body>
+</html>

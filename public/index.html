@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum AI - Turn accounting chaos into a managed workflow. Automate document collection and data extraction so you can focus on advisory, not manual data entry.">
+  <meta name="keywords" content="accounting automation, AI document processing, OCR, MiniMax integration, e-Računi">
+  <title>Moddrum AI | Turn Accounting Chaos into Managed Workflow</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path fill='%23135bec' d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z'/><path fill='%23135bec' fill-rule='evenodd' d='M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z'/></svg>">
+</head>
+<body>
+  
+  <!-- ========================================
+       Header
+       ======================================== -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <!-- Logo -->
+        <a href="/" class="logo">
+          <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"/>
+            <path clip-rule="evenodd" d="M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+          <span class="logo-text">Moddrum AI</span>
+        </a>
+        
+        <!-- Navigation -->
+        <nav class="nav">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#workflow" class="nav-link">Workflow</a>
+          <a href="#security" class="nav-link">Security</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+        </nav>
+        
+        <!-- Actions -->
+        <div class="header-actions">
+          <a href="/login" class="login-link">Login</a>
+          <a href="/signup" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================
+       Hero Section
+       ======================================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Content -->
+        <div class="hero-content">
+          <span class="hero-badge">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            Now with OCR 2.0
+          </span>
+          
+          <h1 class="hero-title">
+            Turn Accounting Chaos into a <span class="highlight">Managed Workflow</span>
+          </h1>
+          
+          <p class="hero-description">
+            Moddrum AI automates document collection and data extraction so you can focus on advisory, not manual data entry.
+          </p>
+          
+          <div class="hero-actions">
+            <a href="/signup" class="btn btn-primary btn-md">Start Free Trial</a>
+          </div>
+        </div>
+        
+        <!-- Visual -->
+        <div class="hero-visual">
+          <div class="hero-image-wrapper">
+            <div class="hero-image placeholder-img">
+              <span class="material-symbols-outlined" style="font-size: 4rem;">dashboard</span>
+            </div>
+          </div>
+          
+          <div class="hero-stat-card">
+            <div class="hero-stat-icon">
+              <span class="material-symbols-outlined">task_alt</span>
+            </div>
+            <div>
+              <p class="hero-stat-label">Automation Rate</p>
+              <p class="hero-stat-value">95% Accuracy</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="hero-bg-accent"></div>
+  </section>
+
+  <!-- ========================================
+       Problem-Solution Section
+       ======================================== -->
+  <section id="features" class="section features-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>The Old Grind vs. The Moddrum Way</h2>
+        <p>Why keep fighting manual processes when AI can handle the heavy lifting?</p>
+      </div>
+      
+      <div class="problem-solution-rows">
+        
+        <!-- Row 1: Inbox -->
+        <div class="ps-row reverse">
+          <div class="ps-content">
+            <div class="pain-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">error</span>
+                The Pain: Messy Inbox
+              </div>
+              <h3>Drowning in Client Emails?</h3>
+              <p>Scattered attachments, buried threads, and WhatsApp pings. Searching for one document takes 15 minutes.</p>
+            </div>
+            
+            <div class="solution-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">verified</span>
+                The Solution: Centralized Feed
+              </div>
+              <h3>Centralized Document Inbox</h3>
+              <p>Moddrum automatically pulls attachments from Email and WhatsApp into one organized place. No more digging.</p>
+              <a href="#" class="learn-more">
+                Learn about integrations
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+          
+          <div class="ps-visual grayscale">
+            <div class="placeholder-img">
+              <span class="material-symbols-outlined">inbox</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Row 2: Data Entry -->
+        <div class="ps-row">
+          <div class="ps-visual">
+            <div class="placeholder-img">
+              <span class="material-symbols-outlined">keyboard</span>
+            </div>
+          </div>
+          
+          <div class="ps-content">
+            <div class="pain-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">warning</span>
+                The Pain: Human Error
+              </div>
+              <h3>Slow & Error-Prone Entry</h3>
+              <p>Hours spent typing data into spreadsheets with frequent errors and mental fatigue. One typo ruins the whole audit.</p>
+            </div>
+            
+            <div class="solution-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">smart_toy</span>
+                The Solution: AI Extraction
+              </div>
+              <h3>AI-Powered Extraction</h3>
+              <p>Smart OCR that learns your documents and fills fields automatically. 95%+ accuracy that gets smarter with every page.</p>
+              <div class="code-tags">
+                <span class="code-tag neutral">Invoice # INV-449</span>
+                <span class="code-tag primary">Extracted by Moddrum AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Row 3: Chasing Clients -->
+        <div class="ps-row reverse">
+          <div class="ps-content">
+            <div class="pain-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">schedule</span>
+                The Pain: The Chase
+              </div>
+              <h3>Chasing Clients for Info</h3>
+              <p>Constant phone calls and reminder emails for that one missing receipt. It feels like baby-sitting instead of accounting.</p>
+            </div>
+            
+            <div class="solution-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">notifications_active</span>
+                The Solution: Auto-Ping
+              </div>
+              <h3>Automated Reminders</h3>
+              <p>Moddrum flags missing docs based on bank statements and pings the client via their preferred channel. Automatically.</p>
+            </div>
+          </div>
+          
+          <div class="ps-visual grayscale">
+            <div class="placeholder-img">
+              <span class="material-symbols-outlined">phone_missed</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Row 4: Sync Errors -->
+        <div class="ps-row">
+          <div class="ps-visual">
+            <div class="placeholder-img">
+              <span class="material-symbols-outlined">error_outline</span>
+            </div>
+          </div>
+          
+          <div class="ps-content">
+            <div class="pain-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">cloud_off</span>
+                The Pain: Sync Hell
+              </div>
+              <h3>MiniMax Sync Errors</h3>
+              <p>The dread of "Internal Server Error" when exporting to your ledger. Hours spent cleaning up duplicated entries.</p>
+            </div>
+            
+            <div class="solution-card">
+              <div class="card-label">
+                <span class="material-symbols-outlined">sync</span>
+                The Solution: Validated Export
+              </div>
+              <h3>One-Click Validated Export</h3>
+              <p>Documents are pre-checked for quality and duplicates before they ever touch your accounting software. Clean data, every time.</p>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Workflow Comparison Section
+       ======================================== -->
+  <section id="workflow" class="section workflow-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>The Moddrum Workflow</h2>
+        <p>Compare your current reality with the automated future.</p>
+      </div>
+      
+      <div class="workflow-grid">
+        <div class="workflow-divider"></div>
+        
+        <!-- Manual Way -->
+        <div class="workflow-column manual">
+          <h3 class="workflow-column-header manual">
+            <span class="material-symbols-outlined">person</span>
+            THE MANUAL WAY
+          </h3>
+          
+          <div class="workflow-steps">
+            <div class="workflow-step">
+              <div class="step-number">1</div>
+              <p>Manually check 3 separate email accounts and WhatsApp groups.</p>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">2</div>
+              <p>Download, rename, and sort PDFs into desktop folders.</p>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">3</div>
+              <p>Open spreadsheets and manually type line items from invoices.</p>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">4</div>
+              <p>Identify missing info and call the client (who doesn't pick up).</p>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">5</div>
+              <p>Batch upload to MiniMax and cross fingers for sync errors.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Moddrum Way -->
+        <div class="workflow-column moddrum">
+          <h3 class="workflow-column-header moddrum">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            THE MODDRUM WAY
+          </h3>
+          
+          <div class="workflow-steps">
+            <div class="workflow-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Auto-Ingestion</h4>
+                <p>Moddrum watches your channels and pulls everything automatically.</p>
+              </div>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>AI Data Extraction</h4>
+                <p>Every document is instantly digitized and categorized by AI.</p>
+              </div>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>One-Click Validation</h4>
+                <p>Quickly scan and approve the AI's work. Expert-in-the-loop.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="workflow-highlight">
+            <p>Total Time Saved: 85% per Client</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Trust / Security Section
+       ======================================== -->
+  <section id="security" class="section trust-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Enterprise-Grade Trust</h2>
+        <p>Your client's data is isolated, encrypted, and safe.</p>
+      </div>
+      
+      <div class="trust-grid">
+        <div class="trust-card">
+          <span class="material-symbols-outlined">lock</span>
+          <h3>Data Isolation</h3>
+          <p>Each account operates in a sandboxed environment. Your data is never used to train global AI models.</p>
+        </div>
+        
+        <div class="trust-card">
+          <span class="material-symbols-outlined">verified_user</span>
+          <h3>Expert-in-the-Loop</h3>
+          <p>The AI never makes final accounting decisions. You remain the final validator for every document.</p>
+        </div>
+        
+        <div class="trust-card">
+          <span class="material-symbols-outlined">shield</span>
+          <h3>Full Audit Log</h3>
+          <p>Every extraction, sync, and modification is logged with timestamps for complete accountability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Pricing Section
+       ======================================== -->
+  <section id="pricing" class="section pricing-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Simple Pricing, Infinite Scale.</h2>
+        <p>No hidden fees or complex tiers. Just a simple credit system designed to grow alongside your business.</p>
+      </div>
+      
+      <!-- Main Pricing Card -->
+      <div class="pricing-card">
+        <div class="pricing-card-header">
+          <div class="pricing-card-title">
+            <h3>Standard</h3>
+            <p>Full platform access with included credits</p>
+          </div>
+          <div class="pricing-card-price">
+            <span class="price" id="mp-plan-price">€29.00</span>
+            <span class="period">/mo</span>
+            <span class="billing-note">BILLED MONTHLY</span>
+          </div>
+        </div>
+        
+        <div class="pricing-body">
+          <ul class="pricing-features">
+            <li class="pricing-feature pricing-feature-highlight">
+              <span class="material-symbols-outlined filled">check_circle</span>
+              <span><strong><span id="mp-credits-included">100</span> Credits included every month</strong></span>
+            </li>
+            <li class="pricing-feature">
+              <span class="material-symbols-outlined">check</span>
+              <span>Unlimited Company entities</span>
+            </li>
+            <li class="pricing-feature">
+              <span class="material-symbols-outlined">check</span>
+              <span>Smart OCR & Automatic validation</span>
+            </li>
+            <li class="pricing-feature">
+              <span class="material-symbols-outlined">check</span>
+              <span>Collaborative invoice correction</span>
+            </li>
+            <li class="pricing-feature">
+              <span class="material-symbols-outlined">check</span>
+              <span>Advanced export to ERP/Accounting</span>
+            </li>
+            <li class="pricing-feature">
+              <span class="material-symbols-outlined">check</span>
+              <span>Next-day email support</span>
+            </li>
+          </ul>
+          
+          <a href="/signup" class="btn btn-primary btn-md btn-full">Start Free Trial</a>
+        </div>
+      </div>
+      
+      <!-- Credit Top-up Card -->
+      <div class="pricing-addon-card">
+        <div class="pricing-addon-header">
+          <div class="pricing-addon-icon">
+            <span class="material-symbols-outlined">add</span>
+          </div>
+          <div class="pricing-addon-title">
+            <h4>Low on credits?</h4>
+            <p>Top up instantly at any time.</p>
+          </div>
+        </div>
+        <div class="pricing-addon-item">
+          <div class="addon-details">
+            <span class="addon-name">100 Extra Pack</span>
+            <span class="addon-note">Credits roll over forever</span>
+          </div>
+          <span class="addon-price" id="mp-topup-price">€20</span>
+        </div>
+      </div>
+      
+      <!-- Fair Credit System -->
+      <div class="credit-system">
+        <h4 class="credit-system-title">Fair Credit System</h4>
+        <div class="credit-system-grid">
+          <div class="credit-system-item">
+            <span class="credit-system-label">CORE USAGE</span>
+            <p>Processing 1 document up to 1 pages uses <span class="highlight">1 credit</span>.</p>
+          </div>
+          <div class="credit-system-item">
+            <span class="credit-system-label">OVERAGE SUPPORT</span>
+            <p>Each additional 1 pages consumes only <span class="highlight">1 more credit</span>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       FAQ Section
+       ======================================== -->
+  <section class="section faq-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Common Questions</h2>
+      </div>
+      
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            Does Moddrum work with my existing software?
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
+          <p class="faq-answer">Yes, we have deep integrations with MiniMax, Xero, Sage, and QuickBooks. We also offer a CSV/Excel export for legacy systems.</p>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            How secure is the client data?
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
+          <p class="faq-answer">We use AES-256 encryption at rest and TLS 1.3 in transit. We are fully SOC2 compliant and undergo regular security audits.</p>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            Is there a limit on how many team members can use it?
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
+          <p class="faq-answer">No. We believe collaboration shouldn't be gated. Add as many firm members as you need at no extra cost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       CTA Section
+       ======================================== -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to stop the manual grind?</h2>
+        <p>Join 500+ firms who have reclaimed their weekends with Moddrum AI.</p>
+        <a href="/signup" class="btn btn-white btn-lg">Start Your Free Trial</a>
+      </div>
+    </div>
+    
+    <div class="cta-bg">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+        <path d="M0 0 L100 100 M100 0 L0 100" stroke="white" stroke-width="0.1"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Footer
+       ======================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 8L8 40h32L24 8z" fill="currentColor"/>
+          </svg>
+          <span>Moddrum AI</span>
+        </div>
+        
+        <div class="footer-links">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="/contact">Contact Support</a>
+        </div>
+        
+        <p class="footer-copyright">© 2026 Moddrum AI. Built for better accounting.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Smooth Scroll -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+  <!-- Live pricing from Moddrum API — falls back to static values if unreachable -->
+  <script>
+    (function () {
+      fetch('/api/public/pricing')
+        .then(function (r) { return r.json(); })
+        .then(function (p) {
+          var planEl = document.getElementById('mp-plan-price');
+          if (planEl) planEl.textContent = '\u20ac' + Number(p.calculatedPlanPrice).toFixed(2);
+
+          var topupEl = document.getElementById('mp-topup-price');
+          if (topupEl) topupEl.textContent = '\u20ac' + Math.round(Number(p.pricePerCredit) * Number(p.creditsPerPack));
+
+          var credEl = document.getElementById('mp-credits-included');
+          if (credEl) credEl.textContent = p.creditsPerPack;
+        })
+        .catch(function () { /* API unreachable — static fallback values remain */ });
+    })();
+  </script>
+</body>
+</html>

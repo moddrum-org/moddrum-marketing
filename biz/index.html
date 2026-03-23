@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum Biz — dokumentni portal za podjetnike. Naložite dokumente, vidite kaj manjka in vaš računovodja dobi vse samodejno. Konec mesečnega stresa.">
+  <title>Moddrum Biz — Konec mesečnega lovljenja dokumentov</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23d97706'/><path transform='translate(4,4)' fill='white' d='M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92'/></svg>">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #135bec; --blue-dark: #0d47c7; --blue-light: #e8effe; --blue-mid: #3b77f0;
+      --green: #16a34a; --green-light: #dcfce7;
+      --amber: #d97706; --amber-dark: #b45309; --amber-light: #fef3c7; --amber-mid: #f59e0b;
+      --red: #dc2626; --red-light: #fee2e2;
+      --slate-900: #0f172a; --slate-800: #1e293b; --slate-700: #334155;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08); --shadow-lg: 0 12px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--slate-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Coming soon banner ─── */
+    .coming-soon-banner { background: #fef3c7; border-bottom: 2px solid #d97706; padding: 12px 0; text-align: center; }
+    .coming-soon-banner .container { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .coming-soon-text { font-size: 14px; font-weight: 600; color: #92400e; }
+
+    /* ─── Header ─── */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 30px; height: 30px; color: var(--amber); }
+    .logo-badge { font-size: 10px; font-weight: 700; background: var(--amber-light); color: var(--amber-dark); padding: 2px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: .3px; }
+    .logo-names { display: flex; flex-direction: column; gap: 0; }
+    .logo-parent { font-size: 11px; font-weight: 600; color: var(--slate-400); text-decoration: none; line-height: 1.4; letter-spacing: .1px; transition: color .15s; }
+    .logo-parent:hover { color: var(--amber); }
+    .logo-product { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--slate-900); text-decoration: none; line-height: 1.1; }
+    .logo-product:hover { color: var(--slate-700); }
+    .logo-name-row { display: flex; align-items: center; gap: 6px; }
+    .nav { display: flex; gap: 28px; }
+    .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
+    .nav a:hover { color: var(--amber); }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher {
+      display: flex; align-items: center;
+      background: var(--slate-100); border-radius: 6px;
+      padding: 3px; gap: 2px;
+    }
+    .lang-btn {
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer;
+      color: var(--slate-500); background: transparent; transition: all .15s;
+      letter-spacing: .3px;
+    }
+    .lang-btn.active { background: var(--white); color: var(--amber); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .lang-btn:not(.active):hover { color: var(--slate-800); }
+
+    /* ─── Buttons ─── */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 11px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .btn-amber { background: var(--amber); color: var(--white); }
+    .btn-amber:hover { background: var(--amber-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(217,119,6,.35); }
+    .btn-outline { background: transparent; color: var(--amber); border: 1.5px solid var(--amber); }
+    .btn-outline:hover { background: var(--amber-light); }
+    .btn-white { background: var(--white); color: var(--amber); }
+    .btn-white:hover { background: var(--amber-light); transform: translateY(-1px); }
+    .btn-ghost { background: rgba(255,255,255,.12); color: white; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); }
+    .btn-lg { font-size: 17px; padding: 15px 32px; }
+    .btn-sm { font-size: 13px; padding: 8px 18px; }
+
+    /* ─── Hero ─── */
+    .hero { background: linear-gradient(160deg, #0d1b3e 0%, #1a2f6b 50%, #0f47a8 100%); color: var(--white); padding: 60px 0; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(217,119,6,.18) 0%, transparent 70%); pointer-events: none; }
+    .hero-label { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.9); font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 100px; margin-bottom: 28px; text-transform: uppercase; letter-spacing: .5px; }
+    .hero h1 { font-size: clamp(30px, 3.2vw, 52px); font-weight: 900; line-height: 1.06; letter-spacing: -2px; margin-bottom: 20px; }
+    .hero h1 .accent { color: #fcd34d; }
+    .hero-sub { font-size: 17px; color: rgba(255,255,255,.75); line-height: 1.65; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+    .hero-proof { display: flex; gap: 32px; flex-wrap: wrap; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.12); }
+    .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stat-number { font-size: 28px; font-weight: 800; color: var(--white); line-height: 1; letter-spacing: -1px; }
+    .hero-stat-label { font-size: 12px; color: rgba(255,255,255,.6); }
+    /* ─── Hero split + illustration ─── */
+    .hero-split { display: grid; grid-template-columns: 52% 1fr; gap: 56px; align-items: center; }
+    .hero-viz { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; overflow: hidden; }
+    .hviz-bar { background: rgba(0,0,0,.25); padding: 10px 16px; display: flex; align-items: center; gap: 5px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .hviz-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .hviz-dot-r { background: #ff5f57; } .hviz-dot-y { background: #febc2e; } .hviz-dot-g { background: #28c840; }
+    .hviz-title { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 600; flex: 1; margin-left: 8px; }
+    /* ─── Biz: request-card illustration ─── */
+    .bviz-body { padding: 14px 16px; }
+    .bviz-card { background: rgba(217,119,6,.1); border: 1px solid rgba(217,119,6,.35); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+    .bviz-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .bviz-badge { font-size: 10px; font-weight: 800; color: #fcd34d; background: rgba(217,119,6,.25); padding: 2px 8px; border-radius: 100px; }
+    .bviz-card-date { font-size: 10px; color: rgba(255,255,255,.35); }
+    .bviz-card-title { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 3px; }
+    .bviz-card-sub { font-size: 10px; color: rgba(255,255,255,.4); }
+    .bviz-action { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 11px; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .bviz-action:last-of-type { border-bottom: none; }
+    .bviz-action-done { color: rgba(255,255,255,.35); text-decoration: line-through; text-decoration-color: rgba(255,255,255,.15); }
+    .bviz-action-active { color: rgba(255,255,255,.88); font-weight: 600; }
+    .bviz-check { color: #4ade80; font-size: 12px; width: 16px; flex-shrink: 0; }
+    .bviz-spin { color: #fcd34d; font-size: 12px; width: 16px; flex-shrink: 0; }
+    .bviz-progress { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+    .bviz-bar { flex: 1; height: 5px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; }
+    .bviz-bar-fill { height: 100%; background: linear-gradient(90deg, #d97706, #fcd34d); border-radius: 3px; animation: bviz-pulse 3s ease-in-out infinite; }
+    .bviz-pct { font-size: 11px; font-weight: 700; color: #fcd34d; }
+    @keyframes bviz-pulse { 0%,100%{width:52%} 55%{width:82%} }
+    @media (max-width: 900px) { .hero-split { grid-template-columns: 1fr; } .hero-viz { display: none; } }
+
+    /* ─── Section common ─── */
+    .section-tag { display: inline-block; background: var(--amber-light); color: var(--amber-dark); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .section-tag.blue { background: var(--blue-light); color: var(--blue); }
+    .section-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .section-sub { font-size: 18px; color: var(--slate-600); max-width: 640px; line-height: 1.65; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── Pain points ─── */
+    .pains-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pain-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; position: relative; overflow: hidden; transition: box-shadow .2s, transform .2s; }
+    .pain-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .pain-card.highlight { border-color: #fcd34d; background: #fffbeb; }
+    .pain-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .pain-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .pain-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .pain-problem { font-size: 14px; color: var(--slate-600); margin-bottom: 16px; line-height: 1.6; }
+    .pain-solution { background: var(--green-light); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--green); font-weight: 500; line-height: 1.5; }
+    .pain-solution::before { content: '✓ '; font-weight: 700; }
+
+    /* ─── How it works (steps) ─── */
+    .flow-section { background: var(--slate-50); }
+    .flow-steps { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: start; margin-bottom: 48px; }
+    /* ─── Biz: warm amber sliding-document arrows ─── */
+    .flow-arrow { display: flex; align-items: flex-start; padding-top: 40px; flex-shrink: 0; }
+    .flow-arrow span { position: relative; display: block; width: 52px; height: 20px; }
+    .flow-arrow span::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: calc(100% - 9px); height: 2px; border-radius: 1px; background: linear-gradient(90deg, var(--amber-light), var(--amber)); }
+    .flow-arrow span::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 9px solid var(--amber); }
+    .flow-arrow span .biz-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px rgba(217,119,6,.7); animation: biz-slide 2.2s cubic-bezier(.4,0,.2,1) infinite; }
+    @keyframes biz-slide { 0%{left:-8px;opacity:0} 10%{opacity:1} 80%{opacity:1;left:calc(100% - 17px)} 100%{left:calc(100% - 17px);opacity:0} }
+    .flow-step { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; text-align: center; box-shadow: var(--shadow); }
+    .flow-step.step-auto { border-color: var(--amber); background: linear-gradient(135deg, var(--amber-light), #fffbeb); }
+    .flow-step-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
+    .icon-human { background: #dbeafe; }
+    .icon-auto { background: var(--amber-light); }
+    .flow-step-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--slate-400); margin-bottom: 8px; }
+    .flow-step h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--slate-900); }
+    .flow-step p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+    .flow-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--amber); color: var(--white); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; margin-top: 12px; text-transform: uppercase; }
+    .flow-badge-you { background: var(--blue-light); color: var(--blue); }
+
+    /* ─── Features ─── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; transition: box-shadow .2s; }
+    .feature-card:hover { box-shadow: var(--shadow); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--amber-light); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .feature-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── Waitlist section ─── */
+    .waitlist-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 80px 0; text-align: center; }
+    .waitlist-section .section-tag { background: rgba(217,119,6,.2); color: #fcd34d; }
+    .waitlist-section .section-title { color: var(--white); }
+    .waitlist-pre { font-size: 16px; color: rgba(255,255,255,.6); max-width: 520px; margin: 0 auto 8px; }
+    .waitlist-form { display: flex; gap: 12px; max-width: 480px; margin: 32px auto 0; }
+    .waitlist-input { flex: 1; padding: 13px 18px; border-radius: 8px; border: none; font-size: 15px; font-family: var(--font); outline: none; }
+    .waitlist-input:focus { box-shadow: 0 0 0 3px rgba(217,119,6,.4); }
+    .waitlist-btn { padding: 13px 24px; background: var(--amber); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: var(--font); transition: background .15s; }
+    .waitlist-btn:hover { background: var(--amber-dark); }
+    .waitlist-note { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,.35); }
+
+    /* ─── Products portfolio (standard) ─── */
+    .products-section { background: var(--slate-50); }
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; text-align: center; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; align-items: center; }
+    .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .product-card.current { border-color: var(--amber); background: var(--amber-light); }
+    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-name { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
+    .product-desc { font-size: 12px; color: var(--slate-500); margin-bottom: 10px; line-height: 1.4; flex: 1; }
+    .product-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge-live { background: var(--green-light); color: var(--green); }
+    .badge-soon { background: var(--slate-100); color: var(--slate-500); }
+    .badge-here { background: var(--amber-light); color: var(--amber); }
+    @media (max-width: 860px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* ─── Trust ─── */
+    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .trust-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
+    .trust-icon { font-size: 32px; margin-bottom: 12px; }
+    .trust-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .trust-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── Footer ─── */
+    .footer { background: var(--slate-900); padding: 48px 0 32px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer-brand { max-width: 280px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 12px; }
+    .footer-logo-icon { width: 26px; height: 26px; color: #fcd34d; }
+    .footer-logo-text { font-size: 18px; font-weight: 800; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .footer-links { display: flex; gap: 48px; }
+    .footer-col h5 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.6); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-col a.current-page { color: #fcd34d; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; }
+    .footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+    /* ─── Mock UI ─── */
+    .mock-bar { display: flex; gap: 6px; margin-bottom: 20px; align-items: center; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+    .mock-title-bar { font-size: 12px; color: rgba(255,255,255,.4); margin-left: 8px; }
+    .hiw-section { background: var(--slate-900); color: var(--white); }
+    .hiw-section .section-title { color: var(--white); }
+    .hiw-section .section-sub { color: rgba(255,255,255,.6); }
+    .hiw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-bottom: 72px; }
+    .hiw-grid:last-child { margin-bottom: 0; }
+    .hiw-grid.reverse { direction: rtl; }
+    .hiw-grid.reverse > * { direction: ltr; }
+    .hiw-step-num { width: 32px; height: 32px; background: var(--amber); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 16px; }
+    .hiw-content h3 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--white); }
+    .hiw-content p { font-size: 16px; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 20px; }
+    .hiw-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .hiw-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: rgba(255,255,255,.7); }
+    .hiw-list li::before { content: '→'; color: #fcd34d; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .hiw-visual { background: var(--slate-800); border-radius: var(--radius); border: 1px solid rgba(255,255,255,.08); padding: 24px; min-height: 280px; }
+
+    /* ─── Mock checklist ─── */
+    .mock-checklist { display: flex; flex-direction: column; gap: 8px; }
+    .mock-check-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.04); border-radius: 6px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.06); }
+    .mock-check-row.done { border-color: rgba(16,163,74,.25); background: rgba(16,163,74,.06); }
+    .mock-check-row.missing { border-color: rgba(220,38,38,.25); background: rgba(220,38,38,.04); }
+    .check-icon { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; }
+    .check-label { flex: 1; font-size: 12px; color: rgba(255,255,255,.75); }
+    .check-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+    .s-done { background: rgba(16,163,74,.2); color: #4ade80; }
+    .s-missing { background: rgba(220,38,38,.2); color: #fca5a5; }
+    .s-pending { background: rgba(255,255,255,.08); color: rgba(255,255,255,.4); }
+
+    /* ─── Mock upload ─── */
+    .mock-upload-zone { border: 2px dashed rgba(217,119,6,.4); border-radius: var(--radius-sm); padding: 28px 20px; text-align: center; color: rgba(255,255,255,.5); font-size: 13px; margin-bottom: 16px; }
+    .mock-file { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.05); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; }
+    .mock-file-name { flex: 1; font-size: 12px; color: rgba(255,255,255,.8); }
+    .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+    .badge-ok { background: rgba(16,163,74,.2); color: #4ade80; }
+    .badge-processing { background: rgba(217,119,6,.2); color: #fcd34d; }
+
+    /* ─── Mock status ─── */
+    .mock-status-card { background: rgba(255,255,255,.04); border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,.08); padding: 16px; margin-bottom: 10px; }
+    .mock-status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .mock-biz-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.8); }
+    .mock-period { font-size: 11px; color: rgba(255,255,255,.35); }
+    .mock-progress-bar { height: 6px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .mock-progress-fill { height: 100%; background: #fcd34d; border-radius: 3px; }
+    .mock-progress-label { font-size: 11px; color: rgba(255,255,255,.45); }
+
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .flow-steps { grid-template-columns: 1fr; }
+      .flow-arrow { display: none; }
+      .pains-grid { grid-template-columns: 1fr 1fr; }
+      .hiw-grid, .hiw-grid.reverse { grid-template-columns: 1fr; direction: ltr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pains-grid, .features-grid { grid-template-columns: 1fr; }
+      .waitlist-form { flex-direction: column; }
+      .footer-top { flex-direction: column; gap: 40px; }
+      .footer-links { flex-direction: column; gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.style.visibility='hidden';</script>
+
+<!-- ═══════════ HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/>
+        </svg>
+        <div class="logo-names">
+          <a href="/" class="logo-parent">moddrum.com ↗</a>
+          <div class="logo-name-row">
+            <a href="/biz" class="logo-product">Moddrum Biz</a>
+            <span class="logo-badge" data-i18n="badge_soon"></span>
+          </div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#how-it-works" data-i18n="nav_how"></a>
+        <a href="#pain-points" data-i18n="nav_challenges"></a>
+        <a href="#features" data-i18n="nav_features"></a>
+        <a href="#waitlist" data-i18n="nav_notify"></a>
+      </nav>
+      <div class="header-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-sl" onclick="setLang('sl')">SL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="#waitlist" class="btn btn-amber btn-sm" data-i18n="nav_notify_cta"></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-split">
+      <!-- LEFT: copy -->
+      <div class="hero-content">
+        <div class="hero-label" data-i18n="hero_label"></div>
+        <h1 data-i18n-html="hero_h1"></h1>
+        <p class="hero-sub" data-i18n="hero_sub"></p>
+        <div class="hero-actions">
+          <a href="#waitlist" class="btn btn-amber btn-lg" data-i18n="hero_cta_primary"></a>
+          <a href="#how-it-works" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary"></a>
+        </div>
+        <div class="hero-proof">
+          <div class="hero-stat">
+            <span class="hero-stat-number">0</span>
+            <span class="hero-stat-label" data-i18n="stat1"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">1×</span>
+            <span class="hero-stat-label" data-i18n="stat2"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">100%</span>
+            <span class="hero-stat-label" data-i18n="stat3"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">2026</span>
+            <span class="hero-stat-label" data-i18n="stat4"></span>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT: business owner portal illustration -->
+      <div class="hero-viz">
+        <div class="hviz-bar">
+          <span class="hviz-dot hviz-dot-r"></span><span class="hviz-dot hviz-dot-y"></span><span class="hviz-dot hviz-dot-g"></span>
+          <span class="hviz-title">Moddrum Biz — zahteva dokumenta</span>
+        </div>
+        <div class="bviz-body">
+          <div class="bviz-card">
+            <div class="bviz-card-head">
+              <span class="bviz-badge">⚠ Zahteva</span>
+              <span class="bviz-card-date">rok 5. feb 2026</span>
+            </div>
+            <div class="bviz-card-title">Faktura za januar 2026</div>
+            <div class="bviz-card-sub">J. Novak d.o.o. · NLB tekoči račun</div>
+          </div>
+          <div class="bviz-action">
+            <span class="bviz-check">✓</span>
+            <span class="bviz-action-done">Obvestilo poslano — push + e-pošta</span>
+          </div>
+          <div class="bviz-action">
+            <span class="bviz-spin">📲</span>
+            <span class="bviz-action-active">Podjetnik nalaga dokument…</span>
+          </div>
+          <div class="bviz-progress">
+            <div class="bviz-bar"><div class="bviz-bar-fill"></div></div>
+            <span class="bviz-pct">67%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PAIN POINTS -->
+<section class="section" id="pain-points">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="pain_tag"></div>
+      <h2 class="section-title" data-i18n="pain_title"></h2>
+      <p class="section-sub" data-i18n="pain_sub"></p>
+    </div>
+    <div class="pains-grid">
+
+      <div class="pain-card highlight">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fef3c7">📨</div>
+        </div>
+        <h3 data-i18n="p1_title"></h3>
+        <p class="pain-problem" data-i18n="p1_problem"></p>
+        <div class="pain-solution" data-i18n="p1_solution"></div>
+      </div>
+
+      <div class="pain-card highlight">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fef3c7">❓</div>
+        </div>
+        <h3 data-i18n="p2_title"></h3>
+        <p class="pain-problem" data-i18n="p2_problem"></p>
+        <div class="pain-solution" data-i18n="p2_solution"></div>
+      </div>
+
+      <div class="pain-card highlight">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fef3c7">🔀</div>
+        </div>
+        <h3 data-i18n="p3_title"></h3>
+        <p class="pain-problem" data-i18n="p3_problem"></p>
+        <div class="pain-solution" data-i18n="p3_solution"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS (3-STEP FLOW) -->
+<section class="section flow-section" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="flow_tag"></div>
+      <h2 class="section-title" data-i18n="flow_title"></h2>
+      <p class="section-sub" data-i18n="flow_sub"></p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-icon icon-human">📤</div>
+        <div class="flow-step-num" data-i18n="flow1_num"></div>
+        <h3 data-i18n="flow1_title"></h3>
+        <p data-i18n="flow1_body"></p>
+        <div class="flow-badge flow-badge-you" data-i18n="flow_role_you"></div>
+      </div>
+      <div class="flow-arrow"><span><span class="biz-dot"></span></span></div>
+      <div class="flow-step step-auto">
+        <div class="flow-step-icon icon-auto">⚡</div>
+        <div class="flow-step-num" data-i18n="flow2_num"></div>
+        <h3 data-i18n="flow2_title"></h3>
+        <p data-i18n="flow2_body"></p>
+        <div class="flow-badge" data-i18n="flow_auto_badge"></div>
+      </div>
+      <div class="flow-arrow"><span><span class="biz-dot"></span></span></div>
+      <div class="flow-step">
+        <div class="flow-step-icon icon-human">✅</div>
+        <div class="flow-step-num" data-i18n="flow3_num"></div>
+        <h3 data-i18n="flow3_title"></h3>
+        <p data-i18n="flow3_body"></p>
+        <div class="flow-badge flow-badge-you" data-i18n="flow_role_accountant"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS DETAIL (dark) -->
+<section class="section hiw-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="hiw_tag"></div>
+      <h2 class="section-title" style="color:white" data-i18n="hiw_title"></h2>
+      <p class="section-sub" data-i18n="hiw_sub"></p>
+    </div>
+
+    <div class="hiw-grid">
+      <div class="hiw-content">
+        <div class="hiw-step-num">1</div>
+        <h3 data-i18n="hiw1_title"></h3>
+        <p data-i18n="hiw1_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw1_l1"></li>
+          <li data-i18n="hiw1_l2"></li>
+          <li data-i18n="hiw1_l3"></li>
+          <li data-i18n="hiw1_l4"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock1_title"></span></div>
+        <div class="mock-upload-zone">
+          <div style="font-size:32px;margin-bottom:8px">📤</div>
+          <div data-i18n="mock_upload_text"></div>
+          <div style="font-size:11px;margin-top:6px;color:rgba(255,255,255,.3)">PDF · JPG · PNG · XML</div>
+        </div>
+        <div>
+          <div class="mock-file"><span style="font-size:16px">🧾</span><span class="mock-file-name">racun_dobavitelj_0324.pdf</span><span class="badge badge-ok" data-i18n="mock_badge_ok"></span></div>
+          <div class="mock-file"><span style="font-size:16px">📸</span><span class="mock-file-name">bon_bencinska_1403.jpg</span><span class="badge badge-processing" data-i18n="mock_badge_proc"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:64px"></div>
+
+    <div class="hiw-grid reverse">
+      <div class="hiw-content">
+        <div class="hiw-step-num">2</div>
+        <h3 data-i18n="hiw2_title"></h3>
+        <p data-i18n="hiw2_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw2_l1"></li>
+          <li data-i18n="hiw2_l2"></li>
+          <li data-i18n="hiw2_l3"></li>
+          <li data-i18n="hiw2_l4"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock2_title"></span></div>
+        <div class="mock-checklist">
+          <div class="mock-check-row done"><span class="check-icon">✅</span><span class="check-label" data-i18n="mock2_c1"></span><span class="check-status s-done" data-i18n="mock2_s_done"></span></div>
+          <div class="mock-check-row done"><span class="check-icon">✅</span><span class="check-label" data-i18n="mock2_c2"></span><span class="check-status s-done" data-i18n="mock2_s_done"></span></div>
+          <div class="mock-check-row missing"><span class="check-icon">⚠️</span><span class="check-label" data-i18n="mock2_c3"></span><span class="check-status s-missing" data-i18n="mock2_s_missing"></span></div>
+          <div class="mock-check-row"><span class="check-icon">⬜</span><span class="check-label" data-i18n="mock2_c4"></span><span class="check-status s-pending" data-i18n="mock2_s_pending"></span></div>
+        </div>
+        <div style="margin-top:12px;padding:10px;background:rgba(217,119,6,.08);border-radius:6px;border:1px solid rgba(217,119,6,.2);font-size:12px;color:#fcd34d" data-i18n="mock2_result"></div>
+      </div>
+    </div>
+
+    <div style="height:64px"></div>
+
+    <div class="hiw-grid">
+      <div class="hiw-content">
+        <div class="hiw-step-num">3</div>
+        <h3 data-i18n="hiw3_title"></h3>
+        <p data-i18n="hiw3_body"></p>
+        <ul class="hiw-list">
+          <li data-i18n="hiw3_l1"></li>
+          <li data-i18n="hiw3_l2"></li>
+          <li data-i18n="hiw3_l3"></li>
+          <li data-i18n="hiw3_l4"></li>
+        </ul>
+      </div>
+      <div class="hiw-visual">
+        <div class="mock-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="mock-title-bar" data-i18n="mock3_title"></span></div>
+        <div class="mock-status-card">
+          <div class="mock-status-header">
+            <span class="mock-biz-name" data-i18n="mock3_biz1"></span>
+            <span class="mock-period" data-i18n="mock3_period"></span>
+          </div>
+          <div class="mock-progress-bar"><div class="mock-progress-fill" style="width:75%"></div></div>
+          <div class="mock-progress-label" data-i18n="mock3_prog1"></div>
+        </div>
+        <div class="mock-status-card">
+          <div class="mock-status-header">
+            <span class="mock-biz-name" data-i18n="mock3_biz2"></span>
+            <span class="mock-period" data-i18n="mock3_period"></span>
+          </div>
+          <div class="mock-progress-bar"><div class="mock-progress-fill" style="width:100%;background:#4ade80"></div></div>
+          <div class="mock-progress-label" data-i18n="mock3_prog2"></div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.35);text-align:center" data-i18n="mock3_result"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="feat_tag"></div>
+      <h2 class="section-title" data-i18n="feat_title"></h2>
+      <p class="section-sub" data-i18n="feat_sub"></p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">📤</div><h3 data-i18n="f1_title"></h3><p data-i18n="f1_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">✅</div><h3 data-i18n="f2_title"></h3><p data-i18n="f2_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🔔</div><h3 data-i18n="f3_title"></h3><p data-i18n="f3_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><h3 data-i18n="f4_title"></h3><p data-i18n="f4_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🔗</div><h3 data-i18n="f5_title"></h3><p data-i18n="f5_body"></p></div>
+      <div class="feature-card"><div class="feature-icon">🔐</div><h3 data-i18n="f6_title"></h3><p data-i18n="f6_body"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TRUST -->
+<section class="section-sm">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-icon">🇸🇮</div><h4 data-i18n="t1_title"></h4><p data-i18n="t1_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🔐</div><h4 data-i18n="t2_title"></h4><p data-i18n="t2_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🏠</div><h4 data-i18n="t3_title"></h4><p data-i18n="t3_body"></p></div>
+      <div class="trust-card"><div class="trust-icon">🤝</div><h4 data-i18n="t4_title"></h4><p data-i18n="t4_body"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="container">
+    <div class="section-tag" data-i18n="waitlist_tag"></div>
+    <h2 class="section-title" style="color:white;margin-top:16px" data-i18n="waitlist_title"></h2>
+    <p class="waitlist-pre" data-i18n="waitlist_pre"></p>
+    <form class="waitlist-form" onsubmit="handleNotify(event, 'Biz')">
+      <input class="waitlist-input" type="email" data-i18n-placeholder="waitlist_placeholder" required>
+      <button class="waitlist-btn" type="submit" data-i18n="waitlist_btn"></button>
+    </form>
+    <p class="waitlist-note" data-i18n="waitlist_note"></p>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS PORTFOLIO -->
+<section class="section products-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="products_tag"></div>
+      <h2 class="section-title" data-i18n="products_title"></h2>
+      <p class="section-sub" data-i18n="products_sub"></p>
+    </div>
+    <div class="products-grid">
+      <a href="/practice" class="product-card">
+        <span class="product-icon">📋</span>
+        <div class="product-name" data-i18n="pc_practice_name"></div>
+        <div class="product-desc"  data-i18n="pc_practice_desc"></div>
+        <span class="product-badge badge-live" data-i18n="pc_badge_live"></span>
+      </a>
+      <a href="/biz" class="product-card current">
+        <span class="product-icon">🏢</span>
+        <div class="product-name" data-i18n="pc_biz_name"></div>
+        <div class="product-desc"  data-i18n="pc_biz_desc"></div>
+        <span class="product-badge badge-here" data-i18n="pc_badge_here"></span>
+      </a>
+      <a href="/connect" class="product-card">
+        <span class="product-icon">🔗</span>
+        <div class="product-name" data-i18n="pc_connect_name"></div>
+        <div class="product-desc"  data-i18n="pc_connect_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="/mcp" class="product-card">
+        <span class="product-icon">🤖</span>
+        <div class="product-name" data-i18n="pc_mcp_name"></div>
+        <div class="product-desc"  data-i18n="pc_mcp_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/biz" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/>
+          </svg>
+          <span class="footer-logo-text">Moddrum Biz</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline"></p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5 data-i18n="footer_col1_title"></h5>
+          <a href="/practice">Moddrum Practice</a>
+          <a href="/biz" class="current-page">Moddrum Biz</a>
+          <a href="/connect">Moddrum Connect</a>
+          <a href="/mcp">Moddrum MCP</a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col2_title"></h5>
+          <a href="#how-it-works" data-i18n="nav_how"></a>
+          <a href="#features" data-i18n="nav_features"></a>
+          <a href="#waitlist" data-i18n="nav_notify"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col3_title"></h5>
+          <a href="/about" data-i18n="footer_about"></a>
+          <a href="/contact" data-i18n="footer_contact"></a>
+          <a href="/privacy" data-i18n="footer_privacy"></a>
+          <a href="/terms" data-i18n="footer_terms"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-i18n="footer_copy"></div>
+      <div class="footer-legal">
+        <a href="/privacy" data-i18n="footer_privacy"></a>
+        <a href="/terms" data-i18n="footer_terms"></a>
+        <a href="/gdpr">GDPR</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TRANSLATIONS = {
+  en: {
+    badge_soon: 'Coming Soon',
+
+    banner_text: '🔜 Coming soon — we are building Moddrum Biz',
+    banner_sub: 'The document portal for small business owners who work with an accounting practice.',
+    banner_cta: 'Notify me',
+
+    nav_how: 'How it works',
+    nav_challenges: 'Challenges',
+    nav_features: 'Features',
+    nav_notify: 'Coming soon',
+    nav_notify_cta: 'Notify me →',
+
+    hero_label: '📤 Moddrum Biz — for business owners',
+    hero_h1: 'Stop the monthly document chase.<br><span class="accent">Your accountant needs your documents.</span><br>Moddrum Biz makes it effortless.',
+    hero_sub: 'Moddrum Biz gives you a simple portal to upload documents, see exactly what\'s missing, and let your accountant receive everything automatically — no more chasing emails or last-minute stress.',
+    hero_cta_primary: 'Notify me when it launches →',
+    hero_cta_secondary: 'See how it works',
+    stat1: 'emails chasing documents',
+    stat2: 'upload once per month',
+    stat3: 'visibility on what is missing',
+    stat4: 'launching in 2026',
+
+    pain_tag: '3 key frustrations',
+    pain_title: 'The monthly document headache every business owner knows',
+    pain_sub: 'Every month the same story. Moddrum Biz fixes all three.',
+
+    p1_title: 'Your accountant asks for documents every month',
+    p1_problem: 'You get a WhatsApp message or email every month: "Please send me your invoices." You forget, send the wrong ones, or miss a receipt. The chaos repeats.',
+    p1_solution: 'Moddrum Biz gives you a clear portal. Upload once, your accountant gets everything automatically — no more back-and-forth.',
+
+    p2_title: 'You never know what is actually missing',
+    p2_problem: 'Which invoices does your accountant need? Which receipts? You guess, you over-send, or you miss something critical and find out weeks later during reconciliation.',
+    p2_solution: 'A smart checklist shows you exactly what\'s needed for the current month. Green = done. Red = still missing. No guessing.',
+
+    p3_title: 'Manual sending means errors and delays',
+    p3_problem: 'Wrong file format, a blurry scan from your phone, a PDF lost in an email thread. Your accountant spends time fixing your submissions instead of doing accounting.',
+    p3_solution: 'Moddrum Biz validates your uploads automatically — tells you if something is unreadable or in the wrong format before your accountant ever sees it.',
+
+    flow_tag: 'How it works',
+    flow_title: 'Three steps. Zero email threads.',
+    flow_sub: 'Moddrum Biz connects your document submissions directly to your accountant\'s Moddrum Practice workspace.',
+    flow1_num: 'Step 1 — You',
+    flow1_title: 'Upload your documents',
+    flow1_body: 'Drag and drop invoices, receipts, and any other documents your accountant needs. Works from any device.',
+    flow2_num: 'Moddrum Biz — automatic',
+    flow2_title: 'Biz checks everything',
+    flow2_body: 'Validates format and readability, updates your submission checklist, and notifies your accountant automatically.',
+    flow3_num: 'Step 3 — Done',
+    flow3_title: 'Your accountant has everything',
+    flow3_body: 'Documents land directly in your accountant\'s Moddrum Practice workspace — categorized, verified, ready to process.',
+    flow_role_you: '👤 Your action',
+    flow_role_accountant: '🧮 Accountant notified',
+    flow_auto_badge: '⚡ Automatic',
+
+    hiw_tag: 'Three features',
+    hiw_title: 'Simple for you. Powerful for your accountant.',
+    hiw_sub: 'Moddrum Biz is built around one idea: make document submission so easy that you never miss a deadline again.',
+
+    hiw1_title: 'Upload portal — any device, any format',
+    hiw1_body: 'Your personal upload portal accepts documents from your phone, tablet or computer. No app to install.',
+    hiw1_l1: 'Drag and drop or tap to select — PDF, JPG, PNG, XML',
+    hiw1_l2: 'Automatic readability check — you are told if a scan is too blurry',
+    hiw1_l3: 'Upload history — see everything you have sent this month',
+    hiw1_l4: 'Secure link — your portal, your documents, nobody else\'s',
+
+    hiw2_title: 'Smart checklist — see exactly what is missing',
+    hiw2_body: 'Moddrum Biz knows what documents your accountant needs. The checklist updates in real time as you upload.',
+    hiw2_l1: 'Monthly checklist generated by your accountant\'s requirements',
+    hiw2_l2: 'Green ticks as you upload — red warnings for what is still missing',
+    hiw2_l3: 'Automatic reminders if the deadline is approaching and items are open',
+    hiw2_l4: 'No surprises — you always know your submission status',
+
+    hiw3_title: 'Status tracking — always know where things stand',
+    hiw3_body: 'You can see the status of your submission at any time: what has been received, what is being processed, and what is complete.',
+    hiw3_l1: 'Real-time submission progress bar',
+    hiw3_l2: 'Notification when your accountant has processed your documents',
+    hiw3_l3: 'Monthly archive — find any document you have ever sent',
+    hiw3_l4: 'Works alongside Moddrum Practice — no separate account needed for your accountant',
+
+    mock1_title: 'Moddrum Biz — Upload',
+    mock_upload_text: 'Drag and drop files or tap to select',
+    mock_badge_ok: 'Received ✓',
+    mock_badge_proc: 'Checking…',
+    mock2_title: 'Moddrum Biz — Checklist',
+    mock2_c1: 'Supplier invoices (March)',
+    mock2_c2: 'Bank statement NLB',
+    mock2_c3: 'Fuel receipts',
+    mock2_c4: 'Travel expense report',
+    mock2_s_done: 'Done',
+    mock2_s_missing: 'Missing',
+    mock2_s_pending: 'Pending',
+    mock2_result: '⚠ 1 item missing — please upload before the 5th',
+    mock3_title: 'Moddrum Biz — Status',
+    mock3_biz1: 'My Company d.o.o.',
+    mock3_biz2: 'Freelancer s.p.',
+    mock3_period: 'March 2026',
+    mock3_prog1: '3 of 4 items submitted',
+    mock3_prog2: 'All items submitted ✓',
+    mock3_result: 'Your accountant has been notified',
+
+    feat_tag: 'Features',
+    feat_title: 'Everything you need to submit documents without stress',
+    feat_sub: 'Moddrum Biz is purpose-built for the business owner side of the accounting relationship.',
+    f1_title: 'Upload portal',
+    f1_body: 'A clean, simple portal to upload invoices, receipts and any other documents — from any device, any time.',
+    f2_title: 'Smart missing-document checklist',
+    f2_body: 'Always know exactly which documents are needed for the current month. Real-time updates as you upload.',
+    f3_title: 'Automatic reminders',
+    f3_body: 'Friendly reminders before deadlines if your checklist is not complete. No more last-minute scrambles.',
+    f4_title: 'Submission status tracking',
+    f4_body: 'See what has been received, what is being processed, and what your accountant has completed.',
+    f5_title: 'Works with any Moddrum Practice accountant',
+    f5_body: 'If your accountant uses Moddrum Practice, you get Moddrum Biz automatically. No setup needed on your side.',
+    f6_title: 'Secure document storage',
+    f6_body: 'Your documents are encrypted and stored securely. Monthly archive so you can always find what you sent.',
+
+    t1_title: 'Built for Slovenia',
+    t1_body: 'Designed around Slovenian accounting workflows, invoice formats, and tax requirements.',
+    t2_title: 'AES-256 encryption',
+    t2_body: 'All documents encrypted at rest and in transit. Your financial data stays private.',
+    t3_title: 'Data in the EU',
+    t3_body: 'Servers in the European Union. Your documents never leave the EU. Full GDPR compliance.',
+    t4_title: 'Works with your accountant',
+    t4_body: 'Moddrum Biz connects directly to Moddrum Practice. Your accountant sees what you upload — instantly.',
+
+    waitlist_tag: 'Coming in 2026',
+    waitlist_title: 'Be the first to know when Moddrum Biz launches',
+    waitlist_pre: 'Moddrum Biz is being built for 2026. Leave your email and we will notify you as soon as it is available.',
+    waitlist_placeholder: 'your@email.com',
+    waitlist_btn: 'Notify me',
+    waitlist_note: 'No spam. One email when we launch. Unsubscribe any time.',
+
+    products_tag: 'Moddrum product family',
+    products_title: 'One platform, four products',
+    products_sub: 'Moddrum covers the full pre-accounting workflow — from the business owner\'s document portal to the accountant\'s export pipeline.',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'For accounting practices',
+    pc_biz_name: 'Moddrum Biz',           pc_biz_desc: 'For business owners',
+    pc_connect_name: 'Moddrum Connect',   pc_connect_desc: 'For ERP teams',
+    pc_mcp_name: 'Moddrum MCP',           pc_mcp_desc: 'For AI teams',
+    pc_badge_live: 'Live', pc_badge_soon: 'Coming soon', pc_badge_here: 'You are here',
+
+    footer_tagline: 'The document portal for business owners working with Moddrum Practice accountants.',
+    footer_col1_title: 'Products',
+    footer_col2_title: 'Moddrum Biz',
+    footer_col3_title: 'Company',
+    footer_about: 'About',
+    footer_contact: 'Contact',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms',
+    footer_copy: '© 2026 Moddrum d.o.o. All rights reserved.',
+  },
+
+  sl: {
+    badge_soon: 'Kmalu',
+
+    banner_text: '🔜 Kmalu na voljo — gradimo Moddrum Biz',
+    banner_sub: 'Dokumentni portal za podjetnike, ki delajo z računovodsko pisarno.',
+    banner_cta: 'Obvesti me',
+
+    nav_how: 'Kako deluje',
+    nav_challenges: 'Izzivi',
+    nav_features: 'Funkcije',
+    nav_notify: 'Kmalu na voljo',
+    nav_notify_cta: 'Obvesti me →',
+
+    hero_label: '📤 Moddrum Biz — za podjetnike',
+    hero_h1: 'Konec mesečnega lovljenja dokumentov.<br><span class="accent">Vaš računovodja potrebuje vaše dokumente.</span><br>Moddrum Biz to uredi brez stresa.',
+    hero_sub: 'Moddrum Biz vam dá preprost portal za pošiljanje dokumentov, pregled kaj manjka in samodejno dostavo vašemu računovodji — brez iskanja po e-pošti in zadnjeminutnega kaosa.',
+    hero_cta_primary: 'Obvesti me ob zagonu →',
+    hero_cta_secondary: 'Oglej si kako deluje',
+    stat1: 'opomnikov po e-pošti/WhatsApp-u',
+    stat2: 'nalaganje enkrat na mesec',
+    stat3: 'pregled nad tem, kaj manjka',
+    stat4: 'zagotovljeno v 2026',
+
+    pain_tag: '3 glavne frustracije',
+    pain_title: 'Mesečni dokumentni stres, ki ga pozna vsak podjetnik',
+    pain_sub: 'Vsak mesec ista zgodba. Moddrum Biz reši vse tri hkrati.',
+
+    p1_title: 'Računovodja vsak mesec prosi za dokumente',
+    p1_problem: 'Vsak mesec dobite sporočilo: "Prosim pošljite mi račune." Pozabite, pošljete napačne, ali zamudite bon. Kaos se ponavlja mesec za mesecem.',
+    p1_solution: 'Moddrum Biz vam da jasen portal. Naložite enkrat, računovodja dobi vse samodejno — brez usklajevanja.',
+
+    p2_title: 'Ne veste, kaj točno manjka',
+    p2_problem: 'Katere račune računovodja potrebuje? Kateri boni so potrebni? Ugibate, pošljete preveč ali premalo in za zamudo izveste šele tedne kasneje.',
+    p2_solution: 'Pametni seznam natančno pokaže, kaj je potrebno za tekoči mesec. Zelena = narejeno. Rdeča = še manjka. Brez ugibanja.',
+
+    p3_title: 'Ročno pošiljanje = napake in zamude',
+    p3_problem: 'Napačna oblika datoteke, zamegljena fotografija s telefona, PDF, ki se izgubi v e-poštni niti. Računovodja popravlja vaše dokumente namesto da bi računovodil.',
+    p3_solution: 'Moddrum Biz samodejno preveri vaše dokumente — pove vam, če je kaj nečitljivo ali v napačni obliki, preden to vidi računovodja.',
+
+    flow_tag: 'Kako deluje',
+    flow_title: 'Trije koraki. Brez e-poštnih usklajevanj.',
+    flow_sub: 'Moddrum Biz poveže vaše pošiljanje dokumentov neposredno z delovnim okoljem vašega računovodje v Moddrum Practice.',
+    flow1_num: 'Korak 1 — Vi',
+    flow1_title: 'Naložite dokumente',
+    flow1_body: 'Povlecite in spustite račune, bone in vse ostale dokumente. Deluje z vsake naprave.',
+    flow2_num: 'Moddrum Biz — samodejno',
+    flow2_title: 'Biz vse preveri',
+    flow2_body: 'Preveri obliko in čitljivost, posodobi vaš seznam in samodejno obvesti vašega računovodjo.',
+    flow3_num: 'Korak 3 — Opravljeno',
+    flow3_title: 'Računovodja ima vse',
+    flow3_body: 'Dokumenti pristanejo neposredno v delovnem okolju vašega računovodje — kategorizirani, preverjeni, pripravljeni za obdelavo.',
+    flow_role_you: '👤 Vaša akcija',
+    flow_role_accountant: '🧮 Računovodja obveščen',
+    flow_auto_badge: '⚡ Samodejno',
+
+    hiw_tag: 'Tri funkcije',
+    hiw_title: 'Preprosto za vas. Zmogljivo za računovodjo.',
+    hiw_sub: 'Moddrum Biz je zgrajen okoli enega principa: pošiljanje dokumentov mora biti tako preprosto, da ne zamudite nobenega roka.',
+
+    hiw1_title: 'Portal za nalaganje — vsaka naprava, vsak format',
+    hiw1_body: 'Vaš osebni portal za nalaganje sprejema dokumente s telefona, tablice ali računalnika. Nobene aplikacije ni treba namestiti.',
+    hiw1_l1: 'Povleci in spusti ali dotakni za izbiro — PDF, JPG, PNG, XML',
+    hiw1_l2: 'Samodejno preverjanje čitljivosti — obveščeni ste, če je posnetek zamegljen',
+    hiw1_l3: 'Zgodovina nalaganja — vidite vse, kar ste poslali ta mesec',
+    hiw1_l4: 'Varna povezava — vaš portal, vaši dokumenti, nihče drug',
+
+    hiw2_title: 'Pametni seznam — vidite točno kaj manjka',
+    hiw2_body: 'Moddrum Biz ve, katere dokumente računovodja potrebuje. Seznam se posodablja v realnem času ko nalagате.',
+    hiw2_l1: 'Mesečni seznam generiran glede na zahteve vašega računovodje',
+    hiw2_l2: 'Zelene kljukice med nalaganjem — rdeča opozorila za tisto, kar še manjka',
+    hiw2_l3: 'Samodejni opomniki, ko se rok bliža in so točke odprte',
+    hiw2_l4: 'Brez presenečenj — vedno veste kje stojite',
+
+    hiw3_title: 'Sledenje statusu — vedno veste kako stojite',
+    hiw3_body: 'Kadarkoli vidite status svojega pošiljanja: kaj je prejeto, kaj se obdeluje in kaj je zaključeno.',
+    hiw3_l1: 'Vrstica napredka pošiljanja v realnem času',
+    hiw3_l2: 'Obvestilo, ko je računovodja obdelal vaše dokumente',
+    hiw3_l3: 'Mesečni arhiv — poiščite kateri koli dokument, ki ste ga kdaj poslali',
+    hiw3_l4: 'Deluje skupaj z Moddrum Practice — vaš računovodja ne potrebuje ločenega računa',
+
+    mock1_title: 'Moddrum Biz — Nalaganje',
+    mock_upload_text: 'Povlecite in spustite datoteke ali tapnite za izbiro',
+    mock_badge_ok: 'Prejeto ✓',
+    mock_badge_proc: 'Preverjanje…',
+    mock2_title: 'Moddrum Biz — Seznam',
+    mock2_c1: 'Dobaviteljski računi (marec)',
+    mock2_c2: 'Bančni izpisek NLB',
+    mock2_c3: 'Bencinski boni',
+    mock2_c4: 'Poročilo o potnih stroških',
+    mock2_s_done: 'Narejeno',
+    mock2_s_missing: 'Manjka',
+    mock2_s_pending: 'Čaka',
+    mock2_result: '⚠ 1 točka manjka — prosim naložite pred 5. v mesecu',
+    mock3_title: 'Moddrum Biz — Status',
+    mock3_biz1: 'Moje podjetje d.o.o.',
+    mock3_biz2: 'Samostojni s.p.',
+    mock3_period: 'Marec 2026',
+    mock3_prog1: '3 od 4 točk poslanih',
+    mock3_prog2: 'Vse točke poslane ✓',
+    mock3_result: 'Vaš računovodja je bil obveščen',
+
+    feat_tag: 'Funkcije',
+    feat_title: 'Vse kar potrebujete za pošiljanje dokumentov brez stresa',
+    feat_sub: 'Moddrum Biz je namenjen posebej za podjetnike na vaši strani računovodskega razmerja.',
+    f1_title: 'Portal za nalaganje',
+    f1_body: 'Preprost portal za nalaganje računov, bonov in vseh drugih dokumentov — z vsake naprave, kadarkoli.',
+    f2_title: 'Pametni seznam manjkajočih dokumentov',
+    f2_body: 'Vedno veste točno katere dokumente potrebujete za tekoči mesec. Posodablja se sproti med nalaganjem.',
+    f3_title: 'Samodejni opomniki',
+    f3_body: 'Prijazni opomniki pred roki, ko vaš seznam ni popoln. Konec zadnjeminutnega stresa.',
+    f4_title: 'Sledenje statusu pošiljanja',
+    f4_body: 'Vidite kaj je prejeto, kaj se obdeluje in kaj je vaš računovodja zaključil.',
+    f5_title: 'Deluje z vsakim Moddrum Practice računovodjem',
+    f5_body: 'Če vaš računovodja uporablja Moddrum Practice, dobite Moddrum Biz samodejno. Nobene nastavitve z vaše strani.',
+    f6_title: 'Varno shranjevanje dokumentov',
+    f6_body: 'Vaši dokumenti so šifrirani in varno shranjeni. Mesečni arhiv za iskanje kateregakoli poslanega dokumenta.',
+
+    t1_title: 'Narejeno za Slovenijo',
+    t1_body: 'Zasnovano okoli slovenskih računovodskih procesov, formatov računov in davčnih zahtev.',
+    t2_title: 'Šifriranje AES-256',
+    t2_body: 'Vsi dokumenti šifrirani v mirovanju in prenosu. Vaši finančni podatki ostanejo zasebni.',
+    t3_title: 'Podatki v EU',
+    t3_body: 'Strežniki v Evropski uniji. Vaši dokumenti ne zapustijo EU. Popolna GDPR skladnost.',
+    t4_title: 'Deluje z vašim računovodjem',
+    t4_body: 'Moddrum Biz se poveže neposredno z Moddrum Practice. Vaš računovodja takoj vidi, kar naložite.',
+
+    waitlist_tag: 'Prihaja v 2026',
+    waitlist_title: 'Bodite prvi, ki izveste, ko se Moddrum Biz zažene',
+    waitlist_pre: 'Moddrum Biz gradimo za 2026. Pustite e-naslov in obvestili vas bomo takoj, ko bo na voljo.',
+    waitlist_placeholder: 'vas@email.si',
+    waitlist_btn: 'Obvesti me',
+    waitlist_note: 'Brez neželene pošte. Eno sporočilo ob zagonu. Odjava kadarkoli.',
+
+    products_tag: 'Moddrum produktna družina',
+    products_title: 'Ena platforma, štiri produkti',
+    products_sub: 'Moddrum pokriva celoten predračunovodski proces — od portala za podjetnike do izvoznega pipeline-a računovodje.',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'Za računovodske prakse',
+    pc_biz_name: 'Moddrum Biz',           pc_biz_desc: 'Za lastnike podjetij',
+    pc_connect_name: 'Moddrum Connect',   pc_connect_desc: 'Za ERP ekipe',
+    pc_mcp_name: 'Moddrum MCP',           pc_mcp_desc: 'Za AI ekipe',
+    pc_badge_live: 'V živo', pc_badge_soon: 'Prihaja kmalu', pc_badge_here: 'Tukaj ste',
+
+    footer_tagline: 'Dokumentni portal za podjetnike, ki delajo z računovodjami na Moddrum Practice.',
+    footer_col1_title: 'Produkti',
+    footer_col2_title: 'Moddrum Biz',
+    footer_col3_title: 'Podjetje',
+    footer_about: 'O nas',
+    footer_contact: 'Kontakt',
+    footer_privacy: 'Zasebnost',
+    footer_terms: 'Pogoji',
+    footer_copy: '© 2026 Moddrum d.o.o. Vse pravice pridržane.',
+  },
+};
+
+let currentLang = localStorage.getItem('moddrum_lang') || 'sl';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('moddrum_lang', lang);
+  applyTranslations();
+  document.getElementById('btn-sl').classList.toggle('active', lang === 'sl');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+
+function applyTranslations() {
+  const t = TRANSLATIONS[currentLang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+}
+
+function handleNotify(event, product) {
+  event.preventDefault();
+  const form = event.target.closest('form') || event.target.closest('.waitlist-form');
+  const input = form ? form.querySelector('input[type="email"]') : null;
+  const email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    alert(currentLang === 'sl' ? 'Vnesite veljavni e-naslov.' : 'Please enter a valid email.');
+    return;
+  }
+  if (input) input.value = '';
+  const msg = currentLang === 'sl'
+    ? `Hvala! Obvestili vas bomo, ko bo Moddrum ${product} na voljo.`
+    : `Thank you! We'll notify you when Moddrum ${product} launches.`;
+  alert(msg);
+}
+
+// Init
+setLang(currentLang);
+document.documentElement.style.visibility='';
+</script>
+
+</body>
+</html>

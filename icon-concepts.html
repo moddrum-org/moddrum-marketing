@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moddrum — Icon Proposals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Symbols for icon rendering -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f1f5f9; color: #0f172a; padding: 48px 24px; }
+    .page { max-width: 900px; margin: 0 auto; }
+
+    .page-header { margin-bottom: 44px; }
+    .page-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -.5px; }
+    .page-header p { font-size: 14px; color: #64748b; margin-top: 6px; line-height: 1.6; max-width: 640px; }
+
+    /* ─── Main grid of product icon cards ─── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 700px) { .icon-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .product-card {
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 22px 14px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* App icon squircle */
+    .icon-squircle {
+      width: 88px; height: 88px;
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .material-symbols-rounded {
+      font-size: 48px !important;
+      color: white;
+      user-select: none;
+    }
+
+    /* Product name + MUI name */
+    .prod-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .mui-name {
+      font-size: 10.5px; color: #94a3b8; font-weight: 500;
+      font-family: 'Courier New', monospace;
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 4px; padding: 2px 6px;
+      display: inline-block; margin-top: 4px;
+    }
+
+    /* ─── Size strip ─── */
+    .size-strip {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 10px; padding-top: 12px; margin-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .sz { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .sz span { font-size: 8.5px; color: #cbd5e1; font-weight: 600; text-transform: uppercase; }
+    .sz .icon-mini {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sz .icon-mini .material-symbols-rounded { color: white; }
+
+    /* Product colors */
+    .moddrum  .icon-squircle { background: linear-gradient(140deg, #334155, #0f172a); }
+    .practice .icon-squircle { background: linear-gradient(140deg, #2d6ef5, #0d46cc); }
+    .biz      .icon-squircle { background: linear-gradient(140deg, #f59e0b, #b45309); }
+    .connect  .icon-squircle { background: linear-gradient(140deg, #14b8a6, #0f766e); }
+    .mcp      .icon-squircle { background: linear-gradient(140deg, #8b5cf6, #6d28d9); }
+
+    /* ─── Info table ─── */
+    .info-table {
+      width: 100%; background: white; border: 1.5px solid #e2e8f0;
+      border-radius: 16px; overflow: hidden; border-collapse: collapse;
+    }
+    .info-table th {
+      background: #f8fafc; text-align: left; padding: 10px 16px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: #64748b;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .info-table td {
+      padding: 11px 16px; font-size: 13px;
+      border-bottom: 1px solid #f1f5f9; vertical-align: middle;
+    }
+    .info-table tr:last-child td { border-bottom: none; }
+    .info-table td:nth-child(3) { font-family: monospace; font-size: 12px; color: #475569; }
+    .color-dot {
+      display: inline-block; width: 10px; height: 10px;
+      border-radius: 50%; margin-right: 6px; vertical-align: middle;
+    }
+    .tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; vertical-align: middle;
+    }
+    .tag-done { background: #dcfce7; color: #15803d; }
+    .tag-new  { background: #eff6ff; color: #1d4ed8; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">
+    <h1>Moddrum — Icon Proposals (Material Design)</h1>
+    <p>All icons from the Material Design icon set — the same library the app uses via
+       <code style="font-size:13px;background:#f1f5f9;padding:1px 5px;border-radius:3px;">@mui/icons-material</code>.
+       No custom SVGs needed. The same icon component works in React (app) and as an SVG path in the marketing site.</p>
+  </div>
+
+
+  <!-- ════ 5 product icons ════ -->
+  <div class="icon-grid">
+
+    <!-- Moddrum -->
+    <div class="product-card moddrum">
+      <div class="icon-squircle">
+        <span class="material-symbols-rounded">layers</span>
+      </div>
+      <div class="prod-name">Moddrum</div>
+      <div class="mui-name">Layers</div>
+      <div class="size-strip" data-bg="linear-gradient(140deg,#334155,#0f172a)" data-icon="layers"></div>
+    </div>
+
+    <!-- Practice -->
+    <div class="product-card practice">
+      <div class="icon-squircle">
+        <span class="material-symbols-rounded">article</span>
+      </div>
+      <div class="prod-name">Practice</div>
+      <div class="mui-name">Article</div>
+      <div class="size-strip" data-bg="linear-gradient(140deg,#2d6ef5,#0d46cc)" data-icon="article"></div>
+    </div>
+
+    <!-- Biz -->
+    <div class="product-card biz">
+      <div class="icon-squircle">
+        <span class="material-symbols-rounded">donut_large</span>
+      </div>
+      <div class="prod-name">Biz</div>
+      <div class="mui-name">DonutLarge</div>
+      <div class="size-strip" data-bg="linear-gradient(140deg,#f59e0b,#b45309)" data-icon="donut_large"></div>
+    </div>
+
+    <!-- Connect -->
+    <div class="product-card connect">
+      <div class="icon-squircle">
+        <span class="material-symbols-rounded">sync_alt</span>
+      </div>
+      <div class="prod-name">Connect</div>
+      <div class="mui-name">SyncAlt</div>
+      <div class="size-strip" data-bg="linear-gradient(140deg,#14b8a6,#0f766e)" data-icon="sync_alt"></div>
+    </div>
+
+    <!-- MCP -->
+    <div class="product-card mcp">
+      <div class="icon-squircle">
+        <span class="material-symbols-rounded">terminal</span>
+      </div>
+      <div class="prod-name">MCP</div>
+      <div class="mui-name">Terminal</div>
+      <div class="size-strip" data-bg="linear-gradient(140deg,#8b5cf6,#6d28d9)" data-icon="terminal"></div>
+    </div>
+
+  </div>
+
+
+  <!-- ════ Reference table ════ -->
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>MUI Component</th>
+        <th>Icon name string</th>
+        <th>Accent color</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Moddrum</strong> (umbrella)</td>
+        <td><code>&lt;LayersIcon /&gt;</code></td>
+        <td>layers</td>
+        <td><span class="color-dot" style="background:#1e293b"></span>#1e293b dark navy</td>
+        <td><span class="tag tag-done">Already in login page</span></td>
+      </tr>
+      <tr>
+        <td><strong>Practice</strong></td>
+        <td><code>&lt;ArticleIcon /&gt;</code></td>
+        <td>article</td>
+        <td><span class="color-dot" style="background:#135bec"></span>#135bec blue</td>
+        <td><span class="tag tag-new">Confirmed today</span></td>
+      </tr>
+      <tr>
+        <td><strong>Biz</strong></td>
+        <td><code>&lt;DonutLargeIcon /&gt;</code></td>
+        <td>donut_large</td>
+        <td><span class="color-dot" style="background:#d97706"></span>#d97706 amber</td>
+        <td><span class="tag tag-new">Confirm?</span></td>
+      </tr>
+      <tr>
+        <td><strong>Connect</strong></td>
+        <td><code>&lt;SyncAltIcon /&gt;</code></td>
+        <td>sync_alt</td>
+        <td><span class="color-dot" style="background:#0d9488"></span>#0d9488 teal</td>
+        <td><span class="tag tag-new">Confirm?</span></td>
+      </tr>
+      <tr>
+        <td><strong>MCP</strong></td>
+        <td><code>&lt;TerminalIcon /&gt;</code></td>
+        <td>terminal</td>
+        <td><span class="color-dot" style="background:#7c3aed"></span>#7c3aed purple</td>
+        <td><span class="tag tag-new">Confirm?</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+  // Build size strips — mini squircles at 48/32/20/16px
+  document.querySelectorAll('.size-strip').forEach(strip => {
+    const bg   = strip.dataset.bg;
+    const icon = strip.dataset.icon;
+    [48, 32, 20, 16].forEach(size => {
+      const item = document.createElement('div');
+      item.className = 'sz';
+      const fontSize = Math.max(8, Math.round(size * 0.55));
+      const wrap = document.createElement('div');
+      wrap.className = 'icon-mini';
+      const br = Math.round(size * 0.225);
+      wrap.style.cssText = `
+        width:${size}px; height:${size}px; border-radius:${br}px;
+        background:${bg}; display:flex; align-items:center; justify-content:center;
+      `;
+      const span = document.createElement('span');
+      span.className = 'material-symbols-rounded';
+      span.textContent = icon;
+      span.style.fontSize = fontSize + 'px';
+      wrap.appendChild(span);
+      const label = document.createElement('span');
+      label.textContent = size + 'px';
+      item.appendChild(wrap);
+      item.appendChild(label);
+      strip.appendChild(item);
+    });
+  });
+</script>
+</body>
+</html>

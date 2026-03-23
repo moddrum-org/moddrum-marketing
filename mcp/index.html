@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum MCP — Model Context Protocol strežnik za procesiranje finančnih dokumentov. Daj svojemu AI agentu moč branja in ekstrakcije podatkov iz vsakega finančnega dokumenta.">
+  <title>Moddrum MCP — Daj svojemu AI agentu moč procesiranja finančnih dokumentov</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%237c3aed'/><path transform='translate(4,4)' fill='white' d='M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4z'/></svg>">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #135bec; --blue-dark: #0d47c7; --blue-light: #e8effe; --blue-mid: #3b77f0;
+      --purple: #7c3aed; --purple-dark: #6d28d9; --purple-light: #ede9fe; --purple-mid: #8b5cf6;
+      --green: #16a34a; --green-light: #dcfce7;
+      --amber: #d97706; --amber-light: #fef3c7;
+      --red: #dc2626; --red-light: #fee2e2;
+      --slate-900: #0f172a; --slate-800: #1e293b; --slate-700: #334155;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08); --shadow-lg: 0 12px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--slate-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Coming Soon Banner ─── */
+    .coming-soon-banner { background: #fef3c7; border-bottom: 2px solid #d97706; padding: 12px 0; text-align: center; }
+    .coming-soon-banner .container { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .coming-soon-text { font-size: 14px; font-weight: 600; color: #92400e; }
+
+    /* ─── Header ─── */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 30px; height: 30px; color: var(--purple); }
+    .logo-badge { font-size: 10px; font-weight: 700; background: var(--purple-light); color: var(--purple); padding: 2px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: .3px; }
+    .logo-names { display: flex; flex-direction: column; gap: 0; }
+    .logo-parent { font-size: 11px; font-weight: 600; color: var(--slate-400); text-decoration: none; line-height: 1.4; letter-spacing: .1px; transition: color .15s; }
+    .logo-parent:hover { color: var(--purple); }
+    .logo-product { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--slate-900); text-decoration: none; line-height: 1.1; }
+    .logo-product:hover { color: var(--slate-700); }
+    .logo-name-row { display: flex; align-items: center; gap: 6px; }
+    .nav { display: flex; gap: 28px; }
+    .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
+    .nav a:hover { color: var(--purple); }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher {
+      display: flex; align-items: center;
+      background: var(--slate-100); border-radius: 6px;
+      padding: 3px; gap: 2px;
+    }
+    .lang-btn {
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer;
+      color: var(--slate-500); background: transparent; transition: all .15s;
+      letter-spacing: .3px;
+    }
+    .lang-btn.active { background: var(--white); color: var(--purple); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .lang-btn:not(.active):hover { color: var(--slate-800); }
+
+    /* ─── Buttons ─── */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 11px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .btn-primary { background: var(--purple); color: var(--white); }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,58,237,.35); }
+    .btn-outline { background: transparent; color: var(--purple); border: 1.5px solid var(--purple); }
+    .btn-outline:hover { background: var(--purple-light); }
+    .btn-white { background: var(--white); color: var(--purple); }
+    .btn-white:hover { background: var(--purple-light); transform: translateY(-1px); }
+    .btn-ghost { background: rgba(255,255,255,.12); color: white; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); }
+    .btn-lg { font-size: 17px; padding: 15px 32px; }
+    .btn-sm { font-size: 13px; padding: 8px 18px; }
+
+    /* ─── Hero ─── */
+    .hero { background: linear-gradient(160deg, #0d1b3e 0%, #1a1052 45%, #2d1b69 75%, #1a0f6b 100%); color: var(--white); padding: 60px 0; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(124,58,237,.22) 0%, transparent 65%), radial-gradient(ellipse 50% 40% at 20% 70%, rgba(59,119,240,.15) 0%, transparent 60%); pointer-events: none; }
+    .hero-label { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.9); font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 100px; margin-bottom: 28px; text-transform: uppercase; letter-spacing: .5px; }
+    .hero h1 { font-size: clamp(30px, 3.2vw, 52px); font-weight: 900; line-height: 1.06; letter-spacing: -2px; margin-bottom: 20px; }
+    .hero h1 .accent { color: #c4b5fd; }
+    .hero-sub { font-size: 17px; color: rgba(255,255,255,.75); line-height: 1.65; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+    .hero-proof { display: flex; gap: 32px; flex-wrap: wrap; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.12); }
+    .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stat-number { font-size: 28px; font-weight: 800; color: var(--white); line-height: 1; letter-spacing: -1px; }
+    .hero-stat-label { font-size: 12px; color: rgba(255,255,255,.6); }
+    /* ─── Hero split + illustration ─── */
+    .hero-split { display: grid; grid-template-columns: 52% 1fr; gap: 56px; align-items: center; }
+    .hero-viz { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; overflow: hidden; }
+    .hviz-bar { background: rgba(0,0,0,.25); padding: 10px 16px; display: flex; align-items: center; gap: 5px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .hviz-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .hviz-dot-r { background: #ff5f57; } .hviz-dot-y { background: #febc2e; } .hviz-dot-g { background: #28c840; }
+    .hviz-title { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 600; flex: 1; margin-left: 8px; }
+    /* ─── Process step illustration ─── */
+    .pviz-steps { padding: 10px 16px 14px; }
+    .pviz-step { display: flex; gap: 11px; position: relative; }
+    .pviz-step:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 30px; bottom: 0; width: 1px; background: rgba(255,255,255,.1); }
+    .pviz-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 3px; position: relative; z-index: 1; font-weight: 700; }
+    /* ─── MCP: terminal/code illustration ─── */
+    .hero-viz { font-family: 'Courier New', monospace; background: rgba(0,0,0,.45) !important; border-color: rgba(255,255,255,.1) !important; }
+    .mviz-body { padding: 14px 16px; }
+    .mviz-line { font-size: 11px; margin-bottom: 3px; font-family: 'Courier New', monospace; }
+    .mviz-sep { height: 1px; background: rgba(255,255,255,.06); margin: 10px 0; }
+    .mviz-prompt { color: #c4b5fd; }
+    .mviz-args { color: rgba(255,255,255,.32); padding-left: 14px; font-size: 10px; }
+    .mviz-ret-ok { color: #4ade80; }
+    .mviz-ret-run { color: rgba(255,255,255,.7); }
+    .mviz-cursor { color: #c4b5fd; animation: mcp-blink 1s step-end infinite; }
+    @keyframes mcp-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .mviz-bar { height: 3px; background: rgba(255,255,255,.07); border-radius: 2px; margin-top: 7px; overflow: hidden; }
+    .mviz-bar-fill { height: 100%; background: linear-gradient(90deg, #7c3aed, #c4b5fd); border-radius: 2px; animation: mviz-grow 2.8s ease-in-out infinite; }
+    @keyframes mviz-grow { 0%,100%{width:10%} 45%{width:82%} }
+    @media (max-width: 900px) { .hero-split { grid-template-columns: 1fr; } .hero-viz { display: none; } }
+
+    /* ─── Section common ─── */
+    .section-tag { display: inline-block; background: var(--purple-light); color: var(--purple); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .section-sub { font-size: 18px; color: var(--slate-600); max-width: 640px; line-height: 1.65; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── What is MCP ─── */
+    .what-mcp-section { background: var(--slate-50); }
+    .what-mcp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .what-mcp-content h3 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--slate-900); }
+    .what-mcp-content p { font-size: 16px; color: var(--slate-600); line-height: 1.7; margin-bottom: 16px; }
+    .mcp-explain-box { background: var(--white); border: 1.5px solid var(--slate-200); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+    .mcp-explain-row { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .mcp-explain-row:last-child { margin-bottom: 0; }
+    .mcp-explain-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .mcp-explain-text h4 { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
+    .mcp-explain-text p { font-size: 13px; color: var(--slate-600); line-height: 1.5; }
+    .mcp-divider { border: none; border-top: 1px solid var(--slate-200); margin: 16px 0; }
+
+    /* ─── Pain points ─── */
+    .pains-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pain-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; position: relative; overflow: hidden; transition: box-shadow .2s, transform .2s; }
+    .pain-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .pain-card.p0 { border-color: #fca5a5; background: #fff8f8; }
+    .pain-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .pain-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .pain-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .pain-problem { font-size: 14px; color: var(--slate-600); margin-bottom: 16px; }
+    .pain-solution { background: var(--green-light); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--green); font-weight: 500; line-height: 1.5; }
+    .pain-solution::before { content: '✓ '; font-weight: 700; }
+
+    /* ─── Tools Grid ─── */
+    .tools-section { background: var(--slate-900); color: var(--white); }
+    .tools-section .section-tag { background: rgba(124,58,237,.2); color: #c4b5fd; }
+    .tools-section .section-title { color: var(--white); }
+    .tools-section .section-sub { color: rgba(255,255,255,.6); }
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 40px; }
+    .tool-card { background: var(--white); border: 1.5px solid var(--slate-200); border-radius: var(--radius); padding: 20px; transition: box-shadow .2s, transform .2s; }
+    .tool-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .tool-name { font-family: 'Courier New', monospace; font-size: 14px; font-weight: 700; color: var(--purple); background: var(--purple-light); padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
+    .tool-desc { font-size: 14px; color: var(--slate-600); }
+    .tool-return { display: inline-flex; align-items: center; gap: 4px; background: var(--green-light); color: var(--green); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; margin-top: 8px; }
+
+    /* ─── Use Cases ─── */
+    .usecase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .usecase-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; transition: box-shadow .2s, transform .2s; }
+    .usecase-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .usecase-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--purple-light); color: var(--purple); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; padding: 3px 10px; border-radius: 100px; margin-bottom: 16px; }
+    .usecase-icon { font-size: 36px; margin-bottom: 16px; }
+    .usecase-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--slate-900); }
+    .usecase-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px; }
+    .usecase-flow { display: flex; flex-direction: column; gap: 6px; }
+    .usecase-step { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--slate-700); }
+    .usecase-step::before { content: '→'; color: var(--purple-mid); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* ─── Code Preview ─── */
+    .code-section { background: var(--slate-800); color: var(--white); }
+    .code-section .section-tag { background: rgba(124,58,237,.2); color: #c4b5fd; }
+    .code-section .section-title { color: var(--white); }
+    .code-section .section-sub { color: rgba(255,255,255,.6); }
+    .code-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; margin-top: 48px; }
+    .code-block { background: var(--slate-900); border-radius: var(--radius); border: 1px solid rgba(255,255,255,.08); overflow: hidden; }
+    .code-block-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-dot-r { background: #ff5f57; } .code-dot-y { background: #febc2e; } .code-dot-g { background: #28c840; }
+    .code-block-title { font-size: 12px; color: rgba(255,255,255,.4); margin-left: 4px; }
+    .code-block pre { padding: 20px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,.8); overflow-x: auto; white-space: pre; }
+    .code-c-key { color: #93c5fd; }
+    .code-c-str { color: #86efac; }
+    .code-c-num { color: #fbbf24; }
+    .code-c-brace { color: rgba(255,255,255,.5); }
+    .code-c-comment { color: rgba(255,255,255,.3); font-style: italic; }
+    .code-explain { display: flex; flex-direction: column; gap: 20px; }
+    .code-explain-item { background: rgba(255,255,255,.04); border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,.06); padding: 16px; }
+    .code-explain-item h4 { font-size: 14px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 6px; }
+    .code-explain-item p { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.6; }
+
+    /* ─── Protocol section ─── */
+    .protocol-section { background: var(--slate-50); }
+    .protocol-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .protocol-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
+    .protocol-icon { font-size: 32px; margin-bottom: 12px; }
+    .protocol-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .protocol-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── Products portfolio (standard) ─── */
+    .products-section { background: var(--slate-50); }
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; text-align: center; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; align-items: center; }
+    .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .product-card.current { border-color: var(--purple); background: var(--purple-light); }
+    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-name { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
+    .product-desc { font-size: 12px; color: var(--slate-500); margin-bottom: 10px; line-height: 1.4; flex: 1; }
+    .product-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge-live { background: var(--green-light); color: var(--green); }
+    .badge-soon { background: var(--slate-100); color: var(--slate-500); }
+    .badge-here { background: var(--purple-light); color: var(--purple); }
+    @media (max-width: 860px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* ─── Waitlist ─── */
+    .waitlist-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 80px 0; text-align: center; }
+    .waitlist-section .section-title { color: var(--white); }
+    .waitlist-section .section-sub { color: rgba(255,255,255,.6); margin: 0 auto; }
+    .waitlist-form { display: flex; gap: 12px; max-width: 480px; margin: 32px auto 0; }
+    .waitlist-input { flex: 1; padding: 13px 18px; border-radius: 8px; border: none; font-size: 15px; font-family: var(--font); outline: none; }
+    .waitlist-input:focus { box-shadow: 0 0 0 3px rgba(124,58,237,.3); }
+    .waitlist-btn { padding: 13px 24px; background: var(--purple); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: var(--font); transition: background .15s; }
+    .waitlist-btn:hover { background: var(--purple-dark); }
+    .waitlist-note { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,.4); }
+
+    /* ─── Footer ─── */
+    .footer { background: var(--slate-900); padding: 48px 0 32px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer-brand { max-width: 280px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 12px; }
+    .footer-logo-icon { width: 26px; height: 26px; color: #c4b5fd; }
+    .footer-logo-text { font-size: 18px; font-weight: 800; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .footer-links { display: flex; gap: 64px; }
+    .footer-col h5 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.6); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-col a.current-page { color: #c4b5fd; font-weight: 600; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; }
+    .footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .what-mcp-grid { grid-template-columns: 1fr; }
+      .pains-grid { grid-template-columns: 1fr 1fr; }
+      .usecase-grid { grid-template-columns: 1fr 1fr; }
+      .code-grid { grid-template-columns: 1fr; }
+      .protocol-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pains-grid, .usecase-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { flex-direction: column; gap: 40px; }
+      .footer-links { flex-direction: column; gap: 32px; }
+      .waitlist-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.style.visibility='hidden';</script>
+
+
+<!-- ═══════════ HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4z"/>
+        </svg>
+        <div class="logo-names">
+          <a href="/" class="logo-parent">moddrum.com ↗</a>
+          <div class="logo-name-row">
+            <a href="/mcp" class="logo-product">Moddrum MCP</a>
+            <span class="logo-badge" data-i18n="badge_soon"></span>
+          </div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#tools" data-i18n="nav_tools"></a>
+        <a href="#use-cases" data-i18n="nav_usecases"></a>
+        <a href="#protocol" data-i18n="nav_protocol"></a>
+        <a href="#waitlist" data-i18n="nav_coming_soon"></a>
+      </nav>
+      <div class="header-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-sl" onclick="setLang('sl')">SL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="#waitlist" class="btn btn-primary btn-sm" data-i18n="nav_notify_cta"></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-split">
+      <!-- LEFT: copy -->
+      <div class="hero-content">
+        <div class="hero-label" data-i18n="hero_label"></div>
+        <h1 data-i18n-html="hero_h1"></h1>
+        <p class="hero-sub" data-i18n="hero_sub"></p>
+        <div class="hero-actions">
+          <a href="#waitlist" class="btn btn-white btn-lg" data-i18n="hero_cta_primary"></a>
+          <a href="#tools" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary"></a>
+        </div>
+        <div class="hero-proof">
+          <div class="hero-stat">
+            <span class="hero-stat-number">6</span>
+            <span class="hero-stat-label" data-i18n="stat1"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">8+</span>
+            <span class="hero-stat-label" data-i18n="stat2"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">JSON</span>
+            <span class="hero-stat-label" data-i18n="stat3"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">MCP</span>
+            <span class="hero-stat-label" data-i18n="stat4"></span>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT: AI terminal illustration -->
+      <div class="hero-viz">
+        <div class="hviz-bar">
+          <span class="hviz-dot hviz-dot-r"></span><span class="hviz-dot hviz-dot-y"></span><span class="hviz-dot hviz-dot-g"></span>
+          <span class="hviz-title" style="font-family:var(--font)">Claude ✦ Moddrum MCP</span>
+        </div>
+        <div class="mviz-body">
+          <div class="mviz-line mviz-prompt">▶ moddrum_process_document</div>
+          <div class="mviz-line mviz-args">{ "file": "faktura_mar26.pdf" }</div>
+          <div class="mviz-line mviz-ret-ok">← { type: "invoice", conf: 0.98 }</div>
+          <div class="mviz-sep"></div>
+          <div class="mviz-line mviz-prompt">▶ moddrum_extract_fields</div>
+          <div class="mviz-line mviz-args">{ "doc_id": "d-8842", "fields": "all" }</div>
+          <div class="mviz-line mviz-ret-run">
+            <span class="mviz-cursor">●</span> ekstrakcija polj…
+          </div>
+          <div class="mviz-bar"><div class="mviz-bar-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHAT IS MCP -->
+<section class="section what-mcp-section" id="protocol">
+  <div class="container">
+    <div class="what-mcp-grid">
+      <div class="what-mcp-content">
+        <div class="section-tag" data-i18n="mcp_tag"></div>
+        <h3 data-i18n="mcp_title"></h3>
+        <p data-i18n="mcp_body1"></p>
+        <p data-i18n="mcp_body2"></p>
+      </div>
+      <div class="mcp-explain-box">
+        <div class="mcp-explain-row">
+          <div class="mcp-explain-icon">🤖</div>
+          <div class="mcp-explain-text">
+            <h4 data-i18n="mcp_e1_title"></h4>
+            <p data-i18n="mcp_e1_body"></p>
+          </div>
+        </div>
+        <hr class="mcp-divider">
+        <div class="mcp-explain-row">
+          <div class="mcp-explain-icon">🔌</div>
+          <div class="mcp-explain-text">
+            <h4 data-i18n="mcp_e2_title"></h4>
+            <p data-i18n="mcp_e2_body"></p>
+          </div>
+        </div>
+        <hr class="mcp-divider">
+        <div class="mcp-explain-row">
+          <div class="mcp-explain-icon">📄</div>
+          <div class="mcp-explain-text">
+            <h4 data-i18n="mcp_e3_title"></h4>
+            <p data-i18n="mcp_e3_body"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DEVELOPER PAIN POINTS -->
+<section class="section" id="pain-points">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="pain_tag"></div>
+      <h2 class="section-title" data-i18n="pain_title"></h2>
+      <p class="section-sub" data-i18n="pain_sub"></p>
+    </div>
+    <div class="pains-grid">
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#ede9fe">🧠</div>
+        </div>
+        <h3 data-i18n="p1_title"></h3>
+        <p class="pain-problem" data-i18n="p1_problem"></p>
+        <div class="pain-solution" data-i18n="p1_solution"></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fef9c3">📑</div>
+        </div>
+        <h3 data-i18n="p2_title"></h3>
+        <p class="pain-problem" data-i18n="p2_problem"></p>
+        <div class="pain-solution" data-i18n="p2_solution"></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#dcfce7">🇸🇮</div>
+        </div>
+        <h3 data-i18n="p3_title"></h3>
+        <p class="pain-problem" data-i18n="p3_problem"></p>
+        <div class="pain-solution" data-i18n="p3_solution"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MCP TOOLS -->
+<section class="section tools-section" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tools_tag"></div>
+      <h2 class="section-title" data-i18n="tools_title"></h2>
+      <p class="section-sub" data-i18n="tools_sub"></p>
+    </div>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-name">process_document</div>
+        <p class="tool-desc" data-i18n="tool1_desc"></p>
+        <div class="tool-return" data-i18n="tool1_return"></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">extract_invoice_fields</div>
+        <p class="tool-desc" data-i18n="tool2_desc"></p>
+        <div class="tool-return" data-i18n="tool2_return"></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">match_transactions</div>
+        <p class="tool-desc" data-i18n="tool3_desc"></p>
+        <div class="tool-return" data-i18n="tool3_return"></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">get_document_status</div>
+        <p class="tool-desc" data-i18n="tool4_desc"></p>
+        <div class="tool-return" data-i18n="tool4_return"></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">list_documents</div>
+        <p class="tool-desc" data-i18n="tool5_desc"></p>
+        <div class="tool-return" data-i18n="tool5_return"></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">create_export_preview</div>
+        <p class="tool-desc" data-i18n="tool6_desc"></p>
+        <div class="tool-return" data-i18n="tool6_return"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ USE CASES -->
+<section class="section" id="use-cases">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="uc_tag"></div>
+      <h2 class="section-title" data-i18n="uc_title"></h2>
+      <p class="section-sub" data-i18n="uc_sub"></p>
+    </div>
+    <div class="usecase-grid">
+      <div class="usecase-card">
+        <div class="usecase-tag" data-i18n="uc1_tag"></div>
+        <div class="usecase-icon">🧑‍💼</div>
+        <h3 data-i18n="uc1_title"></h3>
+        <p data-i18n="uc1_body"></p>
+        <div class="usecase-flow">
+          <div class="usecase-step" data-i18n="uc1_s1"></div>
+          <div class="usecase-step" data-i18n="uc1_s2"></div>
+          <div class="usecase-step" data-i18n="uc1_s3"></div>
+        </div>
+      </div>
+      <div class="usecase-card">
+        <div class="usecase-tag" data-i18n="uc2_tag"></div>
+        <div class="usecase-icon">🤖</div>
+        <h3 data-i18n="uc2_title"></h3>
+        <p data-i18n="uc2_body"></p>
+        <div class="usecase-flow">
+          <div class="usecase-step" data-i18n="uc2_s1"></div>
+          <div class="usecase-step" data-i18n="uc2_s2"></div>
+          <div class="usecase-step" data-i18n="uc2_s3"></div>
+        </div>
+      </div>
+      <div class="usecase-card">
+        <div class="usecase-tag" data-i18n="uc3_tag"></div>
+        <div class="usecase-icon">💬</div>
+        <h3 data-i18n="uc3_title"></h3>
+        <p data-i18n="uc3_body"></p>
+        <div class="usecase-flow">
+          <div class="usecase-step" data-i18n="uc3_s1"></div>
+          <div class="usecase-step" data-i18n="uc3_s2"></div>
+          <div class="usecase-step" data-i18n="uc3_s3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CODE PREVIEW -->
+<section class="section code-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="code_tag"></div>
+      <h2 class="section-title" data-i18n="code_title"></h2>
+      <p class="section-sub" data-i18n="code_sub"></p>
+    </div>
+    <div class="code-grid">
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-dot code-dot-r"></span>
+          <span class="code-dot code-dot-y"></span>
+          <span class="code-dot code-dot-g"></span>
+          <span class="code-block-title" data-i18n="code_file_label"></span>
+        </div>
+        <pre><span class="code-c-comment">// MCP tool call — extract_invoice_fields</span>
+<span class="code-c-brace">{</span>
+  <span class="code-c-key">"jsonrpc"</span>: <span class="code-c-str">"2.0"</span>,
+  <span class="code-c-key">"method"</span>: <span class="code-c-str">"tools/call"</span>,
+  <span class="code-c-key">"id"</span>: <span class="code-c-num">1</span>,
+  <span class="code-c-key">"params"</span>: <span class="code-c-brace">{</span>
+    <span class="code-c-key">"name"</span>: <span class="code-c-str">"extract_invoice_fields"</span>,
+    <span class="code-c-key">"arguments"</span>: <span class="code-c-brace">{</span>
+      <span class="code-c-key">"document_id"</span>: <span class="code-c-str">"doc_a3f9b2c1"</span>,
+      <span class="code-c-key">"fields"</span>: <span class="code-c-brace">[</span>
+        <span class="code-c-str">"supplier_name"</span>,
+        <span class="code-c-str">"supplier_vat_id"</span>,
+        <span class="code-c-str">"invoice_number"</span>,
+        <span class="code-c-str">"total_amount"</span>,
+        <span class="code-c-str">"vat_amount"</span>,
+        <span class="code-c-str">"issue_date"</span>,
+        <span class="code-c-str">"payment_reference"</span>
+      <span class="code-c-brace">]</span>
+    <span class="code-c-brace">}</span>
+  <span class="code-c-brace">}</span>
+<span class="code-c-brace">}</span>
+
+<span class="code-c-comment">// Response</span>
+<span class="code-c-brace">{</span>
+  <span class="code-c-key">"result"</span>: <span class="code-c-brace">{</span>
+    <span class="code-c-key">"supplier_name"</span>: <span class="code-c-str">"Telekom d.d."</span>,
+    <span class="code-c-key">"supplier_vat_id"</span>: <span class="code-c-str">"SI12345678"</span>,
+    <span class="code-c-key">"invoice_number"</span>: <span class="code-c-str">"2024-00847"</span>,
+    <span class="code-c-key">"total_amount"</span>: <span class="code-c-num">142.80</span>,
+    <span class="code-c-key">"vat_amount"</span>: <span class="code-c-num">24.80</span>,
+    <span class="code-c-key">"issue_date"</span>: <span class="code-c-str">"2024-03-01"</span>,
+    <span class="code-c-key">"payment_reference"</span>: <span class="code-c-str">"SI00 2024-00847"</span>,
+    <span class="code-c-key">"confidence"</span>: <span class="code-c-num">0.97</span>
+  <span class="code-c-brace">}</span>
+<span class="code-c-brace">}</span></pre>
+      </div>
+      <div class="code-explain">
+        <div class="code-explain-item">
+          <h4 data-i18n="code_e1_title"></h4>
+          <p data-i18n="code_e1_body"></p>
+        </div>
+        <div class="code-explain-item">
+          <h4 data-i18n="code_e2_title"></h4>
+          <p data-i18n="code_e2_body"></p>
+        </div>
+        <div class="code-explain-item">
+          <h4 data-i18n="code_e3_title"></h4>
+          <p data-i18n="code_e3_body"></p>
+        </div>
+        <div class="code-explain-item">
+          <h4 data-i18n="code_e4_title"></h4>
+          <p data-i18n="code_e4_body"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROTOCOL FEATURES -->
+<section class="section protocol-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="proto_tag"></div>
+      <h2 class="section-title" data-i18n="proto_title"></h2>
+      <p class="section-sub" data-i18n="proto_sub"></p>
+    </div>
+    <div class="protocol-grid">
+      <div class="protocol-card">
+        <div class="protocol-icon">⚡</div>
+        <h4 data-i18n="pr1_title"></h4>
+        <p data-i18n="pr1_body"></p>
+      </div>
+      <div class="protocol-card">
+        <div class="protocol-icon">🔐</div>
+        <h4 data-i18n="pr2_title"></h4>
+        <p data-i18n="pr2_body"></p>
+      </div>
+      <div class="protocol-card">
+        <div class="protocol-icon">📦</div>
+        <h4 data-i18n="pr3_title"></h4>
+        <p data-i18n="pr3_body"></p>
+      </div>
+      <div class="protocol-card">
+        <div class="protocol-icon">🌍</div>
+        <h4 data-i18n="pr4_title"></h4>
+        <p data-i18n="pr4_body"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="container">
+    <div class="section-tag" data-i18n="waitlist_tag"></div>
+    <h2 class="section-title" data-i18n="waitlist_title"></h2>
+    <p class="section-sub" data-i18n="waitlist_sub"></p>
+    <form class="waitlist-form" onsubmit="handleNotify(event, 'MCP')">
+      <input class="waitlist-input" type="email" data-i18n-placeholder="waitlist_placeholder">
+      <button class="waitlist-btn" type="submit" data-i18n="waitlist_btn"></button>
+    </form>
+    <p class="waitlist-note" data-i18n="waitlist_note"></p>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS PORTFOLIO -->
+<section class="section products-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="products_tag"></div>
+      <h2 class="section-title" data-i18n="products_title"></h2>
+      <p class="section-sub" data-i18n="products_sub"></p>
+    </div>
+    <div class="products-grid">
+      <a href="/practice" class="product-card">
+        <span class="product-icon">📋</span>
+        <div class="product-name" data-i18n="pc_practice_name"></div>
+        <div class="product-desc"  data-i18n="pc_practice_desc"></div>
+        <span class="product-badge badge-live" data-i18n="pc_badge_live"></span>
+      </a>
+      <a href="/biz" class="product-card">
+        <span class="product-icon">🏢</span>
+        <div class="product-name" data-i18n="pc_biz_name"></div>
+        <div class="product-desc"  data-i18n="pc_biz_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="/connect" class="product-card">
+        <span class="product-icon">🔗</span>
+        <div class="product-name" data-i18n="pc_connect_name"></div>
+        <div class="product-desc"  data-i18n="pc_connect_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="/mcp" class="product-card current">
+        <span class="product-icon">🤖</span>
+        <div class="product-name" data-i18n="pc_mcp_name"></div>
+        <div class="product-desc"  data-i18n="pc_mcp_desc"></div>
+        <span class="product-badge badge-here" data-i18n="pc_badge_here"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/mcp" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4z"/>
+          </svg>
+          <span class="footer-logo-text">Moddrum MCP</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline"></p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5 data-i18n="footer_col1_title"></h5>
+          <a href="/practice">Moddrum Practice</a>
+          <a href="/biz">Moddrum Biz</a>
+          <a href="/connect">Moddrum Connect</a>
+          <a href="/mcp" class="current-page">Moddrum MCP</a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col2_title"></h5>
+          <a href="#tools" data-i18n="nav_tools"></a>
+          <a href="#use-cases" data-i18n="nav_usecases"></a>
+          <a href="#protocol" data-i18n="nav_protocol"></a>
+          <a href="#waitlist" data-i18n="nav_coming_soon"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col3_title"></h5>
+          <a href="/about" data-i18n="footer_about"></a>
+          <a href="/contact" data-i18n="footer_contact"></a>
+          <a href="/privacy" data-i18n="footer_privacy"></a>
+          <a href="/terms" data-i18n="footer_terms"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-i18n="footer_copy"></div>
+      <div class="footer-legal">
+        <a href="/privacy" data-i18n="footer_privacy"></a>
+        <a href="/terms" data-i18n="footer_terms"></a>
+        <a href="/gdpr">GDPR</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TRANSLATIONS = {
+  sl: {
+    banner_text: '🤖 MCP strežnik kmalu — pridružite se čakalni listi AI razvijalcev',
+    badge_soon: 'Prihaja kmalu',
+    banner_cta: 'Obvesti me',
+
+    nav_tools: 'Orodja',
+    nav_usecases: 'Primeri',
+    nav_protocol: 'Protokol',
+    nav_coming_soon: 'Kmalu',
+    nav_notify_cta: 'Obvesti me →',
+
+    hero_label: '🤖 Moddrum MCP — za AI razvijalce',
+    hero_h1: 'Daj svojemu AI agentu moč<br><span class="accent">branja vsakega finančnega dokumenta.</span>',
+    hero_sub: 'Moddrum MCP je strežnik po protokolu Model Context Protocol. Poveže katerikoli LLM — Claude, GPT, Gemini — z Moddrum\'ovim procesiranjem dokumentov. Tvoj AI kliče orodja, Moddrum naredi ekstrakcijo, vrne strukturiran JSON.',
+    hero_cta_primary: 'Obvesti me →',
+    hero_cta_secondary: 'Oglej si orodja',
+    stat1: 'MCP orodij izpostavljenih',
+    stat2: 'vrst finančnih dokumentov',
+    stat3: 'strukturiran izhod',
+    stat4: 'standardni protokol',
+
+    mcp_tag: 'Kaj je MCP?',
+    mcp_title: 'Model Context Protocol — standardiziran vmesnik za LLM orodja',
+    mcp_body1: 'Model Context Protocol (MCP) je odprt standard za klicanje zunanjih orodij iz jezikovnih modelov. Namesto da bi LLM "ugibal" vsebino dokumenta iz besedilnega opisa, pokliče Moddrum MCP orodje in dobi strukturirane, zanesljive podatke.',
+    mcp_body2: 'Moddrum MCP izpostavi celotno procesiranje finančnih dokumentov kot sklop klicev. Tvoja AI aplikacija dobi OCR rezultate, ekstrahirana polja, primerjave transakcij in predogled izvoza — vse prek standardnega protokola.',
+    mcp_e1_title: 'LLM pokliče orodje',
+    mcp_e1_body: 'Tvoj AI agent (Claude, GPT-4, Gemini ...) pokliče process_document ali extract_invoice_fields z argumenti dokumenta.',
+    mcp_e2_title: 'Moddrum MCP procesira',
+    mcp_e2_body: 'Moddrum AI OCR pipeline prebere dokument, ekstrahira polja, določi tip in vrne zaupanje ekstrakcije.',
+    mcp_e3_title: 'Strukturiran JSON nazaj',
+    mcp_e3_body: 'Tvoj agent dobi zanesljiv, strukturiran JSON z vsemi polji — brez halucinacij, brez nestandardnih formatov.',
+
+    pain_tag: '3 izzivi razvijalcev',
+    pain_title: 'Zakaj razvijalci potrebujejo Moddrum MCP',
+    pain_sub: 'Gradnja AI aplikacij za finančne dokumente je težja kot izgleda. Tukaj so trije najpogostejši problemi.',
+    p1_title: 'Prompt engineering za OCR je nezanesljiv',
+    p1_problem: 'Jezikovni modeli halucinirajo pri finančnih številkah. Zneski, davčne številke, reference — LLM brez specializiranega OCR naredi napake, ki jih ne opaziš dokler ni prepozno.',
+    p1_solution: 'Moddrum MCP uporablja specializiran AI OCR pipeline z zaupanjem na polju. Vsako ekstrahirano vrednost dobi oceno zanesljivosti — tvoj agent ve, kdaj vprašati za potrditev.',
+    p2_title: 'LLM ne more brati PDF in bančnih izpiskov',
+    p2_problem: 'Vsako AI aplikacijo moraš začeti s predprocesiranjem: pretvorba PDF, razčlenitev XML, normalizacija CAMT.053 formatov. To je pipeline, ne produkt.',
+    p2_solution: 'Moddrum MCP sprejme katerikoli format — PDF, XML eSLog, CAMT.053 bančni izpiski, JPEG skeniranja — in vrne enoten strukturiran izhod. Ni predprocesiranja z tvoje strani.',
+    p3_title: 'Slovenski finančni formati — specifično znanje',
+    p3_problem: 'eSLog 2.00, CAMT.053, SI00 reference, DDV pravila, slovenske davčne številke — LLM-i tega ne poznajo dovolj dobro za zanesljivo ekstrakcijo v produkciji.',
+    p3_solution: 'Moddrum je zgrajen od tal za slovenski trg. MCP strežnik vključuje domensko znanje za vse lokalne formate brez dodatnega fine-tuninga modela.',
+
+    tools_tag: 'MCP orodja',
+    tools_title: 'Orodja izpostavljena prek MCP protokola',
+    tools_sub: 'Vsakemu LLM agentu so na voljo ta orodja. Kliči jih prek standardnega JSON-RPC MCP vmesnika.',
+    tool1_desc: 'Naloži in procesira katerikoli dokument. Samodejno določi tip, ekstrahira vsa polja in vrne strukturiran JSON z ocenami zaupanja.',
+    tool1_return: '→ DocumentResult',
+    tool2_desc: 'Ekstrahira vsa polja računa: dobavitelj, znesek, DDV, datumi, IBAN, referenčna številka SI00/RF, davčna ID.',
+    tool2_return: '→ InvoiceFields',
+    tool3_desc: 'Ujeme račune z bančnimi transakcijami po referenci, znesku in datumu. Vrne rezultate ujemanja z ocenami zaupanja.',
+    tool3_return: '→ MatchResult[]',
+    tool4_desc: 'Preveri status procesiranja dokumenta — v čakalni vrsti, procesira, opravljeno, napaka. Vrne napredek in delne rezultate.',
+    tool4_return: '→ DocumentStatus',
+    tool5_desc: 'Pridobi seznam procesiranih dokumentov za določeno podjetje z filtriranjem po tipu, datumu in statusu.',
+    tool5_return: '→ Document[]',
+    tool6_desc: 'Ustvari predogled za izvoz v računovodski sistem (MiniMax). Prikaže preslikana polja in opozorila pred potrditvijo.',
+    tool6_return: '→ ExportPreview',
+
+    uc_tag: 'Primeri uporabe',
+    uc_title: 'Kaj boš zgradil z Moddrum MCP',
+    uc_sub: 'Trije konkretni vzorci AI aplikacij, ki postanejo možni z Moddrum MCP.',
+    uc1_tag: 'AI kopilot',
+    uc1_title: 'AI računovodski kopilot',
+    uc1_body: 'Računovodja opiše dokument v naravnem jeziku. AI agent pokliče process_document, dobi strukturirane podatke in odgovori z točnimi informacijami.',
+    uc1_s1: 'Uporabnik: "Pokaži mi račune od Telekoma za lani"',
+    uc1_s2: 'Agent pokliče list_documents z filtri',
+    uc1_s3: 'Agent odgovori z zneskami, datumi in referenčnimi podatki',
+    uc2_tag: 'Avtomatizacija',
+    uc2_title: 'Avtomatizirani agent za knjiženje',
+    uc2_body: 'AI agent bere e-pošto, zazna priponke računov, jih procesira prek Moddrum MCP in ustvari knjižbe — brez ročnega dela.',
+    uc2_s1: 'Agent prebere e-pošto z računom v priponki',
+    uc2_s2: 'Pokliče process_document → dobi ekstrahirana polja',
+    uc2_s3: 'Pokliče create_export_preview → pošlje predogled v potrditev',
+    uc3_tag: 'Q&A asistent',
+    uc3_title: 'Finančni Q&A asistent',
+    uc3_body: 'Odgovarjaj na vprašanja o procesiranih računih z zanesljivimi strukturiranimi podatki, ne z ugibanjem LLM.',
+    uc3_s1: 'Vprašanje: "Koliko smo plačali za elektriko Q1 2024?"',
+    uc3_s2: 'Agent pokliče list_documents z dobaviteljem in datumskim filtrom',
+    uc3_s3: 'Sešteje zneske iz extract_invoice_fields — točen odgovor brez halucinacij',
+
+    code_tag: 'Primer klica',
+    code_title: 'Pokliči Moddrum MCP iz tvojega agenta',
+    code_sub: 'Standardni JSON-RPC 2.0 klic prek MCP protokola. Deluje z vsakim LLM ogrodjem, ki podpira MCP.',
+    code_file_label: 'mcp-tool-call.json',
+    code_e1_title: 'Standardni JSON-RPC 2.0',
+    code_e1_body: 'MCP protokol uporablja JSON-RPC 2.0 — standardni, široko podprt format. Integriraj ga v Claude, OpenAI Assistants, LangChain ali Autogen.',
+    code_e2_title: 'Polje confidence',
+    code_e2_body: 'Vsako ekstrahirano polje dobi oceno zaupanja (0.0–1.0). Tvoj agent se odloči, kdaj avtomatično procesuira in kdaj zahteva potrditev.',
+    code_e3_title: 'Slovenski formati vključeni',
+    code_e3_body: 'SI00 reference, davčne številke SI+8 mest, DDV stopnje — vse razčlenjeno samodejno. Ni potrebe po custom parsiranju.',
+    code_e4_title: 'Katero polje potrebuješ, to zahtevaj',
+    code_e4_body: 'Seznam fields ni obvezen — privzeto se ekstrahirajo vsa polja. Determiniraj polja za hitrejši odgovor pri enostavnih primerih.',
+
+    proto_tag: 'Protokol',
+    proto_title: 'Zgrajen za produkcijske AI aplikacije',
+    proto_sub: 'Moddrum MCP ni eksperimentalno orodje — zgrajen je za zanesljivo integracijo v produkcijo.',
+    pr1_title: 'Nizka zakasnitev',
+    pr1_body: 'Asinhron streaming — tvoj agent dobi delne rezultate takoj ko so na voljo. Ni čakanja na celoten pipeline.',
+    pr2_title: 'Varnostni model',
+    pr2_body: 'API ključi z obsegom dostopa po orodjih. OAuth 2.0 za organizacijski dostop. Revizijska sled vsakega klica.',
+    pr3_title: 'Bogatejši tipi orodij',
+    pr3_body: 'Poleg text vrne Moddrum MCP image (za predoglede dokumentov), embedded (za semantic search) in resource tipe.',
+    pr4_title: 'Nevtralen na LLM',
+    pr4_body: 'Deluje z vsakim MCP klientom — Claude Desktop, Cursor, LangChain, Autogen, custom implementacije. Ni vendor lock-in.',
+
+    waitlist_tag: 'Čakalna lista',
+    waitlist_title: 'Pridruži se čakalni listi AI razvijalcev',
+    waitlist_sub: 'Moddrum MCP je v razvoju. Pusti e-naslov in bodi med prvimi, ki dobijo dostop do developer preview.',
+    waitlist_placeholder: 'tvoj@email.com',
+    waitlist_btn: 'Pridruži se čakalni listi',
+    waitlist_note: 'Brez spama. Samo en e-mail, ko bo dostop na voljo.',
+
+    products_tag: 'Vsi produkti',
+    products_title: 'Moddrum produktna družina',
+    products_sub: 'Štirje specializirani produkti. En cilj: avtomatizacija finančne birokracije.',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'Za računovodske prakse',
+    pc_biz_name: 'Moddrum Biz',           pc_biz_desc: 'Za lastnike podjetij',
+    pc_connect_name: 'Moddrum Connect',   pc_connect_desc: 'Za ERP ekipe',
+    pc_mcp_name: 'Moddrum MCP',           pc_mcp_desc: 'Za AI ekipe',
+    pc_badge_live: 'V živo', pc_badge_soon: 'Prihaja kmalu', pc_badge_here: 'Tukaj ste',
+
+    footer_tagline: 'Pre-računovodska avtomatizacija za slovensko računovodsko stroko.',
+    footer_col1_title: 'Produkti',
+    footer_col2_title: 'Moddrum MCP',
+    footer_col3_title: 'Podjetje',
+    footer_about: 'O nas',
+    footer_contact: 'Kontakt',
+    footer_privacy: 'Zasebnost',
+    footer_terms: 'Pogoji',
+    footer_copy: '© 2026 Moddrum d.o.o. Vse pravice pridržane.',
+  },
+
+  en: {
+    banner_text: '🤖 MCP server coming soon — join the AI developer waitlist',
+    badge_soon: 'Coming Soon',
+    banner_cta: 'Notify me',
+
+    nav_tools: 'Tools',
+    nav_usecases: 'Use cases',
+    nav_protocol: 'Protocol',
+    nav_coming_soon: 'Coming soon',
+    nav_notify_cta: 'Notify me →',
+
+    hero_label: '🤖 Moddrum MCP — for AI developers',
+    hero_h1: 'Give your AI agent the power to<br><span class="accent">read and process any financial document.</span>',
+    hero_sub: 'Moddrum MCP is a server built on the Model Context Protocol. It connects any LLM — Claude, GPT, Gemini — to Moddrum\'s document processing pipeline. Your AI calls tools, Moddrum handles extraction, you get structured JSON back.',
+    hero_cta_primary: 'Notify me →',
+    hero_cta_secondary: 'Browse the tools',
+    stat1: 'MCP tools exposed',
+    stat2: 'financial document types',
+    stat3: 'structured output',
+    stat4: 'open standard',
+
+    mcp_tag: 'What is MCP?',
+    mcp_title: 'Model Context Protocol — a standardised interface for LLM tools',
+    mcp_body1: 'Model Context Protocol (MCP) is an open standard for calling external tools from language models. Instead of having an LLM "guess" a document\'s content from a text description, it calls a Moddrum MCP tool and receives structured, reliable data.',
+    mcp_body2: 'Moddrum MCP exposes its entire financial document processing pipeline as a set of callable tools. Your AI application gets OCR results, extracted fields, transaction matches and export previews — all through the standard protocol.',
+    mcp_e1_title: 'LLM calls a tool',
+    mcp_e1_body: 'Your AI agent (Claude, GPT-4, Gemini …) calls process_document or extract_invoice_fields with document arguments.',
+    mcp_e2_title: 'Moddrum MCP processes',
+    mcp_e2_body: 'The Moddrum AI OCR pipeline reads the document, extracts fields, determines type, and returns per-field confidence scores.',
+    mcp_e3_title: 'Structured JSON returned',
+    mcp_e3_body: 'Your agent receives reliable, structured JSON with all fields — no hallucinations, no non-standard formats.',
+
+    pain_tag: '3 developer pain points',
+    pain_title: 'Why developers need Moddrum MCP',
+    pain_sub: 'Building AI applications for financial documents is harder than it looks. Here are the three most common blockers.',
+    p1_title: 'Prompt engineering for OCR is unreliable',
+    p1_problem: 'Language models hallucinate on financial numbers. Amounts, tax IDs, payment references — without specialised OCR, an LLM makes errors you won\'t catch until it\'s too late.',
+    p1_solution: 'Moddrum MCP uses a specialised AI OCR pipeline with per-field confidence scoring. Every extracted value carries a reliability score — your agent knows when to ask for confirmation.',
+    p2_title: 'LLMs can\'t natively read PDFs or bank statements',
+    p2_problem: 'Every AI application requires upfront pre-processing: PDF conversion, XML parsing, CAMT.053 normalisation. That\'s a pipeline, not a product.',
+    p2_solution: 'Moddrum MCP accepts any format — PDF, XML eSLog, CAMT.053 bank statements, JPEG scans — and returns a uniform structured output. Zero pre-processing on your side.',
+    p3_title: 'Slovenian financial document specifics',
+    p3_problem: 'eSLog 2.00, CAMT.053, SI00 references, VAT rules, Slovenian tax IDs — LLMs don\'t have enough built-in knowledge for reliable production extraction of these formats.',
+    p3_solution: 'Moddrum is built ground-up for the Slovenian market. The MCP server includes domain knowledge for all local formats — no custom model fine-tuning required.',
+
+    tools_tag: 'MCP tools',
+    tools_title: 'Tools exposed via the MCP protocol',
+    tools_sub: 'These tools are available to any LLM agent. Call them via the standard JSON-RPC MCP interface.',
+    tool1_desc: 'Upload and process any document. Automatically determines type, extracts all fields, and returns structured JSON with per-field confidence scores.',
+    tool1_return: '→ DocumentResult',
+    tool2_desc: 'Extract all invoice fields: supplier, amount, VAT, dates, IBAN, SI00/RF payment reference, tax ID.',
+    tool2_return: '→ InvoiceFields',
+    tool3_desc: 'Match invoices to bank transactions by reference number, amount and date. Returns match results with confidence scores.',
+    tool3_return: '→ MatchResult[]',
+    tool4_desc: 'Check document processing status — queued, processing, done, error. Returns progress and partial results.',
+    tool4_return: '→ DocumentStatus',
+    tool5_desc: 'List processed documents for a business with filtering by type, date range, and status.',
+    tool5_return: '→ Document[]',
+    tool6_desc: 'Generate an export preview for the accounting system (MiniMax). Shows mapped fields and warnings before confirmation.',
+    tool6_return: '→ ExportPreview',
+
+    uc_tag: 'Use cases',
+    uc_title: 'What you\'ll build with Moddrum MCP',
+    uc_sub: 'Three concrete AI application patterns that become possible with Moddrum MCP.',
+    uc1_tag: 'AI copilot',
+    uc1_title: 'AI accounting copilot',
+    uc1_body: 'An accountant describes a document in natural language. An AI agent calls process_document, receives structured data, and responds with accurate information.',
+    uc1_s1: 'User: "Show me all Telekom invoices from last year"',
+    uc1_s2: 'Agent calls list_documents with filters',
+    uc1_s3: 'Agent responds with amounts, dates and reference data',
+    uc2_tag: 'Automation',
+    uc2_title: 'Automated bookkeeping agent',
+    uc2_body: 'An AI agent reads emails, detects invoice attachments, processes them via Moddrum MCP and creates bookkeeping entries — with no manual work.',
+    uc2_s1: 'Agent reads email with invoice attachment',
+    uc2_s2: 'Calls process_document → receives extracted fields',
+    uc2_s3: 'Calls create_export_preview → sends preview for confirmation',
+    uc3_tag: 'Q&A assistant',
+    uc3_title: 'Financial Q&A assistant',
+    uc3_body: 'Answer questions about processed invoices with reliable structured data, not LLM guesswork.',
+    uc3_s1: 'Question: "How much did we pay for electricity in Q1 2024?"',
+    uc3_s2: 'Agent calls list_documents with supplier and date filters',
+    uc3_s3: 'Sums amounts from extract_invoice_fields — exact answer, no hallucinations',
+
+    code_tag: 'Code sample',
+    code_title: 'Call Moddrum MCP from your agent',
+    code_sub: 'Standard JSON-RPC 2.0 call over the MCP protocol. Works with any LLM framework that supports MCP.',
+    code_file_label: 'mcp-tool-call.json',
+    code_e1_title: 'Standard JSON-RPC 2.0',
+    code_e1_body: 'MCP uses JSON-RPC 2.0 — a well-known, broadly supported format. Integrate it into Claude, OpenAI Assistants, LangChain or Autogen.',
+    code_e2_title: 'The confidence field',
+    code_e2_body: 'Every extracted field gets a confidence score (0.0–1.0). Your agent decides when to auto-process and when to request confirmation.',
+    code_e3_title: 'Slovenian formats included',
+    code_e3_body: 'SI00 references, SI+8-digit tax IDs, VAT rates — all parsed automatically. No custom parsing required.',
+    code_e4_title: 'Request only the fields you need',
+    code_e4_body: 'The fields array is optional — all fields are extracted by default. Specify fields for faster responses in simple use cases.',
+
+    proto_tag: 'Protocol',
+    proto_title: 'Built for production AI applications',
+    proto_sub: 'Moddrum MCP is not an experimental tool — it is built for reliable production integration.',
+    pr1_title: 'Low latency',
+    pr1_body: 'Async streaming — your agent receives partial results as soon as they are available. No waiting for the full pipeline to complete.',
+    pr2_title: 'Security model',
+    pr2_body: 'API keys scoped per tool. OAuth 2.0 for organisational access. A full audit trail for every call.',
+    pr3_title: 'Rich tool types',
+    pr3_body: 'Beyond text, Moddrum MCP returns image (document previews), embedded (for semantic search) and resource content types.',
+    pr4_title: 'LLM-agnostic',
+    pr4_body: 'Works with any MCP client — Claude Desktop, Cursor, LangChain, Autogen, custom implementations. No vendor lock-in.',
+
+    waitlist_tag: 'Waitlist',
+    waitlist_title: 'Join the AI developer waitlist',
+    waitlist_sub: 'Moddrum MCP is under active development. Leave your email and be among the first to access the developer preview.',
+    waitlist_placeholder: 'you@email.com',
+    waitlist_btn: 'Join the waitlist',
+    waitlist_note: 'No spam. One email when access becomes available.',
+
+    products_tag: 'All products',
+    products_title: 'The Moddrum product family',
+    products_sub: 'Four specialised products. One goal: automating financial administration.',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'For accounting practices',
+    pc_biz_name: 'Moddrum Biz',           pc_biz_desc: 'For business owners',
+    pc_connect_name: 'Moddrum Connect',   pc_connect_desc: 'For ERP teams',
+    pc_mcp_name: 'Moddrum MCP',           pc_mcp_desc: 'For AI teams',
+    pc_badge_live: 'Live', pc_badge_soon: 'Coming soon', pc_badge_here: 'You are here',
+
+    footer_tagline: 'Pre-accounting automation for the Slovenian accounting profession.',
+    footer_col1_title: 'Products',
+    footer_col2_title: 'Moddrum MCP',
+    footer_col3_title: 'Company',
+    footer_about: 'About',
+    footer_contact: 'Contact',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms',
+    footer_copy: '© 2026 Moddrum d.o.o. All rights reserved.',
+  }
+};
+
+let currentLang = localStorage.getItem('moddrum_lang') || 'sl';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('moddrum_lang', lang);
+  document.documentElement.lang = lang;
+  document.getElementById('btn-sl').classList.toggle('active', lang === 'sl');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  const t = TRANSLATIONS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+}
+
+function handleNotify(event, product) {
+  event.preventDefault();
+  const form = event.target.closest('form') || event.target.closest('.waitlist-form');
+  const input = form ? form.querySelector('input[type="email"]') : null;
+  const email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    alert(currentLang === 'sl' ? 'Vnesite veljavni e-naslov.' : 'Please enter a valid email.');
+    return;
+  }
+  if (input) input.value = '';
+  const msg = currentLang === 'sl'
+    ? `Hvala! Obvestili vas bomo, ko bo Moddrum ${product} na voljo.`
+    : `Thank you! We'll notify you when Moddrum ${product} launches.`;
+  alert(msg);
+}
+
+// Init
+setLang(currentLang);
+document.documentElement.style.visibility='';
+</script>
+</body>
+</html>

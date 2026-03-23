@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<!-- Note: locally accessible at localhost:3002/api/ -->
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum API — REST API za obdelavo dokumentov, OCR in ekstrakcijo polj. Pošljite dokument, prejmite strukturiran JSON. Pay-per-call. Brez infrastrukture.">
+  <title>Moddrum API — Strukturirani podatki iz vsakega dokumenta v enem API klicu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path fill='%23135bec' d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z'/><path fill='%23135bec' fill-rule='evenodd' d='M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z'/></svg>">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #135bec; --blue-dark: #0d47c7; --blue-light: #e8effe; --blue-mid: #3b77f0;
+      --green: #16a34a; --green-light: #dcfce7;
+      --amber: #d97706; --amber-light: #fef3c7;
+      --red: #dc2626; --red-light: #fee2e2;
+      --slate-900: #0f172a; --slate-800: #1e293b; --slate-700: #334155;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08); --shadow-lg: 0 12px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--slate-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Coming Soon Banner ─── */
+    .coming-soon-banner { background: #fef3c7; border-bottom: 2px solid #d97706; padding: 12px 0; text-align: center; }
+    .coming-soon-banner .container { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .coming-soon-text { font-size: 15px; font-weight: 600; color: #92400e; }
+
+    /* ─── Header ─── */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--slate-900); }
+    .logo-icon { width: 28px; height: 28px; color: var(--blue); }
+    .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; background: var(--blue); color: var(--white); padding: 2px 8px; border-radius: 4px; margin-left: 6px; letter-spacing: .3px; text-transform: uppercase; vertical-align: middle; }
+    .nav { display: flex; gap: 28px; }
+    .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
+    .nav a:hover { color: var(--blue); }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher {
+      display: flex; align-items: center;
+      background: var(--slate-100); border-radius: 6px;
+      padding: 3px; gap: 2px;
+    }
+    .lang-btn {
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer;
+      color: var(--slate-500); background: transparent; transition: all .15s;
+      letter-spacing: .3px;
+    }
+    .lang-btn.active { background: var(--white); color: var(--blue); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .lang-btn:not(.active):hover { color: var(--slate-800); }
+
+    /* ─── Buttons ─── */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 11px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(19,91,236,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue-light); }
+    .btn-white { background: var(--white); color: var(--blue); }
+    .btn-white:hover { background: var(--blue-light); transform: translateY(-1px); }
+    .btn-ghost { background: rgba(255,255,255,.12); color: white; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); }
+    .btn-lg { font-size: 17px; padding: 15px 32px; }
+    .btn-sm { font-size: 13px; padding: 8px 18px; }
+
+    /* ─── Hero (tech-focused darker gradient) ─── */
+    .hero { background: linear-gradient(160deg, #060d1f 0%, #0d1b3e 45%, #0a2d6e 100%); color: var(--white); padding: 80px 0 72px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 55% at 65% 35%, rgba(19,91,236,.3) 0%, transparent 65%); pointer-events: none; }
+    .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 40% 40% at 20% 80%, rgba(99,102,241,.12) 0%, transparent 60%); pointer-events: none; }
+    .hero-label { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.9); font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 100px; margin-bottom: 28px; text-transform: uppercase; letter-spacing: .5px; }
+    .hero h1 { font-size: clamp(32px, 4.8vw, 54px); font-weight: 900; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 24px; max-width: 860px; }
+    .hero h1 .accent { color: #7eb8ff; }
+    .hero-sub { font-size: 19px; color: rgba(255,255,255,.72); max-width: 600px; line-height: 1.65; margin-bottom: 40px; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 64px; }
+    .hero-proof { display: flex; gap: 40px; flex-wrap: wrap; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.1); }
+    .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stat-number { font-size: 32px; font-weight: 800; color: var(--white); line-height: 1; letter-spacing: -1px; }
+    .hero-stat-label { font-size: 13px; color: rgba(255,255,255,.55); }
+
+    /* ─── Section common ─── */
+    .section-tag { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 3.5vw, 40px); font-weight: 800; letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 16px; }
+    .section-sub { font-size: 18px; color: var(--slate-600); max-width: 600px; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── Pain Points ─── */
+    .pains-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pain-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 32px 28px; position: relative; overflow: hidden; transition: box-shadow .2s, transform .2s; }
+    .pain-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .pain-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .pain-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .pain-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .pain-problem { font-size: 14px; color: var(--slate-600); margin-bottom: 16px; }
+    .pain-solution { background: var(--green-light); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--green); font-weight: 500; line-height: 1.5; }
+    .pain-solution::before { content: '✓ '; font-weight: 700; }
+
+    /* ─── API Demo code block ─── */
+    .api-demo-section { background: var(--slate-50); }
+    .api-demo { background: #0f172a; border-radius: 12px; padding: 32px; margin: 0; }
+    .api-demo-header { display: flex; gap: 6px; margin-bottom: 20px; align-items: center; }
+    .api-demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+    .api-demo-title { font-size: 12px; color: rgba(255,255,255,.35); margin-left: 8px; font-family: 'Courier New', monospace; }
+    .api-demo pre { color: #e2e8f0; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; white-space: pre; }
+    .api-demo .comment { color: #64748b; }
+    .api-demo .string { color: #86efac; }
+    .api-demo .key { color: #93c5fd; }
+    .api-demo .number { color: #fbbf24; }
+    .api-demo .punct { color: #94a3b8; }
+    .api-demo .method { color: #f0abfc; }
+    .api-demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .api-demo-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+
+    /* ─── Features ─── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; transition: box-shadow .2s; }
+    .feature-card:hover { box-shadow: var(--shadow); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
+    .feature-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+    .feature-tag-soon { display: inline-block; background: var(--amber-light); color: var(--amber); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-top: 8px; text-transform: uppercase; letter-spacing: .3px; }
+
+    /* ─── Pricing ─── */
+    .pricing-section { background: var(--slate-50); }
+    .pricing-center { max-width: 780px; margin: 0 auto; }
+    .pricing-card { background: var(--white); border-radius: var(--radius); border: 2px solid var(--blue); overflow: hidden; box-shadow: 0 0 0 4px var(--blue-light), var(--shadow-lg); }
+    .pricing-top { background: var(--blue); padding: 32px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .pricing-plan-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.7); margin-bottom: 8px; }
+    .pricing-amount { display: flex; align-items: baseline; gap: 4px; }
+    .pricing-cur { font-size: 22px; font-weight: 700; color: var(--white); }
+    .pricing-num { font-size: 60px; font-weight: 900; color: var(--white); line-height: 1; letter-spacing: -2px; }
+    .pricing-cents { font-size: 36px; font-weight: 900; color: var(--white); line-height: 1; }
+    .pricing-per { font-size: 15px; color: rgba(255,255,255,.7); }
+    .pricing-right-label { font-size: 16px; color: rgba(255,255,255,.85); max-width: 280px; line-height: 1.55; font-weight: 500; }
+    .pricing-body { padding: 32px 36px; }
+    .pricing-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-list li { display: flex; gap: 10px; font-size: 14px; color: var(--slate-700); }
+    .pricing-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pricing-tbd { background: var(--amber-light); border: 1px solid #fde68a; border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 16px; }
+    .pricing-tbd p { font-size: 13px; color: var(--amber); font-weight: 500; line-height: 1.6; }
+    .pricing-note { text-align: center; font-size: 13px; color: var(--slate-500); margin-top: 16px; }
+
+    /* ─── Products section ─── */
+    .products-section { background: var(--slate-900); color: var(--white); padding: 72px 0; }
+    .products-section .section-tag { background: rgba(59,119,240,.2); color: #7eb8ff; }
+    .products-section .section-title { color: var(--white); }
+    .products-section .section-sub { color: rgba(255,255,255,.55); }
+    .products-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 48px; }
+    .product-card { background: rgba(255,255,255,.05); border-radius: var(--radius); border: 1px solid rgba(255,255,255,.08); padding: 24px 20px; text-decoration: none; color: var(--white); transition: background .2s, transform .2s; }
+    .product-card:hover { background: rgba(255,255,255,.09); transform: translateY(-2px); }
+    .product-card.current { border-color: var(--blue); background: rgba(19,91,236,.15); }
+    .product-card-icon { font-size: 26px; margin-bottom: 12px; }
+    .product-card-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .product-card-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.5; }
+    .product-card-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 100px; margin-top: 8px; text-transform: uppercase; }
+    .badge-current { background: var(--blue); color: var(--white); }
+    .badge-soon { background: rgba(217,119,6,.3); color: #fbbf24; }
+
+    /* ─── Waitlist ─── */
+    .waitlist-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 80px 0; text-align: center; }
+    .waitlist-section .section-tag { background: rgba(59,119,240,.2); color: #7eb8ff; }
+    .waitlist-title { font-size: clamp(26px, 3.5vw, 38px); font-weight: 900; letter-spacing: -0.8px; margin-bottom: 16px; }
+    .waitlist-sub { font-size: 17px; color: rgba(255,255,255,.65); max-width: 520px; margin: 0 auto 8px; line-height: 1.6; }
+    .waitlist-form { display: flex; gap: 12px; max-width: 480px; margin: 32px auto 0; }
+    .waitlist-input { flex: 1; padding: 13px 18px; border-radius: 8px; border: none; font-size: 15px; font-family: var(--font); outline: none; }
+    .waitlist-input:focus { box-shadow: 0 0 0 3px rgba(19,91,236,.4); }
+    .waitlist-btn { padding: 13px 24px; background: #135bec; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: var(--font); transition: background .15s; }
+    .waitlist-btn:hover { background: var(--blue-dark); }
+    .waitlist-note { font-size: 13px; color: rgba(255,255,255,.35); margin-top: 14px; }
+
+    /* ─── Footer ─── */
+    .footer { background: var(--slate-900); padding: 48px 0 32px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer-brand { max-width: 280px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 12px; }
+    .footer-logo-icon { width: 24px; height: 24px; color: #7eb8ff; }
+    .footer-logo-text { font-size: 16px; font-weight: 700; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .footer-links { display: flex; gap: 64px; }
+    .footer-col h5 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.6); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; }
+    .footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+    /* ─── Dark section overrides ─── */
+    .dark-section { background: var(--slate-900); color: var(--white); }
+    .dark-section .section-tag { background: rgba(59,119,240,.2); color: #7eb8ff; }
+    .dark-section .section-title { color: var(--white); }
+    .dark-section .section-sub { color: rgba(255,255,255,.6); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .pains-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .api-demo-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
+      .pricing-top { flex-direction: column; }
+    }
+    @media (max-width: 600px) {
+      .pains-grid, .features-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { flex-direction: column; gap: 40px; }
+      .footer-links { flex-direction: column; gap: 32px; }
+      .waitlist-form { flex-direction: column; }
+      .hero-proof { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.style.visibility='hidden';</script>
+
+<!-- ═══════════ COMING SOON BANNER -->
+<div class="coming-soon-banner">
+  <div class="container">
+    <span class="coming-soon-text" data-i18n="banner_text"></span>
+    <a href="#waitlist" class="btn btn-outline btn-sm" data-i18n="banner_cta" style="border-color:#92400e;color:#92400e;padding:6px 16px;font-size:13px;"></a>
+  </div>
+</div>
+
+<!-- ═══════════ HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <svg class="logo-icon" viewBox="0 0 48 48" fill="none">
+          <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"/>
+          <path clip-rule="evenodd" d="M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z" fill="currentColor" fill-rule="evenodd"/>
+        </svg>
+        <span class="logo-text">Moddrum<span class="logo-badge">API</span></span>
+      </a>
+      <nav class="nav">
+        <a href="#endpoints" data-i18n="nav_endpoints"></a>
+        <a href="#pricing" data-i18n="nav_pricing"></a>
+        <a href="#docs" data-i18n="nav_docs"></a>
+        <a href="#waitlist" data-i18n="nav_coming_soon"></a>
+      </nav>
+      <div class="header-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-sl" onclick="setLang('sl')">SL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="#waitlist" class="btn btn-primary btn-sm" data-i18n="nav_get_access"></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-label" data-i18n="hero_label"></div>
+    <h1 data-i18n-html="hero_h1"></h1>
+    <p class="hero-sub" data-i18n="hero_sub"></p>
+    <div class="hero-actions">
+      <a href="#waitlist" class="btn btn-white btn-lg" data-i18n="hero_cta_primary"></a>
+      <a href="#endpoints" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary"></a>
+    </div>
+    <div class="hero-proof">
+      <div class="hero-stat">
+        <span class="hero-stat-number">&lt;2s</span>
+        <span class="hero-stat-label" data-i18n="stat1"></span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-number">99.9%</span>
+        <span class="hero-stat-label" data-i18n="stat2"></span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-number">50+</span>
+        <span class="hero-stat-label" data-i18n="stat3"></span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-number">0</span>
+        <span class="hero-stat-label" data-i18n="stat4"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PAIN POINTS -->
+<section class="section" id="pain-points">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="pain_tag"></div>
+      <h2 class="section-title" data-i18n="pain_title"></h2>
+      <p class="section-sub" data-i18n="pain_sub"></p>
+    </div>
+    <div class="pains-grid">
+
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fee2e2">🏗️</div>
+        </div>
+        <h3 data-i18n="p1_title"></h3>
+        <p class="pain-problem" data-i18n="p1_problem"></p>
+        <div class="pain-solution" data-i18n="p1_solution"></div>
+      </div>
+
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#fef3c7">🗂️</div>
+        </div>
+        <h3 data-i18n="p2_title"></h3>
+        <p class="pain-problem" data-i18n="p2_problem"></p>
+        <div class="pain-solution" data-i18n="p2_solution"></div>
+      </div>
+
+      <div class="pain-card">
+        <div class="pain-top">
+          <div class="pain-icon" style="background:#f3e8ff">⚖️</div>
+        </div>
+        <h3 data-i18n="p3_title"></h3>
+        <p class="pain-problem" data-i18n="p3_problem"></p>
+        <div class="pain-solution" data-i18n="p3_solution"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ API DEMO -->
+<section class="section api-demo-section" id="endpoints">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="demo_tag"></div>
+      <h2 class="section-title" data-i18n="demo_title"></h2>
+      <p class="section-sub" data-i18n="demo_sub"></p>
+    </div>
+    <div class="api-demo-grid">
+      <div>
+        <div class="api-demo-label" data-i18n="demo_request_label"></div>
+        <div class="api-demo">
+          <div class="api-demo-header">
+            <div class="api-demo-dot dot-r"></div>
+            <div class="api-demo-dot dot-y"></div>
+            <div class="api-demo-dot dot-g"></div>
+            <span class="api-demo-title">terminal</span>
+          </div>
+          <pre><span class="comment"># POST a document — get structured JSON back</span>
+
+<span class="method">curl</span> -X POST \
+  <span class="string">https://api.moddrum.com/v1/extract</span> \
+  -H <span class="string">"Authorization: Bearer &lt;YOUR_API_KEY&gt;"</span> \
+  -H <span class="string">"Content-Type: multipart/form-data"</span> \
+  -F <span class="string">"file=@invoice_2026_031.pdf"</span> \
+  -F <span class="string">"document_type=invoice"</span>
+
+<span class="comment"># Also supports: receipt, bank_statement,</span>
+<span class="comment"># eslog_xml, camt053, contract</span></pre>
+        </div>
+      </div>
+      <div>
+        <div class="api-demo-label" data-i18n="demo_response_label"></div>
+        <div class="api-demo">
+          <div class="api-demo-header">
+            <div class="api-demo-dot dot-r"></div>
+            <div class="api-demo-dot dot-y"></div>
+            <div class="api-demo-dot dot-g"></div>
+            <span class="api-demo-title">response.json</span>
+          </div>
+          <pre><span class="punct">{</span>
+  <span class="key">"id"</span><span class="punct">:</span> <span class="string">"doc_9xKmP3qR8v"</span><span class="punct">,</span>
+  <span class="key">"document_type"</span><span class="punct">:</span> <span class="string">"invoice"</span><span class="punct">,</span>
+  <span class="key">"confidence"</span><span class="punct">:</span> <span class="number">0.97</span><span class="punct">,</span>
+  <span class="key">"fields"</span><span class="punct">: {</span>
+    <span class="key">"invoice_number"</span><span class="punct">:</span> <span class="string">"2026-031"</span><span class="punct">,</span>
+    <span class="key">"issue_date"</span><span class="punct">:</span> <span class="string">"2026-03-14"</span><span class="punct">,</span>
+    <span class="key">"due_date"</span><span class="punct">:</span> <span class="string">"2026-04-13"</span><span class="punct">,</span>
+    <span class="key">"supplier_name"</span><span class="punct">:</span> <span class="string">"Dobavitelj d.o.o."</span><span class="punct">,</span>
+    <span class="key">"supplier_vat_id"</span><span class="punct">:</span> <span class="string">"SI12345678"</span><span class="punct">,</span>
+    <span class="key">"amount_net"</span><span class="punct">:</span> <span class="number">200.00</span><span class="punct">,</span>
+    <span class="key">"vat_rate"</span><span class="punct">:</span> <span class="number">0.22</span><span class="punct">,</span>
+    <span class="key">"amount_vat"</span><span class="punct">:</span> <span class="number">44.00</span><span class="punct">,</span>
+    <span class="key">"amount_total"</span><span class="punct">:</span> <span class="number">244.00</span><span class="punct">,</span>
+    <span class="key">"currency"</span><span class="punct">:</span> <span class="string">"EUR"</span><span class="punct">,</span>
+    <span class="key">"payment_reference"</span><span class="punct">:</span> <span class="string">"SI00 12345-20260301"</span><span class="punct">,</span>
+    <span class="key">"iban"</span><span class="punct">:</span> <span class="string">"SI56 1910 0000 1234 567"</span>
+  <span class="punct">},</span>
+  <span class="key">"processing_ms"</span><span class="punct">:</span> <span class="number">1340</span>
+<span class="punct">}</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES -->
+<section class="section dark-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="feat_tag"></div>
+      <h2 class="section-title" data-i18n="feat_title"></h2>
+      <p class="section-sub" data-i18n="feat_sub"></p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">🔌</div>
+        <h3 data-i18n="f1_title"></h3>
+        <p data-i18n="f1_body"></p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <h3 data-i18n="f2_title"></h3>
+        <p data-i18n="f2_body"></p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3 data-i18n="f3_title"></h3>
+        <p data-i18n="f3_body"></p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🪝</div>
+        <h3 data-i18n="f4_title"></h3>
+        <p data-i18n="f4_body"></p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <h3 data-i18n="f5_title"></h3>
+        <p data-i18n="f5_body"></p>
+        <span class="feature-tag-soon" data-i18n="coming_soon_badge"></span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🇸🇮</div>
+        <h3 data-i18n="f6_title"></h3>
+        <p data-i18n="f6_body"></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="price_tag"></div>
+      <h2 class="section-title" data-i18n="price_title"></h2>
+      <p class="section-sub" data-i18n="price_sub"></p>
+    </div>
+    <div class="pricing-center">
+      <div class="pricing-card">
+        <div class="pricing-top">
+          <div>
+            <div class="pricing-plan-name" data-i18n="plan_name"></div>
+            <div class="pricing-amount">
+              <span class="pricing-cur">€</span>
+              <span class="pricing-num">0</span>
+              <span class="pricing-cents">,05</span>
+              <span class="pricing-per" data-i18n="per_call"></span>
+            </div>
+          </div>
+          <div class="pricing-right-label" data-i18n="plan_tagline"></div>
+        </div>
+        <div class="pricing-body">
+          <ul class="pricing-list">
+            <li data-i18n="pl1"></li>
+            <li data-i18n="pl2"></li>
+            <li data-i18n="pl3"></li>
+            <li data-i18n="pl4"></li>
+            <li data-i18n="pl5"></li>
+            <li data-i18n="pl6"></li>
+          </ul>
+          <div class="pricing-tbd">
+            <p data-i18n="price_tbd_note"></p>
+          </div>
+        </div>
+      </div>
+      <p class="pricing-note" data-i18n="pricing_note"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="container">
+    <div class="section-tag" data-i18n="waitlist_tag"></div>
+    <h2 class="waitlist-title" data-i18n="waitlist_title"></h2>
+    <p class="waitlist-sub" data-i18n="waitlist_sub"></p>
+    <form class="waitlist-form" onsubmit="handleNotify(event, 'API')">
+      <input type="email" class="waitlist-input" data-i18n-placeholder="waitlist_placeholder" required>
+      <button type="submit" class="waitlist-btn" data-i18n="waitlist_btn"></button>
+    </form>
+    <p class="waitlist-note" data-i18n="waitlist_note"></p>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS PORTFOLIO -->
+<section class="products-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="products_tag"></div>
+      <h2 class="section-title" data-i18n="products_title"></h2>
+      <p class="section-sub" data-i18n="products_sub"></p>
+    </div>
+    <div class="products-grid">
+      <a href="../practice/" class="product-card">
+        <div class="product-card-icon">🏢</div>
+        <div class="product-card-name">Moddrum Practice</div>
+        <div class="product-card-desc" data-i18n="prod_practice_desc"></div>
+        <div class="product-card-badge badge-soon" data-i18n="prod_practice_status"></div>
+      </a>
+      <a href="../biz/" class="product-card">
+        <div class="product-card-icon">💼</div>
+        <div class="product-card-name">Moddrum Biz</div>
+        <div class="product-card-desc" data-i18n="prod_biz_desc"></div>
+        <div class="product-card-badge badge-soon" data-i18n="prod_coming"></div>
+      </a>
+      <a href="api/" class="product-card current">
+        <div class="product-card-icon">🔌</div>
+        <div class="product-card-name">Moddrum API</div>
+        <div class="product-card-desc" data-i18n="prod_api_desc"></div>
+        <div class="product-card-badge badge-current" data-i18n="prod_api_status"></div>
+      </a>
+      <a href="../connect/" class="product-card">
+        <div class="product-card-icon">🔗</div>
+        <div class="product-card-name">Moddrum Connect</div>
+        <div class="product-card-desc" data-i18n="prod_connect_desc"></div>
+        <div class="product-card-badge badge-soon" data-i18n="prod_coming"></div>
+      </a>
+      <a href="../mcp/" class="product-card">
+        <div class="product-card-icon">🤖</div>
+        <div class="product-card-name">Moddrum MCP</div>
+        <div class="product-card-desc" data-i18n="prod_mcp_desc"></div>
+        <div class="product-card-badge badge-soon" data-i18n="prod_coming"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="api/" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 48 48" fill="none">
+            <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"/>
+            <path clip-rule="evenodd" d="M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+          <span class="footer-logo-text">Moddrum API</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline"></p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5 data-i18n="footer_col1_title"></h5>
+          <a href="#endpoints" data-i18n="nav_endpoints"></a>
+          <a href="#features" data-i18n="nav_features_link"></a>
+          <a href="#pricing" data-i18n="nav_pricing"></a>
+          <a href="#waitlist" data-i18n="nav_coming_soon"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col2_title"></h5>
+          <a href="../practice/" data-i18n="footer_practice"></a>
+          <a href="../biz/" data-i18n="footer_biz"></a>
+          <a href="../connect/" data-i18n="footer_connect"></a>
+          <a href="../mcp/" data-i18n="footer_mcp"></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col3_title"></h5>
+          <a href="../about" data-i18n="footer_about"></a>
+          <a href="../contact" data-i18n="footer_contact"></a>
+          <a href="../privacy" data-i18n="footer_privacy"></a>
+          <a href="../terms" data-i18n="footer_terms"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-i18n="footer_copy"></div>
+      <div class="footer-legal">
+        <a href="../privacy" data-i18n="footer_privacy"></a>
+        <a href="../terms" data-i18n="footer_terms"></a>
+        <a href="../gdpr">GDPR</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TRANSLATIONS = {
+  sl: {
+    /* ─── Banner ─── */
+    banner_text: '🔜 Dostop do API-ja prihaja kmalu — pridruži se razvijalski čakalni listi',
+    banner_cta: 'Prijavi se na obvestila',
+
+    /* ─── Nav ─── */
+    nav_endpoints: 'Endpointji',
+    nav_pricing: 'Cena',
+    nav_docs: 'Dokumentacija',
+    nav_coming_soon: 'Prihaja kmalu',
+    nav_features_link: 'Funkcije',
+    nav_get_access: 'Pridobi dostop do API →',
+
+    /* ─── Hero ─── */
+    hero_label: '⚡ Moddrum API — za razvijalce',
+    hero_h1: 'Strukturirani podatki iz<br>vsakega dokumenta v<br><span class="accent">enem API klicu.</span>',
+    hero_sub: 'Pošlji račun, bančni izpisek ali potrdilo — Moddrum API vrne strukturiran JSON z vsemi polji. OCR, ekstrakcija polj in validacija v eni zahtevi. Brez infrastrukture. Brez vzdrževanja modelov.',
+    hero_cta_primary: 'Prijavi se na čakalno listo →',
+    hero_cta_secondary: 'Oglej si primer API klica',
+    stat1: 'povprečni odzivni čas',
+    stat2: 'uptime SLA',
+    stat3: 'vrst ekstrahiranih polj',
+    stat4: 'infrastrukture za upravljanje',
+
+    /* ─── Pain Points ─── */
+    pain_tag: '3 razlogi za Moddrum API',
+    pain_title: 'Zakaj razvijalci ne gradijo lastnega OCR sistema',
+    pain_sub: 'Gradnja lastnega sistema za razpoznavanje dokumentov je draga, počasna in se ne splača za večino aplikacij.',
+
+    p1_title: 'Gradnja OCR od nule je draga',
+    p1_problem: 'Trenirani modeli potrebujejo GPU strežnike, terabajte podatkov za učenje in mesece razvoja. Vzdrževanje modela za vsako posodobitev formata je polno delovno mesto.',
+    p1_solution: 'Moddrum API prevzame vse: modele, infra, posodobitve. Vi plačate samo za dejanske klice — nič fiksnih stroškov.',
+
+    p2_title: 'Formati dokumentov so nepredvidljivi',
+    p2_problem: 'PDF, JPG, PNG, XML (eSLog), CAMT.053, Excel — vsak format zahteva drugačno logiko razčlenjevanja. Ob vsaki spremembi formata se sesuje vaš parser.',
+    p2_solution: 'En endpoint sprejme vse formate. Moddrum API zazna format samodejno in vrne enoten JSON odgovor ne glede na vhod.',
+
+    p3_title: 'Razčlenjevanje finančnih dokumentov je specializirano',
+    p3_problem: 'Slovensko DDV pravo, eSLog sheme, IBAN validacija, referenčne številke po SI00/RF standardu — tovrstno domenskospecifično znanje zahteva leta izkušenj.',
+    p3_solution: 'Moddrum API je zgrajen za slovenski trg: razume eSLog 2.0, CAMT.053, davčne stopnje, in formatiranje referenc za MiniMax in ostale računovodske sisteme.',
+
+    /* ─── API Demo ─── */
+    demo_tag: 'API v akciji',
+    demo_title: 'En klic. Strukturirani podatki.',
+    demo_sub: 'REST API s JSON odgovorom. Brez SDK obveznosti — deluje s katerimkoli HTTP klientom.',
+    demo_request_label: 'Zahteva',
+    demo_response_label: 'Odgovor',
+
+    /* ─── Features ─── */
+    feat_tag: '6 ključnih funkcij',
+    feat_title: 'Vse kar razvijalec potrebuje za obdelavo dokumentov',
+    feat_sub: 'Nič konfiguracije, nič infrastrukture — samo en API klic in strukturiran JSON.',
+
+    f1_title: 'REST API z JSON odgovori',
+    f1_body: 'Standardni HTTPS endpoint. Multipart/form-data za nalaganje datotek. Odgovor je čist, predvidljiv JSON — vedno enaka shema ne glede na vrsto dokumenta.',
+
+    f2_title: '50+ ekstrahiranih polj',
+    f2_body: 'Številka računa, datumi, zneski, DDV stopnja, IBAN, referenčna številka, podatki dobavitelja in prejemnika, valuta, in mnoga druga polja specifična za vrsto dokumenta.',
+
+    f3_title: 'Ocene zaupanja (confidence scores)',
+    f3_body: 'Vsako polje dobi oceno zaupanja od 0 do 1. Vaša aplikacija se lahko odloči kdaj samodejno sprejme vrednost in kdaj jo pošlje v ročni pregled.',
+
+    f4_title: 'Webhook povratni klici',
+    f4_body: 'Za asinhrone tokove pošljite webhook URL in prejmite obvestilo, ko je obdelava končana. Idealno za batch procesiranje večjega števila dokumentov.',
+
+    f5_title: 'SDK-ji (Python, Node.js)',
+    f5_body: 'Uradni Python in Node.js SDK-ji z avtomatskim retry, napredovanjem brez konfiguracije in TypeScript tipizacijo.',
+
+    f6_title: 'Slovenski finančni dokumenti',
+    f6_body: 'Nativna podpora za eSLog 2.0 XML, CAMT.053 bančne izpiske, UJP plačilne naloge in formate ki jih zahtevajo slovenski računovodski sistemi (MiniMax, Pantheon, iCentre).',
+
+    coming_soon_badge: 'Prihaja kmalu',
+
+    /* ─── Pricing ─── */
+    price_tag: 'Preprosta cena',
+    price_title: 'Plačaj samo za dejanske klice',
+    price_sub: 'Brez naročnine. Brez minimalnega mesečnega zneska. Plačaš le za vsak uspešno obdelan dokument.',
+    plan_name: 'Pay-per-call',
+    per_call: '/ klic',
+    plan_tagline: 'Vsak klic vključuje OCR, ekstrakcijo polj, validacijo formatov in confidence scoring. Brez skritih stroškov.',
+    pl1: 'Neomejeno nalaganje — PDF, JPG, PNG, XML, CSV',
+    pl2: 'Vsi tipi dokumentov v eni naročnini',
+    pl3: 'Confidence scoring za vsako polje',
+    pl4: 'Webhook podpora za asinhrone tokove',
+    pl5: 'SLA 99.9% uptime',
+    pl6: 'Prioritetna podpora za prve partnerje',
+    price_tbd_note: '⚠️ Točna cena še ni dokončana. Cena €0,05/klic je indikativna in se lahko pred lansiranjem spremeni. Zgodnji partnerji bodo deležni posebnih pogojev.',
+    pricing_note: 'Brez naročnine. Brez minimuma. Plačaš le kar porabiš.',
+
+    /* ─── Waitlist ─── */
+    waitlist_tag: 'Zgodnji dostop',
+    waitlist_title: 'Pridobi zgodnji dostop do Moddrum API',
+    waitlist_sub: 'Prijavi se za developer preview dokumentacijo, sandbox okolje in zgodnji API dostop pred javnim lansiranjem.',
+    waitlist_placeholder: 'tvoj@email.si',
+    waitlist_btn: 'Prijavi se na čakalno listo',
+    waitlist_note: 'Brez neželene pošte. Samo obvestilo ob zagonu in link do sandbox okolja.',
+
+    /* ─── Products ─── */
+    products_tag: 'Ekosistem Moddrum',
+    products_title: 'Pet produktov. En cilj.',
+    products_sub: 'Moddrum gradi platformo za avtomatizacijo dokumentnih tokov — od prakse do API-ja.',
+    prod_practice_desc: 'Upravljanje računovodske prakse. Zbiranje, obdelava in izvoz dokumentov.',
+    prod_practice_status: 'V razvoju',
+    prod_biz_desc: 'Portal za lastnike podjetij — nalaganje dokumentov in pregled statusov.',
+    prod_api_desc: 'REST API za razvijalce. OCR in ekstrakcija polj za vsako vrsto dokumenta.',
+    prod_api_status: 'Ta produkt',
+    prod_connect_desc: 'ERP integracija za enterprise ekipe z obsežnimi dokumentnimi tokovi.',
+    prod_mcp_desc: 'Model Context Protocol za AI in LLM razvijalce, ki gradijo agentske tokove.',
+    prod_coming: 'Prihaja kmalu',
+
+    /* ─── Footer ─── */
+    footer_tagline: 'REST API za strukturirano ekstrakcijo podatkov iz finančnih dokumentov. Zgrajen za slovenski trg.',
+    footer_col1_title: 'Produkt',
+    footer_col2_title: 'Moddrum produkti',
+    footer_col3_title: 'Podjetje',
+    footer_practice: 'Moddrum Practice',
+    footer_biz: 'Moddrum Biz',
+    footer_connect: 'Moddrum Connect',
+    footer_mcp: 'Moddrum MCP',
+    footer_about: 'O nas',
+    footer_contact: 'Kontakt',
+    footer_privacy: 'Zasebnost',
+    footer_terms: 'Pogoji uporabe',
+    footer_copy: '© 2026 Moddrum. Vse pravice pridržane.',
+  },
+
+  en: {
+    /* ─── Banner ─── */
+    banner_text: '🔜 API access coming soon — join the developer waitlist',
+    banner_cta: 'Sign up for updates',
+
+    /* ─── Nav ─── */
+    nav_endpoints: 'Endpoints',
+    nav_pricing: 'Pricing',
+    nav_docs: 'Docs',
+    nav_coming_soon: 'Coming Soon',
+    nav_features_link: 'Features',
+    nav_get_access: 'Get API Access →',
+
+    /* ─── Hero ─── */
+    hero_label: '⚡ Moddrum API — for developers',
+    hero_h1: 'Structured data from any<br>document in<br><span class="accent">one API call.</span>',
+    hero_sub: 'Send an invoice, bank statement, or receipt — Moddrum API returns a structured JSON with all extracted fields. OCR, field extraction, and validation in a single request. No infrastructure. No model maintenance.',
+    hero_cta_primary: 'Join the developer waitlist →',
+    hero_cta_secondary: 'See a sample API call',
+    stat1: 'average response time',
+    stat2: 'uptime SLA',
+    stat3: 'field types extracted',
+    stat4: 'infrastructure to manage',
+
+    /* ─── Pain Points ─── */
+    pain_tag: '3 reasons to use Moddrum API',
+    pain_title: 'Why developers don\'t build their own OCR systems',
+    pain_sub: 'Building your own document recognition system is expensive, slow, and not cost-effective for most applications.',
+
+    p1_title: 'Building OCR from scratch is expensive',
+    p1_problem: 'Trained models require GPU servers, terabytes of training data, and months of development. Maintaining the model for every format update is a full-time job.',
+    p1_solution: 'Moddrum API handles everything: models, infrastructure, updates. You only pay for actual API calls — no fixed costs.',
+
+    p2_title: 'Document formats are unpredictable',
+    p2_problem: 'PDF, JPG, PNG, XML (eSLog), CAMT.053, Excel — each format requires different parsing logic. Every time a format changes, your parser breaks.',
+    p2_solution: 'One endpoint accepts all formats. Moddrum API detects the format automatically and returns a unified JSON response regardless of input.',
+
+    p3_title: 'Financial document parsing is specialized',
+    p3_problem: 'Slovenian VAT law, eSLog schemas, IBAN validation, reference numbers per SI00/RF standards — this domain-specific knowledge takes years to acquire.',
+    p3_solution: 'Moddrum API is built for the Slovenian market: understands eSLog 2.0, CAMT.053, tax rates, and reference formatting for MiniMax and other accounting systems.',
+
+    /* ─── API Demo ─── */
+    demo_tag: 'API in action',
+    demo_title: 'One call. Structured data.',
+    demo_sub: 'REST API with JSON responses. No SDK required — works with any HTTP client.',
+    demo_request_label: 'Request',
+    demo_response_label: 'Response',
+
+    /* ─── Features ─── */
+    feat_tag: '6 key features',
+    feat_title: 'Everything a developer needs for document processing',
+    feat_sub: 'No configuration, no infrastructure — just one API call and structured JSON.',
+
+    f1_title: 'REST API with JSON responses',
+    f1_body: 'Standard HTTPS endpoint. Multipart/form-data for file uploads. The response is clean, predictable JSON — always the same schema regardless of document type.',
+
+    f2_title: '50+ extracted fields',
+    f2_body: 'Invoice number, dates, amounts, VAT rate, IBAN, reference number, supplier and recipient data, currency, and many other document-type-specific fields.',
+
+    f3_title: 'Confidence scores per field',
+    f3_body: 'Every field receives a confidence score from 0 to 1. Your application can decide when to accept a value automatically and when to send it for manual review.',
+
+    f4_title: 'Webhook callbacks',
+    f4_body: 'For asynchronous flows, send a webhook URL and receive a notification when processing is complete. Ideal for batch processing large volumes of documents.',
+
+    f5_title: 'SDKs (Python, Node.js)',
+    f5_body: 'Official Python and Node.js SDKs with automatic retry, zero-config progress tracking, and TypeScript typings.',
+
+    f6_title: 'Slovenian financial documents',
+    f6_body: 'Native support for eSLog 2.0 XML, CAMT.053 bank statements, UJP payment orders, and formats required by Slovenian accounting systems (MiniMax, Pantheon, iCentre).',
+
+    coming_soon_badge: 'Coming soon',
+
+    /* ─── Pricing ─── */
+    price_tag: 'Simple pricing',
+    price_title: 'Pay only for actual calls',
+    price_sub: 'No subscription. No monthly minimum. You only pay for each successfully processed document.',
+    plan_name: 'Pay-per-call',
+    per_call: '/ call',
+    plan_tagline: 'Each call includes OCR, field extraction, format validation and confidence scoring. No hidden costs.',
+    pl1: 'Unlimited uploads — PDF, JPG, PNG, XML, CSV',
+    pl2: 'All document types in one plan',
+    pl3: 'Confidence scoring for every field',
+    pl4: 'Webhook support for async workflows',
+    pl5: '99.9% uptime SLA',
+    pl6: 'Priority support for early partners',
+    price_tbd_note: '⚠️ Exact pricing is not yet finalized. The €0.05/call price is indicative and may change before launch. Early partners will receive special terms.',
+    pricing_note: 'No subscription. No minimum. Pay only for what you use.',
+
+    /* ─── Waitlist ─── */
+    waitlist_tag: 'Early access',
+    waitlist_title: 'Get early access to the Moddrum API',
+    waitlist_sub: 'Sign up for the developer preview documentation, sandbox environment, and early API access before the public launch.',
+    waitlist_placeholder: 'your@email.com',
+    waitlist_btn: 'Join the waitlist',
+    waitlist_note: 'No spam. Only a launch notification and a link to the sandbox environment.',
+
+    /* ─── Products ─── */
+    products_tag: 'Moddrum ecosystem',
+    products_title: 'Five products. One mission.',
+    products_sub: 'Moddrum builds a platform for document workflow automation — from accounting practice to API.',
+    prod_practice_desc: 'Accounting practice management. Document collection, processing, and export.',
+    prod_practice_status: 'In development',
+    prod_biz_desc: 'Portal for business owners — document uploads and status tracking.',
+    prod_api_desc: 'REST API for developers. OCR and field extraction for every document type.',
+    prod_api_status: 'This product',
+    prod_connect_desc: 'ERP integration for enterprise teams with high-volume document workflows.',
+    prod_mcp_desc: 'Model Context Protocol for AI and LLM developers building agentic workflows.',
+    prod_coming: 'Coming soon',
+
+    /* ─── Footer ─── */
+    footer_tagline: 'REST API for structured data extraction from financial documents. Built for the Slovenian market.',
+    footer_col1_title: 'Product',
+    footer_col2_title: 'Moddrum products',
+    footer_col3_title: 'Company',
+    footer_practice: 'Moddrum Practice',
+    footer_biz: 'Moddrum Biz',
+    footer_connect: 'Moddrum Connect',
+    footer_mcp: 'Moddrum MCP',
+    footer_about: 'About',
+    footer_contact: 'Contact',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms of Use',
+    footer_copy: '© 2026 Moddrum. All rights reserved.',
+  }
+};
+
+let currentLang = localStorage.getItem('moddrum_lang') || 'sl';
+
+function applyTranslations(lang) {
+  const T = TRANSLATIONS[lang];
+  if (!T) return;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[key] !== undefined) el.textContent = T[key];
+  });
+
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (T[key] !== undefined) el.innerHTML = T[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (T[key] !== undefined) el.placeholder = T[key];
+  });
+
+  document.documentElement.lang = lang;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('moddrum_lang', lang);
+
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById('btn-' + lang);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  applyTranslations(lang);
+}
+
+function handleNotify(event, product) {
+  event.preventDefault();
+  const form = event.target.closest('form') || event.target.closest('.waitlist-form');
+  const input = form ? form.querySelector('input[type="email"]') : null;
+  const email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    alert(currentLang === 'sl' ? 'Vnesite veljavni e-naslov.' : 'Please enter a valid email.');
+    return;
+  }
+  if (input) input.value = '';
+  const msg = currentLang === 'sl'
+    ? `Hvala! Obvestili vas bomo, ko bo Moddrum ${product} na voljo.`
+    : `Thank you! We'll notify you when Moddrum ${product} launches.`;
+  alert(msg);
+}
+
+/* ─── Init ─── */
+document.addEventListener('DOMContentLoaded', function () {
+  setLang(currentLang);
+  document.documentElement.style.visibility='';
+});
+</script>
+
+</body>
+</html>

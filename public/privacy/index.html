@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Moddrum AI Privacy Policy — how we collect, process, and protect your personal data in compliance with GDPR.">
+  <title>Privacy Policy | Moddrum AI</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path fill='%23135bec' d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z'/><path fill='%23135bec' fill-rule='evenodd' d='M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z'/></svg>">
+
+  <style>
+    .legal-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 4rem 0 3rem;
+    }
+    .legal-hero h1 { color: #fff; font-size: 2.25rem; margin-bottom: 0.5rem; }
+    .legal-hero p { color: rgba(255,255,255,0.8); font-size: 0.95rem; margin: 0; }
+    .legal-body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+    .legal-body h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 2.5rem 0 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    .legal-body h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin: 1.5rem 0 0.5rem;
+    }
+    .legal-body p, .legal-body li {
+      font-size: 0.9375rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+    .legal-body ul, .legal-body ol {
+      list-style: disc;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .legal-body ol { list-style: decimal; }
+    .legal-body a { color: var(--primary); text-decoration: underline; }
+    .legal-body strong { color: var(--text-dark); font-weight: 600; }
+    .legal-meta {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.875rem;
+    }
+    .data-table th {
+      background: var(--background);
+      color: var(--text-dark);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.625rem 0.875rem;
+      border: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 0.625rem 0.875rem;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+    .rights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .right-card {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+    .right-card strong { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: var(--text-dark); }
+    .right-card p { font-size: 0.8125rem; margin: 0; }
+    @media (max-width: 600px) { .rights-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"/>
+            <path clip-rule="evenodd" d="M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236Z" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+          <span class="logo-text">Moddrum AI</span>
+        </a>
+        <nav class="nav">
+          <a href="/#features" class="nav-link">Features</a>
+          <a href="/#pricing" class="nav-link">Pricing</a>
+        </nav>
+        <div class="header-actions">
+          <a href="/login" class="login-link">Login</a>
+          <a href="/signup" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="legal-hero">
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p>How we collect, use, and protect your personal data — in compliance with the GDPR.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="legal-body">
+
+      <div class="legal-meta">
+        <strong>Last updated:</strong> 19 March 2026 &nbsp;·&nbsp;
+        <strong>Effective date:</strong> 19 March 2026 &nbsp;·&nbsp;
+        <strong>Supervisory authority:</strong> Information Commissioner of Slovenia (IP RS) — <a href="https://www.ip-rs.si" target="_blank" rel="noopener">www.ip-rs.si</a>
+      </div>
+
+      <p>
+        This Privacy Policy describes how <strong>[COMPANY NAME]</strong> ("[COMPANY NAME]", "we", "us", "our"),
+        registered at <strong>[REGISTERED ADDRESS]</strong>, Slovenia, processes personal data when you visit our website
+        at moddrum.com, use the Moddrum Practice platform, or communicate with us.
+      </p>
+      <p>
+        We are committed to protecting your personal data and processing it in accordance with the
+        General Data Protection Regulation (EU) 2016/679 ("GDPR") and applicable Slovenian data protection law.
+      </p>
+
+      <h2>1. Data Controller</h2>
+      <p>
+        The data controller responsible for your personal data is:<br>
+        <strong>[COMPANY NAME]</strong><br>
+        [REGISTERED ADDRESS], Slovenia<br>
+        Email: <a href="mailto:privacy@moddrum.com">privacy@moddrum.com</a><br>
+        Phone: [PHONE NUMBER]
+      </p>
+      <p>
+        For questions about how we handle your personal data, or to exercise your rights,
+        contact us at <a href="mailto:privacy@moddrum.com">privacy@moddrum.com</a>.
+      </p>
+
+      <h2>2. Definitions</h2>
+      <ul>
+        <li><strong>Personal data</strong> — any information relating to an identified or identifiable natural person.</li>
+        <li><strong>Processing</strong> — any operation performed on personal data, including collection, storage, use, disclosure, and deletion.</li>
+        <li><strong>Data controller</strong> — the entity that determines the purposes and means of processing personal data.</li>
+        <li><strong>Data processor</strong> — an entity that processes personal data on behalf of the controller.</li>
+        <li><strong>EEA</strong> — the European Economic Area.</li>
+      </ul>
+
+      <h2>3. What Personal Data We Collect and Why</h2>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Data collected</th>
+            <th>Purpose</th>
+            <th>Legal basis</th>
+            <th>Retention</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Account data</strong></td>
+            <td>Name, role, email address, password (hashed)</td>
+            <td>Account creation and authentication</td>
+            <td>Contract performance</td>
+            <td>Duration of account + 30 days after deletion request</td>
+          </tr>
+          <tr>
+            <td><strong>Organisation data</strong></td>
+            <td>Company name, tax number (davčna številka), VAT ID, address</td>
+            <td>Tenant identification, invoice matching, MiniMax export</td>
+            <td>Contract performance</td>
+            <td>Duration of account + 7 years (legal accounting obligation)</td>
+          </tr>
+          <tr>
+            <td><strong>Subscription &amp; billing</strong></td>
+            <td>Subscription plan, payment status, credit balance, billing email</td>
+            <td>Subscription management, invoicing</td>
+            <td>Contract performance, legal obligation</td>
+            <td>7 years (tax law)</td>
+          </tr>
+          <tr>
+            <td><strong>Uploaded documents</strong></td>
+            <td>Invoices, bank statements, receipts, and other accounting documents uploaded by the Customer</td>
+            <td>Automated data extraction, reconciliation, export — on behalf of the Customer (see Appendix 1 of Terms)</td>
+            <td>Contract performance (processor role)</td>
+            <td>Per Customer agreement; default 90 days after account termination</td>
+          </tr>
+          <tr>
+            <td><strong>Usage &amp; device data</strong></td>
+            <td>IP address, browser type, session events, pages visited, feature usage counts</td>
+            <td>Service delivery, security, debugging, product improvement</td>
+            <td>Legitimate interest</td>
+            <td>90 days (logs); aggregated analytics retained indefinitely</td>
+          </tr>
+          <tr>
+            <td><strong>Communications</strong></td>
+            <td>Email content when you contact support; content of support tickets</td>
+            <td>Customer support and issue resolution</td>
+            <td>Legitimate interest / contract performance</td>
+            <td>3 years</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <strong>Uploaded documents (processor role):</strong> When you upload invoices, bank statements, or other accounting
+        documents, you act as the Data Controller for the personal data those documents contain (e.g. supplier names,
+        IBAN numbers, employee data). We act as your Data Processor and process that data solely on your instructions.
+        This relationship is governed by the Data Processing Contract in Appendix 1 of our
+        <a href="/terms">Terms of Service</a>.
+      </p>
+
+      <h2>4. Personal Data Protection</h2>
+      <p>We implement appropriate technical and organisational measures to protect your personal data, including:</p>
+      <ul>
+        <li>Encryption of data at rest (AES-256) and in transit (TLS 1.2+);</li>
+        <li>Role-based access controls and the principle of least privilege;</li>
+        <li>Regular security reviews and penetration testing;</li>
+        <li>Audit logging of sensitive operations;</li>
+        <li>Pseudonymisation where practicable;</li>
+        <li>Formal incident response procedures.</li>
+      </ul>
+      <p>
+        <strong>Data breach notification:</strong> If we become aware of a personal data breach that is likely to result
+        in a risk to your rights and freedoms, we will notify the Information Commissioner of Slovenia (IP RS)
+        without undue delay and within 72 hours of becoming aware. If the breach is likely to result in a high risk to
+        you personally, we will also notify you directly without undue delay.
+      </p>
+
+      <h2>5. Third Parties and Sub-processors</h2>
+      <p>We share personal data with the following categories of third parties:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Third party</th>
+            <th>Country</th>
+            <th>Purpose</th>
+            <th>Transfer basis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Anthropic PBC</strong></td>
+            <td>United States</td>
+            <td>AI/LLM processing for intelligent document understanding</td>
+            <td>EU Standard Contractual Clauses</td>
+          </tr>
+          <tr>
+            <td><strong>Google Cloud Platform</strong></td>
+            <td>EU (Frankfurt / Belgium)</td>
+            <td>Cloud infrastructure, storage, compute</td>
+            <td>EU adequacy / SCCs</td>
+          </tr>
+          <tr>
+            <td><strong>MiniMax d.o.o.</strong></td>
+            <td>Slovenia</td>
+            <td>Accounting system integration (export on Customer instruction)</td>
+            <td>Within EEA</td>
+          </tr>
+          <tr>
+            <td><strong>Revolut Ltd</strong></td>
+            <td>UK / EU</td>
+            <td>Payment processing (billing information only; document data not shared)</td>
+            <td>UK adequacy decision / SCCs</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        We do not sell personal data. We do not share personal data with advertisers or marketing platforms.
+      </p>
+
+      <h2>6. International Data Transfers</h2>
+      <p>
+        Some of our sub-processors are located outside the EEA, most notably Anthropic (United States).
+        Transfers of personal data to countries not recognised by the European Commission as providing an adequate level
+        of data protection are made under the European Commission's Standard Contractual Clauses (SCCs, 2021),
+        which provide equivalent safeguards. You may request a copy of the applicable SCCs by contacting
+        <a href="mailto:privacy@moddrum.com">privacy@moddrum.com</a>.
+      </p>
+
+      <h2>7. Cookie Policy</h2>
+      <p>
+        Our website (moddrum.com) uses cookies and similar tracking technologies. You can manage cookie preferences
+        through your browser settings.
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Category</th><th>Purpose</th><th>Examples</th><th>Expiry</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Strictly Necessary</strong></td>
+            <td>Authentication, session management, security</td>
+            <td>Session cookie, CSRF token</td>
+            <td>Session / 1 day</td>
+          </tr>
+          <tr>
+            <td><strong>Functional</strong></td>
+            <td>Remembering your language and display preferences</td>
+            <td>Language preference</td>
+            <td>1 year</td>
+          </tr>
+          <tr>
+            <td><strong>Analytics</strong></td>
+            <td>Understanding how the website is used (aggregate, anonymised)</td>
+            <td>Google Analytics (_ga, _gid)</td>
+            <td>Up to 2 years</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Strictly necessary cookies cannot be disabled as they are essential for the Service to function.
+        You may opt out of analytics cookies by adjusting your browser settings or using the
+        <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out browser add-on</a>.
+      </p>
+
+      <h2>8. Your Rights Under GDPR</h2>
+      <p>As a data subject in the EEA, you have the following rights:</p>
+
+      <div class="rights-grid">
+        <div class="right-card">
+          <strong>Right of access</strong>
+          <p>Request a copy of the personal data we hold about you.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to rectification</strong>
+          <p>Request correction of inaccurate or incomplete personal data.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to erasure</strong>
+          <p>Request deletion of your personal data ("right to be forgotten"), subject to legal retention obligations.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to data portability</strong>
+          <p>Receive your personal data in a structured, machine-readable format.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to restriction</strong>
+          <p>Request that processing of your data be temporarily restricted.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to object</strong>
+          <p>Object to processing based on legitimate interest, including for direct marketing.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to withdraw consent</strong>
+          <p>Withdraw any previously given consent at any time, without affecting prior processing.</p>
+        </div>
+        <div class="right-card">
+          <strong>Right to lodge a complaint</strong>
+          <p>Lodge a complaint with the Information Commissioner of Slovenia (IP RS) at <a href="https://www.ip-rs.si" target="_blank" rel="noopener">www.ip-rs.si</a>.</p>
+        </div>
+      </div>
+
+      <p>
+        To exercise any of these rights, contact us at <a href="mailto:privacy@moddrum.com">privacy@moddrum.com</a>.
+        We will respond within 30 days. We may ask you to verify your identity before fulfilling your request.
+      </p>
+
+      <h2>9. Children's Privacy</h2>
+      <p>
+        The Service is intended for professional use by adults. We do not knowingly collect personal data from
+        individuals under the age of 18. If you believe we have inadvertently collected such data,
+        contact us immediately at <a href="mailto:privacy@moddrum.com">privacy@moddrum.com</a>.
+      </p>
+
+      <h2>10. Changes to This Privacy Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time to reflect changes in our practices, the Service,
+        or applicable law. We will notify registered users of material changes by email or in-app notification
+        at least fourteen (14) days before they take effect. The "Last updated" date at the top of this page
+        indicates when it was most recently revised.
+      </p>
+
+      <h2>11. Contact</h2>
+      <p>
+        For privacy-related questions or to exercise your rights:<br>
+        <strong>[COMPANY NAME]</strong><br>
+        [REGISTERED ADDRESS], Slovenia<br>
+        Email: <a href="mailto:privacy@moddrum.com">privacy@moddrum.com</a>
+      </p>
+      <p>
+        You also have the right to lodge a complaint with the supervisory authority:<br>
+        <strong>Information Commissioner of Slovenia (IP RS)</strong><br>
+        Dunajska cesta 22, 1000 Ljubljana, Slovenia<br>
+        <a href="https://www.ip-rs.si" target="_blank" rel="noopener">www.ip-rs.si</a>
+      </p>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 8L8 40h32L24 8z" fill="currentColor"/>
+          </svg>
+          <span>Moddrum AI</span>
+        </div>
+        <div class="footer-links">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="/contact">Contact Support</a>
+        </div>
+        <p class="footer-copyright">© 2026 Moddrum AI. Built for better accounting.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
