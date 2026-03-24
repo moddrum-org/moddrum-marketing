@@ -28,4 +28,4 @@ jobs:
       - name: Reload nginx
         run: |
           ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} \
-            "docker exec moddrum-proxy nginx -s reload"
+            "docker exec moddrum-proxy nginx -s reload 2>/dev/null || docker exec doc-processor-nginx nginx -s reload 2>/dev/null || echo 'nginx reload skipped — container not running yet'"
