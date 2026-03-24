@@ -11,21 +11,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy marketing files via rsync
-        uses: easingthemes/ssh-deploy@v5
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
-          SOURCE: "public/"
-          TARGET: "/opt/moddrum/marketing/"
-          ARGS: "--archive --delete --checksum"
-          EXCLUDE: ".DS_Store, .git*, Thumbs.db"
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.PROD_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -az --delete --checksum \
+            --exclude='.DS_Store' --exclude='.git*' --exclude='Thumbs.db' \
+            public/ \
+            ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/opt/moddrum/marketing/
 
       - name: Reload nginx
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.PROD_SSH_HOST }}
-          username: ${{ secrets.PROD_SSH_USER }}
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          script: docker exec moddrum-proxy nginx -s reload
+        run: |
+          ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} \
+            "docker exec moddrum-proxy nginx -s reload"
