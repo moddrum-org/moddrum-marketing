@@ -8,9 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -18,14 +15,7 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.PROD_SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy via rsync
-        run: |
-          rsync -az --delete --checksum \
-            --exclude='.DS_Store' --exclude='.git*' --exclude='Thumbs.db' \
-            public/ \
-            ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/opt/moddrum/marketing/
-
-      - name: Reload nginx
+      - name: Pull latest and restart container
         run: |
           ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} \
-            "docker exec moddrum-proxy nginx -s reload 2>/dev/null || docker exec doc-processor-nginx nginx -s reload 2>/dev/null || echo 'nginx reload skipped — container not running yet'"
+            "cd /opt/moddrum/moddrum-marketing && git pull && docker restart moddrum-marketing"
