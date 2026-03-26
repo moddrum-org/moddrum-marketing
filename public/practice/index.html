@@ -330,7 +330,7 @@
           <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
         </svg>
         <div class="logo-names">
-          <a href="/" class="logo-parent">moddrum.com ↗</a>
+          <a href="https://moddrum.com" class="logo-parent">moddrum.com ↗</a>
           <a href="/practice" class="logo-product">Moddrum Practice</a>
         </div>
       </div>
@@ -695,12 +695,12 @@
           <div class="pricing-plan-name" data-i18n="plan_name"></div>
           <div class="pricing-amount">
             <span class="pricing-cur">€</span>
-            <span class="pricing-num" id="mp-plan-price">19</span>
+            <span class="pricing-num">19</span>
             <span class="pricing-per" data-i18n="per_month"></span>
           </div>
           <p class="pricing-tagline" data-i18n="plan_tagline"></p>
           <div class="included-credit">
-            <div class="included-credit-num" id="mp-credits-included">100</div>
+            <div class="included-credit-num">100</div>
             <div class="included-credit-label" data-i18n="credits_included_label"></div>
             <div class="included-credit-sub" data-i18n="credits_included_sub"></div>
           </div>
@@ -716,8 +716,8 @@
           <div class="flat-rate-display">
             <div class="flat-rate-amount">
               <span class="flat-rate-cur">€</span>
-              <span class="flat-rate-num" id="mp-flat-num">0</span>
-              <span class="flat-rate-cents" id="mp-flat-cents">,20</span>
+              <span class="flat-rate-num">0</span>
+              <span class="flat-rate-cents">,20</span>
             </div>
             <div class="flat-rate-label" data-i18n="per_doc_label"></div>
             <div class="flat-rate-badge" data-i18n="per_doc_badge"></div>
@@ -1345,32 +1345,6 @@ function setLang(lang) {
   } catch(e) {}
   setLang(lang);
   document.documentElement.style.visibility='';
-})();
-</script>
-
-<!-- Live pricing from Moddrum API — falls back to static values if unreachable -->
-<script>
-(function () {
-  fetch('/api/public/pricing')
-    .then(function (r) { return r.json(); })
-    .then(function (p) {
-      var planEl = document.getElementById('mp-plan-price');
-      if (planEl) planEl.textContent = Math.round(Number(p.calculatedPlanPrice));
-
-      var credEl = document.getElementById('mp-credits-included');
-      if (credEl) credEl.textContent = p.creditsPerPack;
-
-      var ppc = Number(p.pricePerCredit);
-      var numEl = document.getElementById('mp-flat-num');
-      var centsEl = document.getElementById('mp-flat-cents');
-      if (numEl && centsEl) {
-        var euros = Math.floor(ppc);
-        var cents = Math.round((ppc - euros) * 100);
-        numEl.textContent = euros;
-        centsEl.textContent = ',' + (cents < 10 ? '0' : '') + cents;
-      }
-    })
-    .catch(function () { /* API unreachable — static fallback values remain */ });
 })();
 </script>
 </body>
