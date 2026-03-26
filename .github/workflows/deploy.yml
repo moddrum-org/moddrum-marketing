@@ -20,6 +20,7 @@ jobs:
           ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} << 'EOF'
             cd /opt/moddrum/moddrum-marketing
             git pull
+            docker network create moddrum-network 2>/dev/null || true
             docker stop moddrum-marketing 2>/dev/null || true
             docker rm moddrum-marketing 2>/dev/null || true
             docker build -t moddrum-marketing .
