@@ -15,7 +15,17 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.PROD_SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Pull latest and restart container
+      - name: Pull latest and redeploy container
         run: |
-          ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} \
-            "cd /opt/moddrum/moddrum-marketing && git pull && docker restart moddrum-marketing"
+          ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} << 'EOF'
+            cd /opt/moddrum/moddrum-marketing
+            git pull
+            docker stop moddrum-marketing 2>/dev/null || true
+            docker rm moddrum-marketing 2>/dev/null || true
+            docker build -t moddrum-marketing .
+            docker run -d \
+              --name moddrum-marketing \
+              --network moddrum-network \
+              --restart unless-stopped \
+              moddrum-marketing
+          EOF
