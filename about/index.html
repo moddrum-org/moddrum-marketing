@@ -92,17 +92,14 @@
 
     /* ─── Products grid ─── */
     .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; }
-    .product-card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
-    .pc-practice .product-card-icon { background: var(--blue-light); }
-    .pc-biz      .product-card-icon { background: var(--amber-light); }
-    .pc-connect  .product-card-icon { background: var(--teal-light); }
-    .pc-mcp      .product-card-icon { background: var(--purple-light); }
-    .product-card h3 { font-size: 16px; font-weight: 800; color: var(--slate-900); margin-bottom: 6px; }
-    .product-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px; }
-    .product-pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
-    .pill-live { background: var(--green-light); color: var(--green); }
-    .pill-soon { background: var(--slate-100); color: var(--slate-500); }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; text-align: center; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; align-items: center; }
+    .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-name { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
+    .product-desc { font-size: 12px; color: var(--slate-500); margin-bottom: 10px; line-height: 1.4; flex: 1; }
+    .product-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge-live { background: var(--green-light); color: var(--green); }
+    .badge-soon { background: var(--slate-100); color: var(--slate-500); }
 
     /* ─── Company section ─── */
     .company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
@@ -260,30 +257,30 @@
       <p class="section-sub" data-i18n="products_sub"></p>
     </div>
     <div class="products-grid">
-      <div class="product-card pc-practice">
-        <div class="product-card-icon">📋</div>
-        <h3>Moddrum Practice</h3>
-        <p data-i18n="pc_practice_desc"></p>
-        <span class="product-pill pill-live" data-i18n="pill_live"></span>
-      </div>
-      <div class="product-card pc-biz">
-        <div class="product-card-icon">🏢</div>
-        <h3>Moddrum Biz</h3>
-        <p data-i18n="pc_biz_desc"></p>
-        <span class="product-pill pill-soon" data-i18n="pill_soon"></span>
-      </div>
-      <div class="product-card pc-connect">
-        <div class="product-card-icon">🔗</div>
-        <h3>Moddrum Connect</h3>
-        <p data-i18n="pc_connect_desc"></p>
-        <span class="product-pill pill-soon" data-i18n="pill_soon"></span>
-      </div>
-      <div class="product-card pc-mcp">
-        <div class="product-card-icon">🤖</div>
-        <h3>Moddrum MCP</h3>
-        <p data-i18n="pc_mcp_desc"></p>
-        <span class="product-pill pill-soon" data-i18n="pill_soon"></span>
-      </div>
+      <a href="https://practice.moddrum.com" class="product-card">
+        <span class="product-icon">📋</span>
+        <div class="product-name" data-i18n="pc_practice_name"></div>
+        <div class="product-desc" data-i18n="pc_practice_desc"></div>
+        <span class="product-badge badge-live" data-i18n="pc_badge_live"></span>
+      </a>
+      <a href="https://biz.moddrum.com" class="product-card">
+        <span class="product-icon">🏢</span>
+        <div class="product-name" data-i18n="pc_biz_name"></div>
+        <div class="product-desc" data-i18n="pc_biz_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="https://connect.moddrum.com" class="product-card">
+        <span class="product-icon">🔗</span>
+        <div class="product-name" data-i18n="pc_connect_name"></div>
+        <div class="product-desc" data-i18n="pc_connect_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
+      <a href="https://mcp.moddrum.com" class="product-card">
+        <span class="product-icon">🤖</span>
+        <div class="product-name" data-i18n="pc_mcp_name"></div>
+        <div class="product-desc" data-i18n="pc_mcp_desc"></div>
+        <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
+      </a>
     </div>
   </div>
 </section>
@@ -482,12 +479,11 @@ const TRANSLATIONS = {
     products_tag: 'Platforma',
     products_h2: 'Ena platforma, štirje produkti',
     products_sub: 'Vsak produkt rešuje isti problem z drugega zornega kota. Skupni Moddrum Engine, skupna filozofija.',
-    pc_practice_desc: 'Upravljanje računovodske prakse — zbiranje, obdelava, ujemanje in izvoz v MiniMax SI.',
-    pc_biz_desc: 'Portal za podjetja: pošiljanje dokumentov računovodji brez WhatsAppa.',
-    pc_connect_desc: 'REST API za ekstrakcijo finančnih dokumentov — za razvijalce.',
-    pc_mcp_desc: 'MCP server za LLM agente z dostopom do finančnih dokumentov.',
-    pill_live: '✅ V živo',
-    pill_soon: '🔜 Kmalu',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'Za računovodske pisarne',
+    pc_biz_name: 'Moddrum Biz', pc_biz_desc: 'Za lastnike podjetij',
+    pc_connect_name: 'Moddrum Connect', pc_connect_desc: 'Za ERP ekipe',
+    pc_mcp_name: 'Moddrum MCP', pc_mcp_desc: 'Za AI ekipe',
+    pc_badge_live: 'V živo', pc_badge_soon: 'Kmalu',
 
     company_tag: 'Podjetje',
     company_h2: 'Podjetje za Moddrum',
@@ -568,12 +564,11 @@ const TRANSLATIONS = {
     products_tag: 'Platform',
     products_h2: 'One platform, four products',
     products_sub: 'Each product solves the same core problem from a different angle. Shared Moddrum Engine, shared philosophy.',
-    pc_practice_desc: 'Accounting practice management — collection, processing, matching, and export to MiniMax SI.',
-    pc_biz_desc: 'Business portal: send documents to your accountant without WhatsApp.',
-    pc_connect_desc: 'REST API for financial document extraction — for developers.',
-    pc_mcp_desc: 'MCP server for LLM agents with access to financial documents.',
-    pill_live: '✅ Live',
-    pill_soon: '🔜 Coming soon',
+    pc_practice_name: 'Moddrum Practice', pc_practice_desc: 'For accounting practices',
+    pc_biz_name: 'Moddrum Biz', pc_biz_desc: 'For business owners',
+    pc_connect_name: 'Moddrum Connect', pc_connect_desc: 'For ERP teams',
+    pc_mcp_name: 'Moddrum MCP', pc_mcp_desc: 'For AI teams',
+    pc_badge_live: 'Live', pc_badge_soon: 'Coming soon',
 
     company_tag: 'Company',
     company_h2: 'The company behind Moddrum',
