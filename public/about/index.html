@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="O podjetju Moddrum — MKU d.o.o. Avtomatiziramo dokumentni in finančni podatkovni sloj za računovodje, razvijalce in podjetja.">
+  <title>O nas — Moddrum</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231e293b'/><path transform='translate(4,4)' fill='white' d='m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z'/></svg>">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #135bec; --blue-dark: #0d47c7; --blue-light: #e8effe; --blue-mid: #3b77f0;
+      --green: #16a34a; --green-light: #dcfce7;
+      --amber: #d97706; --amber-light: #fef3c7;
+      --purple: #7c3aed; --purple-light: #ede9fe;
+      --teal: #0d9488; --teal-light: #ccfbf1;
+      --red: #dc2626; --red-light: #fee2e2;
+      --slate-900: #0f172a; --slate-800: #1e293b; --slate-700: #334155;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc;
+      --white: #ffffff;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px; --radius-sm: 8px; --radius-lg: 20px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08); --shadow-lg: 0 12px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--slate-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Header ─── */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--slate-900); }
+    .logo-icon { width: 30px; height: 30px; color: var(--blue); }
+    .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .nav { display: flex; gap: 32px; align-items: center; }
+    .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
+    .nav a:hover { color: var(--blue); }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher { display: flex; align-items: center; background: var(--slate-100); border-radius: 6px; padding: 3px; gap: 2px; }
+    .lang-btn { font-family: var(--font); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; color: var(--slate-500); background: transparent; transition: all .15s; letter-spacing: .3px; }
+    .lang-btn.active { background: var(--white); color: var(--blue); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .lang-btn:not(.active):hover { color: var(--slate-800); }
+
+    /* ─── Buttons ─── */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 15px; font-weight: 600; padding: 11px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(19,91,236,.35); }
+    .btn-white { background: var(--white); color: var(--blue); }
+    .btn-white:hover { background: var(--blue-light); transform: translateY(-1px); }
+    .btn-ghost { background: rgba(255,255,255,.12); color: white; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); }
+    .btn-sm { font-size: 13px; padding: 8px 18px; }
+    .btn-lg { font-size: 17px; padding: 15px 32px; }
+
+    /* ─── Section header ─── */
+    .section-tag { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; color: var(--slate-900); }
+    .section-sub { font-size: 18px; color: var(--slate-600); line-height: 1.65; max-width: 640px; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── Page hero (dark) ─── */
+    .page-hero { background: linear-gradient(160deg, #0a1628 0%, #0d1b3e 40%, #1a2f6b 100%); color: var(--white); padding: 80px 0 72px; text-align: center; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(59,119,240,.2) 0%, transparent 65%); pointer-events: none; }
+    .page-hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.85); font-size: 12px; font-weight: 600; padding: 6px 16px; border-radius: 100px; margin-bottom: 28px; letter-spacing: .3px; }
+    .page-hero h1 { font-size: clamp(32px, 4vw, 56px); font-weight: 900; line-height: 1.08; letter-spacing: -2px; margin-bottom: 20px; position: relative; }
+    .page-hero h1 em { font-style: normal; color: #7eb8ff; }
+    .page-hero-sub { font-size: 18px; color: rgba(255,255,255,.65); max-width: 560px; margin: 0 auto; line-height: 1.65; position: relative; }
+
+    /* ─── Mission section ─── */
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .mission-content h2 { font-size: clamp(24px, 2.8vw, 36px); font-weight: 900; letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 20px; color: var(--slate-900); }
+    .mission-content p { font-size: 16px; color: var(--slate-600); line-height: 1.75; margin-bottom: 20px; }
+    .pain-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .pain-stat { background: var(--slate-50); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 20px; }
+    .pain-stat-num { font-size: 28px; font-weight: 900; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+    .pain-stat-lbl { font-size: 13px; color: var(--slate-600); line-height: 1.4; }
+
+    /* ─── Products grid ─── */
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; }
+    .product-card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .pc-practice .product-card-icon { background: var(--blue-light); }
+    .pc-biz      .product-card-icon { background: var(--amber-light); }
+    .pc-connect  .product-card-icon { background: var(--teal-light); }
+    .pc-mcp      .product-card-icon { background: var(--purple-light); }
+    .product-card h3 { font-size: 16px; font-weight: 800; color: var(--slate-900); margin-bottom: 6px; }
+    .product-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px; }
+    .product-pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+    .pill-live { background: var(--green-light); color: var(--green); }
+    .pill-soon { background: var(--slate-100); color: var(--slate-500); }
+
+    /* ─── Company section ─── */
+    .company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .company-card { background: var(--slate-50); border-radius: var(--radius-lg); border: 1.5px solid var(--slate-200); padding: 32px; }
+    .company-card h3 { font-size: 16px; font-weight: 800; color: var(--slate-900); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--slate-200); }
+    .company-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .company-row:last-child { margin-bottom: 0; }
+    .company-row-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .company-row-body { flex: 1; }
+    .company-row-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--slate-400); margin-bottom: 2px; }
+    .company-row-value { font-size: 14px; color: var(--slate-800); font-weight: 500; }
+    .contact-card { background: linear-gradient(140deg, #0a2a7a 0%, #0f47c8 55%, #3b77f0 100%); border-radius: var(--radius-lg); padding: 32px; color: var(--white); }
+    .contact-card h3 { font-size: 16px; font-weight: 800; color: var(--white); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.15); }
+    .contact-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+    .contact-row:last-child { margin-bottom: 0; }
+    .contact-row-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .contact-row-body { flex: 1; }
+    .contact-row-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: rgba(255,255,255,.5); margin-bottom: 3px; }
+    .contact-row-value { font-size: 15px; font-weight: 600; color: var(--white); }
+    .contact-row-value a { color: var(--white); text-decoration: none; }
+    .contact-row-value a:hover { text-decoration: underline; }
+    .contact-note { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.15); font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+    /* ─── Policies section ─── */
+    .policies-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .policy-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; }
+    .policy-icon { font-size: 28px; margin-bottom: 14px; }
+    .policy-card h3 { font-size: 16px; font-weight: 800; color: var(--slate-900); margin-bottom: 12px; }
+    .policy-card p { font-size: 14px; color: var(--slate-600); line-height: 1.7; }
+    .policy-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .policy-card ul li { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: var(--slate-600); line-height: 1.55; }
+    .policy-card ul li::before { content: '→'; font-weight: 800; color: var(--blue); flex-shrink: 0; margin-top: 1px; font-size: 12px; }
+
+    /* ─── CTA section ─── */
+    .cta-section { background: linear-gradient(160deg, #0d1b3e 0%, #1a2f6b 60%, #0f47a8 100%); padding: 96px 0; text-align: center; color: var(--white); }
+    .cta-section h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+    .cta-section h2 em { font-style: normal; color: #7eb8ff; }
+    .cta-section p { font-size: 18px; color: rgba(255,255,255,.7); max-width: 480px; margin: 0 auto 36px; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .cta-note { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,.4); }
+
+    /* ─── Footer ─── */
+    .footer { background: var(--slate-900); padding: 56px 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 280px 1fr; gap: 64px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 14px; }
+    .footer-logo-icon { width: 26px; height: 26px; color: #7eb8ff; }
+    .footer-logo-text { font-size: 18px; font-weight: 800; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.4); line-height: 1.65; margin-bottom: 24px; }
+    .footer-links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .footer-col h5 { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.55); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-col a .soon { font-size: 10px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.4); padding: 1px 6px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.3); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .mission-grid, .company-grid { grid-template-columns: 1fr; gap: 48px; }
+      .pain-stats { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav { display: none; }
+      .policies-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr; gap: 40px; }
+      .footer-links-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pain-stats { grid-template-columns: 1fr 1fr; }
+      .products-grid { grid-template-columns: 1fr; }
+      .footer-links-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.style.visibility='hidden';</script>
+
+<!-- ═══════════ HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="https://moddrum.com/" class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
+        </svg>
+        <span class="logo-text">Moddrum</span>
+      </a>
+      <nav class="nav">
+        <a href="https://moddrum.com/#products" data-i18n="nav_products"></a>
+        <a href="https://moddrum.com/#one-engine" data-i18n="nav_platform"></a>
+        <a href="https://practice.moddrum.com" data-i18n="nav_practice"></a>
+      </nav>
+      <div class="header-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-sl" onclick="setLang('sl')">SL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="https://practice.moddrum.com" class="btn btn-primary btn-sm" data-i18n="nav_try_practice"></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">🇸🇮 Slovenija · MKU d.o.o.</div>
+    <h1 data-i18n-html="hero_h1"></h1>
+    <p class="page-hero-sub" data-i18n="hero_sub"></p>
+  </div>
+</section>
+
+<!-- ═══════════ MISSION -->
+<section class="section">
+  <div class="container">
+    <div class="mission-grid">
+      <div class="mission-content">
+        <span class="section-tag" data-i18n="mission_tag"></span>
+        <h2 data-i18n="mission_h2"></h2>
+        <p data-i18n="mission_p1"></p>
+        <p data-i18n="mission_p2"></p>
+      </div>
+      <div class="pain-stats">
+        <div class="pain-stat">
+          <div class="pain-stat-num">35–50</div>
+          <div class="pain-stat-lbl" data-i18n="stat_hours"></div>
+        </div>
+        <div class="pain-stat">
+          <div class="pain-stat-num">1.500+</div>
+          <div class="pain-stat-lbl" data-i18n="stat_docs"></div>
+        </div>
+        <div class="pain-stat">
+          <div class="pain-stat-num">20–30</div>
+          <div class="pain-stat-lbl" data-i18n="stat_clients"></div>
+        </div>
+        <div class="pain-stat">
+          <div class="pain-stat-num">0</div>
+          <div class="pain-stat-lbl" data-i18n="stat_manual"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS -->
+<section class="section" style="background: var(--slate-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-i18n="products_tag"></span>
+      <h2 class="section-title" data-i18n="products_h2"></h2>
+      <p class="section-sub" data-i18n="products_sub"></p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card pc-practice">
+        <div class="product-card-icon">📋</div>
+        <h3>Moddrum Practice</h3>
+        <p data-i18n="pc_practice_desc"></p>
+        <span class="product-pill pill-live" data-i18n="pill_live"></span>
+      </div>
+      <div class="product-card pc-biz">
+        <div class="product-card-icon">🏢</div>
+        <h3>Moddrum Biz</h3>
+        <p data-i18n="pc_biz_desc"></p>
+        <span class="product-pill pill-soon" data-i18n="pill_soon"></span>
+      </div>
+      <div class="product-card pc-connect">
+        <div class="product-card-icon">🔗</div>
+        <h3>Moddrum Connect</h3>
+        <p data-i18n="pc_connect_desc"></p>
+        <span class="product-pill pill-soon" data-i18n="pill_soon"></span>
+      </div>
+      <div class="product-card pc-mcp">
+        <div class="product-card-icon">🤖</div>
+        <h3>Moddrum MCP</h3>
+        <p data-i18n="pc_mcp_desc"></p>
+        <span class="product-pill pill-soon" data-i18n="pill_soon"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ COMPANY & CONTACT -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-i18n="company_tag"></span>
+      <h2 class="section-title" data-i18n="company_h2"></h2>
+    </div>
+    <div class="company-grid">
+      <div class="company-card">
+        <h3 data-i18n="company_card_title"></h3>
+        <div class="company-row">
+          <div class="company-row-icon">🏛</div>
+          <div class="company-row-body">
+            <div class="company-row-label" data-i18n="company_label_name"></div>
+            <div class="company-row-value">MKU d.o.o.</div>
+          </div>
+        </div>
+        <div class="company-row">
+          <div class="company-row-icon">📍</div>
+          <div class="company-row-body">
+            <div class="company-row-label" data-i18n="company_label_address"></div>
+            <div class="company-row-value">[ADDRESS]</div>
+          </div>
+        </div>
+        <div class="company-row">
+          <div class="company-row-icon">🔢</div>
+          <div class="company-row-body">
+            <div class="company-row-label" data-i18n="company_label_reg"></div>
+            <div class="company-row-value">[MATIČNA]</div>
+          </div>
+        </div>
+        <div class="company-row">
+          <div class="company-row-icon">🧾</div>
+          <div class="company-row-body">
+            <div class="company-row-label" data-i18n="company_label_vat"></div>
+            <div class="company-row-value">[DAVČNA]</div>
+          </div>
+        </div>
+        <div class="company-row">
+          <div class="company-row-icon">🌍</div>
+          <div class="company-row-body">
+            <div class="company-row-label" data-i18n="company_label_country"></div>
+            <div class="company-row-value" data-i18n="company_val_country"></div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <h3 data-i18n="contact_card_title"></h3>
+        <div class="contact-row">
+          <div class="contact-row-icon">✉️</div>
+          <div class="contact-row-body">
+            <div class="contact-row-label" data-i18n="contact_label_email"></div>
+            <div class="contact-row-value"><a href="mailto:info@moddrum.com">info@moddrum.com</a></div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">⏱</div>
+          <div class="contact-row-body">
+            <div class="contact-row-label" data-i18n="contact_label_hours"></div>
+            <div class="contact-row-value" data-i18n="contact_val_hours"></div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">🗣</div>
+          <div class="contact-row-body">
+            <div class="contact-row-label" data-i18n="contact_label_lang"></div>
+            <div class="contact-row-value" data-i18n="contact_val_lang"></div>
+          </div>
+        </div>
+        <p class="contact-note" data-i18n="contact_note"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ POLICIES -->
+<section class="section" style="background: var(--slate-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-i18n="policies_tag"></span>
+      <h2 class="section-title" data-i18n="policies_h2"></h2>
+      <p class="section-sub" data-i18n="policies_sub"></p>
+    </div>
+    <div class="policies-grid">
+      <div class="policy-card">
+        <div class="policy-icon">❌</div>
+        <h3 data-i18n="policy_cancel_title"></h3>
+        <p data-i18n="policy_cancel_desc"></p>
+        <ul>
+          <li data-i18n="policy_cancel_1"></li>
+          <li data-i18n="policy_cancel_2"></li>
+          <li data-i18n="policy_cancel_3"></li>
+        </ul>
+      </div>
+      <div class="policy-card">
+        <div class="policy-icon">💰</div>
+        <h3 data-i18n="policy_refund_title"></h3>
+        <p data-i18n="policy_refund_desc"></p>
+        <ul>
+          <li data-i18n="policy_refund_1"></li>
+          <li data-i18n="policy_refund_2"></li>
+          <li data-i18n="policy_refund_3"></li>
+        </ul>
+      </div>
+      <div class="policy-card">
+        <div class="policy-icon">⚖️</div>
+        <h3 data-i18n="policy_dispute_title"></h3>
+        <p data-i18n="policy_dispute_desc"></p>
+        <ul>
+          <li data-i18n="policy_dispute_1"></li>
+          <li data-i18n="policy_dispute_2"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 data-i18n-html="cta_h2"></h2>
+    <p data-i18n="cta_sub"></p>
+    <div class="cta-actions">
+      <a href="https://practice.moddrum.com" class="btn btn-white btn-lg" data-i18n="cta_try"></a>
+    </div>
+    <p class="cta-note" data-i18n="cta_note"></p>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a href="https://moddrum.com/" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
+          </svg>
+          <span class="footer-logo-text">Moddrum</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline"></p>
+      </div>
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_products"></h5>
+          <a href="https://practice.moddrum.com">Moddrum Practice</a>
+          <a href="https://biz.moddrum.com">Moddrum Biz <span class="soon" data-i18n="soon_label"></span></a>
+          <a href="https://connect.moddrum.com">Moddrum Connect <span class="soon" data-i18n="soon_label"></span></a>
+          <a href="https://mcp.moddrum.com">Moddrum MCP <span class="soon" data-i18n="soon_label"></span></a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_practice"></h5>
+          <a href="https://practice.moddrum.com#how-it-works" data-i18n="footer_how"></a>
+          <a href="https://practice.moddrum.com#pricing" data-i18n="footer_pricing"></a>
+          <a href="https://practice.moddrum.com#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer_col_company"></h5>
+          <a href="/about" data-i18n="footer_about"></a>
+          <a href="/privacy" data-i18n="footer_privacy"></a>
+          <a href="/terms" data-i18n="footer_terms"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-i18n="footer_copy"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TRANSLATIONS = {
+  sl: {
+    nav_products: 'Produkti',
+    nav_platform: 'Platforma',
+    nav_practice: 'Moddrum Practice',
+    nav_try_practice: 'Preizkusi Practice →',
+
+    hero_h1: 'O <em>Moddrum-u</em>',
+    hero_sub: 'Gradimo inteligentni vmesni sloj med dokumenti in računovodskimi sistemi — da računovodje delajo manj ročno in več strokovno.',
+
+    mission_tag: 'Poslanstvo',
+    mission_h2: 'Avtomatiziramo rutino, da strokovnjaki delajo samo tisto, kar zna le strokovnjak.',
+    mission_p1: 'Samostojni računovodja s 20–30 strankami obdela 1.500 do 1.800 dokumentov mesečno. Zbiranje, ročni vnos in ujemanje transakcij vzamejo 35–50 ur na mesec — čas, ki bi ga moral porabiti za svetovanje, ne za tipkanje.',
+    mission_p2: 'Moddrum je odgovor na ta problem. Zbiramo dokumente od strank, jih obdelamo z lastnim OCR pogonom, samodejno ujamemo s transakcijami in izvozimo v MiniMax SI — računovodja samo pregleda in potrdi.',
+
+    stat_hours: 'ur mesečno ročnega dela → 0',
+    stat_docs: 'dokumentov / mesec na tipično prakso',
+    stat_clients: 'strank na samostojnega računovodjo',
+    stat_manual: 'ročnih vnosov po implementaciji',
+
+    products_tag: 'Platforma',
+    products_h2: 'Ena platforma, štirje produkti',
+    products_sub: 'Vsak produkt rešuje isti problem z drugega zornega kota. Skupni Moddrum Engine, skupna filozofija.',
+    pc_practice_desc: 'Upravljanje računovodske prakse — zbiranje, obdelava, ujemanje in izvoz v MiniMax SI.',
+    pc_biz_desc: 'Portal za podjetja: pošiljanje dokumentov računovodji brez WhatsAppa.',
+    pc_connect_desc: 'REST API za ekstrakcijo finančnih dokumentov — za razvijalce.',
+    pc_mcp_desc: 'MCP server za LLM agente z dostopom do finančnih dokumentov.',
+    pill_live: '✅ V živo',
+    pill_soon: '🔜 Kmalu',
+
+    company_tag: 'Podjetje',
+    company_h2: 'Podjetje za Moddrum',
+    company_card_title: 'Pravni podatki',
+    company_label_name: 'Ime podjetja',
+    company_label_address: 'Naslov',
+    company_label_reg: 'Matična številka',
+    company_label_vat: 'Davčna številka',
+    company_label_country: 'Država',
+    company_val_country: 'Slovenija',
+
+    contact_card_title: 'Kontakt in podpora',
+    contact_label_email: 'E-pošta',
+    contact_label_hours: 'Odzivni čas',
+    contact_val_hours: 'Delovni dnevi, 9:00–17:00 CET',
+    contact_label_lang: 'Jeziki podpore',
+    contact_val_lang: 'Slovenščina, Angleščina',
+    contact_note: 'Za vprašanja glede naročnine, vračil ali zahtevkov nas kontaktirajte na info@moddrum.com. Odgovorimo v roku enega delovnega dne.',
+
+    policies_tag: 'Pravila',
+    policies_h2: 'Pravila odpovedi, vračil in zahtevkov',
+    policies_sub: 'Moddrum je SaaS storitev brez fizičnih izdelkov. Spodaj so naša pravila.',
+
+    policy_cancel_title: 'Odpoved naročnine',
+    policy_cancel_desc: 'Naročnino lahko odpoveste kadarkoli iz nadzorne plošče.',
+    policy_cancel_1: '14-dnevno brezplačno preizkusno obdobje — ob odpovedi pred iztekom ni stroškov.',
+    policy_cancel_2: 'Ob odpovedi po začetku plačilnega obdobja dostop velja do konca plačanega obdobja.',
+    policy_cancel_3: 'Ni minimalnih pogodb. Ni kazni za odpoved.',
+
+    policy_refund_title: 'Vračila',
+    policy_refund_desc: 'Plačila se zaračunajo vnaprej za plačilno obdobje.',
+    policy_refund_1: 'Ob odpovedi med plačilnim obdobjem delnih vračil ne izdajamo — dostop ostane aktiven do konca obdobja.',
+    policy_refund_2: 'Vračilo ob tehnični napaki ali napaki pri zaračunavanju: pišite na info@moddrum.com.',
+    policy_refund_3: 'Zahtevki za vračilo se obravnavajo individualno in odgovorimo v 5 delovnih dneh.',
+
+    policy_dispute_title: 'Zahtevki in spori',
+    policy_dispute_desc: 'Najprej nas kontaktirajte — večino primerov rešimo hitro brez formalnega postopka.',
+    policy_dispute_1: 'Pišite na info@moddrum.com z opisom težave. Odgovorimo v 48 urah.',
+    policy_dispute_2: 'Formalni spor je možno vložiti pri ponudniku plačil (Stripe), če skupne rešitve ne najdemo.',
+
+    cta_h2: 'Preizkusite <em>Moddrum Practice</em>.',
+    cta_sub: 'Edini produkt v živo. Brezplačno 14 dni, brez kartice.',
+    cta_try: 'Preizkusi brezplačno →',
+    cta_note: '14 dni brezplačno · Ni potrebna kartica · Prekini kadarkoli',
+
+    footer_tagline: 'Avtomatizacija dokumentnega in finančnega podatkovnega sloja za računovodje, razvijalce in podjetja.',
+    footer_col_products: 'Produkti',
+    footer_col_practice: 'Practice',
+    footer_col_company: 'Podjetje',
+    soon_label: 'kmalu',
+    footer_how: 'Kako deluje',
+    footer_pricing: 'Cena',
+    footer_about: 'O nas',
+    footer_privacy: 'Zasebnost',
+    footer_terms: 'Pogoji',
+    footer_copy: '© 2025–2026 MKU d.o.o. Vse pravice pridržane.',
+  },
+
+  en: {
+    nav_products: 'Products',
+    nav_platform: 'Platform',
+    nav_practice: 'Moddrum Practice',
+    nav_try_practice: 'Try Moddrum Practice →',
+
+    hero_h1: 'About <em>Moddrum</em>',
+    hero_sub: 'We build the intelligent layer between documents and accounting systems — so accountants do less manual work and more expert work.',
+
+    mission_tag: 'Mission',
+    mission_h2: 'We automate the routine so experts can do what only experts can do.',
+    mission_p1: 'A solo accountant serving 20–30 clients processes 1,500 to 1,800 documents per month. Collecting, manually entering, and matching transactions takes 35–50 hours a month — time that should be spent on advising, not typing.',
+    mission_p2: 'Moddrum is the answer to that problem. We collect documents from clients, process them with our own OCR engine, automatically match them to bank transactions, and export to MiniMax SI — the accountant only reviews and confirms.',
+
+    stat_hours: 'hours/month of manual work → 0',
+    stat_docs: 'documents / month per typical practice',
+    stat_clients: 'clients per solo accountant',
+    stat_manual: 'manual entries after implementation',
+
+    products_tag: 'Platform',
+    products_h2: 'One platform, four products',
+    products_sub: 'Each product solves the same core problem from a different angle. Shared Moddrum Engine, shared philosophy.',
+    pc_practice_desc: 'Accounting practice management — collection, processing, matching, and export to MiniMax SI.',
+    pc_biz_desc: 'Business portal: send documents to your accountant without WhatsApp.',
+    pc_connect_desc: 'REST API for financial document extraction — for developers.',
+    pc_mcp_desc: 'MCP server for LLM agents with access to financial documents.',
+    pill_live: '✅ Live',
+    pill_soon: '🔜 Coming soon',
+
+    company_tag: 'Company',
+    company_h2: 'The company behind Moddrum',
+    company_card_title: 'Legal details',
+    company_label_name: 'Legal name',
+    company_label_address: 'Registered address',
+    company_label_reg: 'Registration number',
+    company_label_vat: 'VAT / Tax number',
+    company_label_country: 'Country',
+    company_val_country: 'Slovenia',
+
+    contact_card_title: 'Contact & support',
+    contact_label_email: 'Email',
+    contact_label_hours: 'Response time',
+    contact_val_hours: 'Business days, 9:00–17:00 CET',
+    contact_label_lang: 'Support languages',
+    contact_val_lang: 'Slovenian, English',
+    contact_note: 'For questions about your subscription, refunds, or disputes, contact us at info@moddrum.com. We respond within one business day.',
+
+    policies_tag: 'Policies',
+    policies_h2: 'Cancellation, refund & dispute policy',
+    policies_sub: 'Moddrum is a SaaS service with no physical goods. Our policies are below.',
+
+    policy_cancel_title: 'Cancellation',
+    policy_cancel_desc: 'You can cancel your subscription at any time from the dashboard.',
+    policy_cancel_1: '14-day free trial — cancel before it ends and you are not charged.',
+    policy_cancel_2: 'Cancellation after billing starts: access continues until the end of the paid period.',
+    policy_cancel_3: 'No minimum contracts. No cancellation penalties.',
+
+    policy_refund_title: 'Refunds',
+    policy_refund_desc: 'Payments are charged in advance for the billing period.',
+    policy_refund_1: 'Cancellation mid-period: no partial refunds — access remains active until period end.',
+    policy_refund_2: 'Refund for a technical error or billing mistake: email info@moddrum.com.',
+    policy_refund_3: 'Refund requests are reviewed individually and answered within 5 business days.',
+
+    policy_dispute_title: 'Disputes',
+    policy_dispute_desc: 'Contact us first — most cases are resolved quickly without a formal process.',
+    policy_dispute_1: 'Email info@moddrum.com with a description of the issue. We respond within 48 hours.',
+    policy_dispute_2: 'A formal dispute can be filed with our payment provider (Stripe) if we cannot reach a resolution.',
+
+    cta_h2: 'Try <em>Moddrum Practice</em>.',
+    cta_sub: 'The only live product. Free for 14 days, no card required.',
+    cta_try: 'Try for free →',
+    cta_note: '14 days free · No card required · Cancel any time',
+
+    footer_tagline: 'Automation of the document and financial data layer for accountants, developers, and businesses.',
+    footer_col_products: 'Products',
+    footer_col_practice: 'Practice',
+    footer_col_company: 'Company',
+    soon_label: 'soon',
+    footer_how: 'How it works',
+    footer_pricing: 'Pricing',
+    footer_about: 'About',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms',
+    footer_copy: '© 2025–2026 MKU d.o.o. All rights reserved.',
+  }
+};
+
+function setLang(lang) {
+  const t = TRANSLATIONS[lang];
+  if (!t) return;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById('btn-' + lang);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  try { localStorage.setItem('moddrum_lang', lang); } catch(e) {}
+}
+
+// Init: stored preference → browser language → default 'sl'
+(function() {
+  let lang = 'sl';
+  try {
+    const stored = localStorage.getItem('moddrum_lang');
+    if (stored && TRANSLATIONS[stored]) { lang = stored; }
+    else {
+      const browser = (navigator.language || '').toLowerCase();
+      if (browser.startsWith('en')) lang = 'en';
+    }
+  } catch(e) {}
+  setLang(lang);
+  document.documentElement.style.visibility = '';
+})();
+</script>
+</body>
+</html>
