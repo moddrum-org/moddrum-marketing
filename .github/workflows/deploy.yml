@@ -27,6 +27,7 @@ jobs:
             docker run -d \
               --name moddrum-marketing \
               --network moddrum-network \
+              --network-alias marketing \
               --restart unless-stopped \
               moddrum-marketing
             docker network connect --alias marketing moddrum_doc-processor-network moddrum-marketing 2>/dev/null || true
