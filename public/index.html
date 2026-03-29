@@ -236,13 +236,15 @@
     .cta-note { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,.4); }
 
     /* ─── Footer ─── */
-    .footer { background: var(--slate-900); padding: 56px 0 32px; }
-    .footer-top { display: grid; grid-template-columns: 280px 1fr; gap: 64px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
+    .footer { background: var(--slate-900); padding: 48px 0 32px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
     .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 14px; }
     .footer-logo-icon { width: 26px; height: 26px; color: #7eb8ff; }
     .footer-logo-text { font-size: 18px; font-weight: 800; }
-    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.4); line-height: 1.65; margin-bottom: 24px; }
-    .footer-links-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+    .footer-brand { max-width: 280px; }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .footer-links { display: flex; gap: 64px; }
+    .footer-col { min-width: 140px; }
     .footer-col h5 { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
     .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.55); text-decoration: none; margin-bottom: 10px; transition: color .15s; }
     .footer-col a:hover { color: var(--white); }
@@ -266,11 +268,11 @@
       .pr-biz .pr-content, .pr-mcp .pr-content { padding: 48px 32px; align-items: center; }
       .pr-content-inner { max-width: 100%; text-align: center; }
       .trust-grid { grid-template-columns: 1fr 1fr; }
-      .footer-top { grid-template-columns: 1fr; gap: 40px; }
-      .footer-links-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { flex-direction: column; gap: 40px; }
+      .footer-links { flex-wrap: wrap; gap: 32px; }
     }
     @media (max-width: 500px) {
-      .trust-grid, .footer-links-grid { grid-template-columns: 1fr; }
+      .trust-grid { grid-template-columns: 1fr; }
       .engine-grid { grid-template-columns: 1fr 1fr; }
       .pr-notify-form { flex-direction: column; }
     }
@@ -619,7 +621,7 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-top">
-      <div>
+      <div class="footer-brand">
         <a href="/" class="footer-logo">
           <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
             <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
@@ -628,21 +630,13 @@
         </a>
         <p class="footer-tagline" data-i18n="footer_tagline"></p>
       </div>
-      <div class="footer-links-grid">
+      <div class="footer-links">
         <div class="footer-col">
           <h5 data-i18n="footer_col_products"></h5>
           <a href="https://practice.moddrum.com">Moddrum Practice</a>
           <a href="https://biz.moddrum.com">Moddrum Biz <span class="soon" data-i18n="soon_label"></span></a>
-
           <a href="https://connect.moddrum.com">Moddrum Connect <span class="soon" data-i18n="soon_label"></span></a>
           <a href="https://mcp.moddrum.com">Moddrum MCP <span class="soon" data-i18n="soon_label"></span></a>
-        </div>
-        <div class="footer-col">
-          <h5 data-i18n="footer_col_practice"></h5>
-          <a href="https://practice.moddrum.com#how-it-works" data-i18n="footer_how"></a>
-          <a href="https://practice.moddrum.com#pricing" data-i18n="footer_pricing"></a>
-          <a href="https://practice.moddrum.com#faq">FAQ</a>
-          <a href="/docs" data-i18n="footer_docs"></a>
         </div>
         <div class="footer-col">
           <h5 data-i18n="footer_col_company"></h5>
@@ -764,12 +758,8 @@ const TRANSLATIONS = {
 
     footer_tagline: 'Avtomatizacija dokumentnega in finančnega podatkovnega sloja za računovodje, razvijalce in podjetja.',
     footer_col_products: 'Produkti',
-    footer_col_practice: 'Practice',
     footer_col_company: 'Podjetje',
     soon_label: 'kmalu',
-    footer_how: 'Kako deluje',
-    footer_pricing: 'Cena',
-    footer_docs: 'Dokumentacija',
     footer_about: 'O nas',
     footer_privacy: 'Zasebnost',
     footer_terms: 'Pogoji',
@@ -880,12 +870,8 @@ const TRANSLATIONS = {
 
     footer_tagline: 'Automation of the document and financial data layer for accountants, developers, and businesses.',
     footer_col_products: 'Products',
-    footer_col_practice: 'Practice',
     footer_col_company: 'Company',
     soon_label: 'soon',
-    footer_how: 'How it works',
-    footer_pricing: 'Pricing',
-    footer_docs: 'Documentation',
     footer_about: 'About',
     footer_privacy: 'Privacy',
     footer_terms: 'Terms',
