@@ -693,12 +693,12 @@
           <div class="pricing-plan-name" data-i18n="plan_name"></div>
           <div class="pricing-amount">
             <span class="pricing-cur">€</span>
-            <span class="pricing-num">19</span>
+            <span class="pricing-num" id="pricing-plan-price">19</span>
             <span class="pricing-per" data-i18n="per_month"></span>
           </div>
           <p class="pricing-tagline" data-i18n="plan_tagline"></p>
           <div class="included-credit">
-            <div class="included-credit-num">100</div>
+            <div class="included-credit-num" id="pricing-credits-pack">100</div>
             <div class="included-credit-label" data-i18n="credits_included_label"></div>
             <div class="included-credit-sub" data-i18n="credits_included_sub"></div>
           </div>
@@ -714,13 +714,13 @@
           <div class="flat-rate-display">
             <div class="flat-rate-amount">
               <span class="flat-rate-cur">€</span>
-              <span class="flat-rate-num">0</span>
-              <span class="flat-rate-cents">,20</span>
+              <span class="flat-rate-num" id="pricing-per-credit-int">0</span>
+              <span class="flat-rate-cents" id="pricing-per-credit-cents">,20</span>
             </div>
             <div class="flat-rate-label" data-i18n="per_doc_label"></div>
             <div class="flat-rate-badge" data-i18n="per_doc_badge"></div>
           </div>
-          <div class="credit-calc"><p data-i18n-html="credit_example"></p></div>
+          <div class="credit-calc"><p data-i18n-html="credit_example" id="pricing-credit-example"></p></div>
         </div>
       </div>
       <p class="pricing-note" data-i18n="pricing_note"></p>
@@ -1318,6 +1318,81 @@ function setLang(lang) {
 
   // Persist
   try { localStorage.setItem('moddrum_lang', lang); } catch(e) {}
+
+  // Keep dynamic pricing text in sync when language switches.
+  if (window.__pricingData) {
+    renderDynamicPricing(window.__pricingData);
+  }
+}
+
+function formatMoney(value, lang, minFraction, maxFraction) {
+  return new Intl.NumberFormat(lang === 'sl' ? 'sl-SI' : 'en-US', {
+    minimumFractionDigits: minFraction,
+    maximumFractionDigits: maxFraction,
+  }).format(value);
+}
+
+function renderDynamicPricing(pricing) {
+  if (!pricing) return;
+
+  const lang = document.documentElement.lang === 'en' ? 'en' : 'sl';
+  const planPriceRaw = Number(pricing.calculatedPlanPrice);
+  const perCreditRaw = Number(pricing.pricePerCredit);
+  const creditsPerPackRaw = Number(pricing.creditsPerPack);
+
+  if (!Number.isFinite(planPriceRaw) || !Number.isFinite(perCreditRaw) || !Number.isFinite(creditsPerPackRaw)) {
+    return;
+  }
+
+  const planPrice = Number(planPriceRaw.toFixed(2));
+  const perCredit = Number(perCreditRaw.toFixed(2));
+  const creditsPerPack = Math.max(1, Math.round(creditsPerPackRaw));
+
+  const planPriceEl = document.getElementById('pricing-plan-price');
+  if (planPriceEl) {
+    planPriceEl.textContent = formatMoney(planPrice, lang, 0, 2);
+  }
+
+  const creditsPackEl = document.getElementById('pricing-credits-pack');
+  if (creditsPackEl) {
+    creditsPackEl.textContent = String(creditsPerPack);
+  }
+
+  const perCreditIntEl = document.getElementById('pricing-per-credit-int');
+  const perCreditCentsEl = document.getElementById('pricing-per-credit-cents');
+  const roundedPerCredit = perCredit.toFixed(2);
+  const parts = roundedPerCredit.split('.');
+  if (perCreditIntEl && perCreditCentsEl) {
+    perCreditIntEl.textContent = parts[0];
+    perCreditCentsEl.textContent = ',' + parts[1];
+  }
+
+  const creditExampleEl = document.getElementById('pricing-credit-example');
+  if (creditExampleEl) {
+    const extraDocs = 300;
+    const total = planPrice + extraDocs * perCredit;
+    const planText = formatMoney(planPrice, lang, 0, 2);
+    const perCreditText = formatMoney(perCredit, lang, 2, 2);
+    const totalText = formatMoney(total, lang, 0, 2);
+
+    if (lang === 'sl') {
+      creditExampleEl.innerHTML = '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača €' + planText + ' (naročnina + ' + creditsPerPack + ' kreditov) + 300 × €' + perCreditText + ' = <strong>€' + totalText + '/mesec skupaj</strong>.';
+    } else {
+      creditExampleEl.innerHTML = '<strong>Example:</strong> A practice with 400 documents/month pays €' + planText + ' (subscription + ' + creditsPerPack + ' credits) + 300 × €' + perCreditText + ' = <strong>€' + totalText + '/month total</strong>.';
+    }
+  }
+}
+
+async function loadDynamicPricing() {
+  try {
+    const response = await fetch('/api/public/pricing', { cache: 'no-store' });
+    if (!response.ok) return;
+    const pricing = await response.json();
+    window.__pricingData = pricing;
+    renderDynamicPricing(pricing);
+  } catch (e) {
+    // Keep static fallback values when pricing API is unavailable.
+  }
 }
 
 // Init: use stored preference, then browser language, then default to 'sl'
@@ -1332,6 +1407,7 @@ function setLang(lang) {
     }
   } catch(e) {}
   setLang(lang);
+  loadDynamicPricing();
   document.documentElement.style.visibility='';
 })();
 </script>
