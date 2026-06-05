@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23d97706'/><path transform='translate(4,4)' fill='white' d='M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92'/></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23f59e0b'/><stop offset='100%25' stop-color='%23b45309'/></linearGradient></defs><rect width='32' height='32' rx='7' fill='url(%23g)'/><path transform='translate(4,4)' fill='white' d='M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92'/></svg>">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -45,7 +45,17 @@
     .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
     .logo { display: flex; align-items: center; gap: 10px; }
-    .logo-icon { width: 30px; height: 30px; color: var(--amber); }
+    .logo-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, var(--amber-mid), var(--amber-dark));
+      flex-shrink: 0;
+    }
+    .logo-icon { width: 30px; height: 30px; color: var(--white); }
     .logo-badge { font-size: 10px; font-weight: 700; background: var(--amber-light); color: var(--amber-dark); padding: 2px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: .3px; }
     .logo-names { display: flex; flex-direction: column; gap: 0; }
     .logo-parent { font-size: 11px; font-weight: 600; color: var(--slate-400); text-decoration: none; line-height: 1.4; letter-spacing: .1px; transition: color .15s; }
@@ -193,7 +203,21 @@
     .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; text-align: center; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; align-items: center; }
     .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
     .product-card.current { border-color: var(--amber); background: var(--amber-light); }
-    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+    }
+    .product-icon svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+    .product-icon-practice { background: linear-gradient(140deg, #2d6ef5, #0d46cc); }
+    .product-icon-biz { background: linear-gradient(140deg, #f59e0b, #b45309); }
+    .product-icon-connect { background: linear-gradient(140deg, #14b8a6, #0f766e); }
+    .product-icon-mcp { background: linear-gradient(140deg, #8b5cf6, #6d28d9); }
     .product-name { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
     .product-desc { font-size: 12px; color: var(--slate-500); margin-bottom: 10px; line-height: 1.4; flex: 1; }
     .product-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
@@ -203,19 +227,22 @@
     @media (max-width: 860px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr 1fr; } }
 
-    /* ─── Trust ─── */
-    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .trust-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
-    .trust-icon { font-size: 32px; margin-bottom: 12px; }
-    .trust-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
-    .trust-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
-
     /* ─── Footer ─── */
     .footer { background: var(--slate-900); padding: 48px 0 32px; }
     .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
     .footer-brand { max-width: 280px; }
     .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 12px; }
-    .footer-logo-icon { width: 26px; height: 26px; color: #fcd34d; }
+    .footer-logo-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #f59e0b, #b45309);
+      flex-shrink: 0;
+    }
+    .footer-logo-icon { width: 18px; height: 18px; color: var(--white); }
     .footer-logo-text { font-size: 18px; font-weight: 800; }
     .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
     .footer-links { display: flex; gap: 64px; }
@@ -283,7 +310,6 @@
       .pains-grid { grid-template-columns: 1fr 1fr; }
       .hiw-grid, .hiw-grid.reverse { grid-template-columns: 1fr; direction: ltr; }
       .features-grid { grid-template-columns: 1fr 1fr; }
-      .trust-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 600px) {
       .pains-grid, .features-grid { grid-template-columns: 1fr; }
@@ -301,9 +327,11 @@
   <div class="container">
     <div class="header-inner">
       <div class="logo">
-        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/>
-        </svg>
+        <div class="logo-icon-wrap" aria-hidden="true">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/>
+          </svg>
+        </div>
         <div class="logo-names">
           <a href="https://moddrum.com" class="logo-parent">moddrum.com ↗</a>
           <div class="logo-name-row">
@@ -590,18 +618,6 @@
   </div>
 </section>
 
-<!-- ═══════════ TRUST -->
-<section class="section-sm">
-  <div class="container">
-    <div class="trust-grid">
-      <div class="trust-card"><div class="trust-icon">🇸🇮</div><h4 data-i18n="t1_title"></h4><p data-i18n="t1_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🔐</div><h4 data-i18n="t2_title"></h4><p data-i18n="t2_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🏠</div><h4 data-i18n="t3_title"></h4><p data-i18n="t3_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🤝</div><h4 data-i18n="t4_title"></h4><p data-i18n="t4_body"></p></div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══════════ WAITLIST -->
 <section class="waitlist-section" id="waitlist">
   <div class="container">
@@ -626,25 +642,33 @@
     </div>
     <div class="products-grid">
       <a href="https://practice.moddrum.com" class="product-card">
-        <span class="product-icon">📋</span>
+        <span class="product-icon product-icon-practice" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_practice_name"></div>
         <div class="product-desc"  data-i18n="pc_practice_desc"></div>
         <span class="product-badge badge-live" data-i18n="pc_badge_live"></span>
       </a>
       <a href="https://biz.moddrum.com" class="product-card current">
-        <span class="product-icon">🏢</span>
+        <span class="product-icon product-icon-biz" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_biz_name"></div>
         <div class="product-desc"  data-i18n="pc_biz_desc"></div>
         <span class="product-badge badge-here" data-i18n="pc_badge_here"></span>
       </a>
       <a href="https://connect.moddrum.com" class="product-card">
-        <span class="product-icon">🔗</span>
+        <span class="product-icon product-icon-connect" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m18 12 4-4-4-4v3H3v2h15zM6 12l-4 4 4 4v-3h15v-2H6z"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_connect_name"></div>
         <div class="product-desc"  data-i18n="pc_connect_desc"></div>
         <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
       </a>
       <a href="https://mcp.moddrum.com" class="product-card">
-        <span class="product-icon">🤖</span>
+        <span class="product-icon product-icon-mcp" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4z"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_mcp_name"></div>
         <div class="product-desc"  data-i18n="pc_mcp_desc"></div>
         <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
@@ -659,9 +683,11 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="https://biz.moddrum.com" class="footer-logo">
-          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/>
-          </svg>
+          <span class="footer-logo-icon-wrap" aria-hidden="true">
+            <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/>
+            </svg>
+          </span>
           <span class="footer-logo-text">Moddrum Biz</span>
         </a>
         <p class="footer-tagline" data-i18n="footer_tagline"></p>

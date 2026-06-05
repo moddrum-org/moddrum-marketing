@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23135bec'/><path transform='translate(4,4)' fill='white' d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z'/></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%232d6ef5'/><stop offset='100%25' stop-color='%230d46cc'/></linearGradient></defs><rect width='32' height='32' rx='7' fill='url(%23g)'/><path transform='translate(4,4)' fill='white' d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z'/></svg>">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,7 +40,17 @@
     .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
     .logo { display: flex; align-items: center; gap: 10px; }
-    .logo-icon { width: 30px; height: 30px; color: var(--blue); }
+    .logo-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #2d6ef5, #0d46cc);
+      flex-shrink: 0;
+    }
+    .logo-icon { width: 30px; height: 30px; color: var(--white); }
     .logo-names { display: flex; flex-direction: column; gap: 0; }
     .logo-parent { font-size: 11px; font-weight: 600; color: var(--slate-400); text-decoration: none; line-height: 1.4; letter-spacing: .1px; transition: color .15s; }
     .logo-parent:hover { color: var(--blue); }
@@ -134,11 +144,11 @@
     .pain-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
     .pain-card.p0 { border-color: #fca5a5; background: #fff8f8; }
     .pain-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .pain-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .pain-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--slate-700); flex-shrink: 0; }
+    .pain-icon svg { width: 22px; height: 22px; fill: currentColor; display: block; }
     .pain-time { display: flex; flex-direction: column; align-items: flex-end; }
     .pain-time-num { font-size: 22px; font-weight: 800; color: var(--red); line-height: 1; }
     .pain-time-label { font-size: 11px; color: var(--slate-500); }
-    .pain-p0-badge { position: absolute; top: 16px; right: -28px; background: var(--red); color: var(--white); font-size: 10px; font-weight: 800; padding: 3px 36px; transform: rotate(45deg); text-transform: uppercase; }
     .pain-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
     .pain-problem { font-size: 14px; color: var(--slate-600); margin-bottom: 16px; }
     .pain-solution { background: var(--green-light); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--green); font-weight: 500; line-height: 1.5; }
@@ -243,13 +253,6 @@
     blockquote { font-size: clamp(20px, 3vw, 26px); font-weight: 600; line-height: 1.55; color: var(--white); font-style: italic; margin-bottom: 24px; }
     .quote-attribution { font-size: 15px; color: rgba(255,255,255,.7); font-weight: 500; }
 
-    /* ─── Trust ─── */
-    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .trust-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
-    .trust-icon { font-size: 32px; margin-bottom: 12px; }
-    .trust-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
-    .trust-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
-
     /* ─── FAQ ─── */
     .faq-section { background: var(--slate-50); }
     .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
@@ -270,7 +273,21 @@
     .product-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 24px 20px; text-align: center; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; align-items: center; }
     .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
     .product-card.current { border-color: var(--blue); background: var(--blue-light); }
-    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+    }
+    .product-icon svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+    .product-icon-practice { background: linear-gradient(140deg, #2d6ef5, #0d46cc); }
+    .product-icon-biz { background: linear-gradient(140deg, #f59e0b, #b45309); }
+    .product-icon-connect { background: linear-gradient(140deg, #14b8a6, #0f766e); }
+    .product-icon-mcp { background: linear-gradient(140deg, #8b5cf6, #6d28d9); }
     .product-name { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
     .product-desc { font-size: 12px; color: var(--slate-500); margin-bottom: 10px; line-height: 1.4; flex: 1; }
     .product-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
@@ -285,7 +302,17 @@
     .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
     .footer-brand { max-width: 280px; }
     .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 12px; }
-    .footer-logo-icon { width: 26px; height: 26px; color: #7eb8ff; }
+    .footer-logo-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #2d6ef5, #0d46cc);
+      flex-shrink: 0;
+    }
+    .footer-logo-icon { width: 18px; height: 18px; color: var(--white); }
     .footer-logo-text { font-size: 18px; font-weight: 800; }
     .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
     .footer-links { display: flex; gap: 64px; }
@@ -306,7 +333,6 @@
       .features-grid { grid-template-columns: 1fr 1fr; }
       .pricing-main { grid-template-columns: 1fr; }
       .pricing-left { border-right: none; border-bottom: 2px solid var(--slate-100); }
-      .trust-grid { grid-template-columns: 1fr 1fr; }
       .faq-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
@@ -324,9 +350,11 @@
   <div class="container">
     <div class="header-inner">
       <div class="logo">
-        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
-        </svg>
+        <div class="logo-icon-wrap" aria-hidden="true">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+          </svg>
+        </div>
         <div class="logo-names">
           <a href="https://moddrum.com" class="logo-parent">moddrum.com ↗</a>
           <a href="https://practice.moddrum.com" class="logo-product">Moddrum Practice</a>
@@ -459,9 +487,8 @@
 
       <!-- P0: Killer Feature A — Document collection -->
       <div class="pain-card p0">
-        <div class="pain-p0-badge">P0</div>
         <div class="pain-top">
-          <div class="pain-icon" style="background:#fee2e2">📨</div>
+          <div class="pain-icon" style="background:#fee2e2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 4-8 5-8-5V6l8 5 8-5z"/></svg></div>
           <div class="pain-time"><span class="pain-time-num">5–10</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
         </div>
         <h3 data-i18n="p1_title"></h3>
@@ -471,9 +498,8 @@
 
       <!-- P0: Killer Feature B — Accounting system export -->
       <div class="pain-card p0">
-        <div class="pain-p0-badge">P0</div>
         <div class="pain-top">
-          <div class="pain-icon" style="background:#fee2e2">📋</div>
+          <div class="pain-icon" style="background:#fee2e2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-1.11-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.58-2.59L7.5 9l4 4z"/></svg></div>
           <div class="pain-time"><span class="pain-time-num">20–30</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
         </div>
         <h3 data-i18n="p2_title"></h3>
@@ -483,9 +509,8 @@
 
       <!-- P0: Transaction matching -->
       <div class="pain-card p0">
-        <div class="pain-p0-badge">P0</div>
         <div class="pain-top">
-          <div class="pain-icon" style="background:#fee2e2">🔍</div>
+          <div class="pain-icon" style="background:#fee2e2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 14 15.5l.27.28v.79L20 21.5 21.5 20zm-6 0A4.5 4.5 0 1 1 10 5a4.5 4.5 0 0 1-.5 9"/></svg></div>
           <div class="pain-time"><span class="pain-time-num">15–20</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
         </div>
         <h3 data-i18n="p3_title"></h3>
@@ -495,7 +520,7 @@
 
       <div class="pain-card">
         <div class="pain-top">
-          <div class="pain-icon" style="background:#fef3c7">📷</div>
+          <div class="pain-icon" style="background:#fef3c7" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 3h-3.17L14 1H10L8.17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-7 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10m0-2.2A2.8 2.8 0 1 0 12 10a2.8 2.8 0 0 0 0 5.6"/></svg></div>
           <div class="pain-time"><span class="pain-time-num">2–5</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
         </div>
         <h3 data-i18n="p4_title"></h3>
@@ -505,7 +530,7 @@
 
       <div class="pain-card">
         <div class="pain-top">
-          <div class="pain-icon" style="background:#f3e8ff">📄</div>
+          <div class="pain-icon" style="background:#f3e8ff" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5zm-1.59-7.41L15 11.17l-3.41 3.42L10 13l-3 3 1.41 1.41L10 15.83l1.59 1.59 4.82-4.83z"/></svg></div>
           <div class="pain-time"><span class="pain-time-num">1–3</span><span class="pain-time-label" data-i18n="hrs_month"></span></div>
         </div>
         <h3 data-i18n="p5_title"></h3>
@@ -515,7 +540,7 @@
 
       <div class="pain-card">
         <div class="pain-top">
-          <div class="pain-icon" style="background:#ecfdf5">🗓️</div>
+          <div class="pain-icon" style="background:#ecfdf5" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 16H5V10h14zm-3-7h-2v-2h2zm-4 0h-2v-2h2zm-4 0H6v-2h2z"/></svg></div>
           <div class="pain-time"><span class="pain-time-num" data-i18n="p6_time_num"></span><span class="pain-time-label" data-i18n="p6_time_label"></span></div>
         </div>
         <h3 data-i18n="p6_title"></h3>
@@ -647,18 +672,6 @@
   </div>
 </section>
 
-<!-- ═══════════ QUOTE -->
-<section class="quote-section">
-  <div class="container">
-    <div class="quote-inner">
-      <blockquote data-i18n="quote_text"></blockquote>
-      <div class="quote-attribution" data-i18n="quote_attr"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ FEATURES -->
-<section class="section">
   <div class="container">
     <div class="section-header">
       <div class="section-tag" data-i18n="feat_tag"></div>
@@ -693,12 +706,12 @@
           <div class="pricing-plan-name" data-i18n="plan_name"></div>
           <div class="pricing-amount">
             <span class="pricing-cur">€</span>
-            <span class="pricing-num">19</span>
+            <span class="pricing-num" id="pricing-plan-price">19</span>
             <span class="pricing-per" data-i18n="per_month"></span>
           </div>
           <p class="pricing-tagline" data-i18n="plan_tagline"></p>
           <div class="included-credit">
-            <div class="included-credit-num">100</div>
+            <div class="included-credit-num" id="pricing-credits-pack">100</div>
             <div class="included-credit-label" data-i18n="credits_included_label"></div>
             <div class="included-credit-sub" data-i18n="credits_included_sub"></div>
           </div>
@@ -714,28 +727,16 @@
           <div class="flat-rate-display">
             <div class="flat-rate-amount">
               <span class="flat-rate-cur">€</span>
-              <span class="flat-rate-num">0</span>
-              <span class="flat-rate-cents">,20</span>
+              <span class="flat-rate-num" id="pricing-per-credit-int">0</span>
+              <span class="flat-rate-cents" id="pricing-per-credit-cents">,20</span>
             </div>
             <div class="flat-rate-label" data-i18n="per_doc_label"></div>
             <div class="flat-rate-badge" data-i18n="per_doc_badge"></div>
           </div>
-          <div class="credit-calc"><p data-i18n-html="credit_example"></p></div>
+          <div class="credit-calc"><p data-i18n-html="credit_example" id="pricing-credit-example"></p></div>
         </div>
       </div>
       <p class="pricing-note" data-i18n="pricing_note"></p>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ TRUST -->
-<section class="section-sm">
-  <div class="container">
-    <div class="trust-grid">
-      <div class="trust-card"><div class="trust-icon">🇸🇮</div><h4 data-i18n="t1_title"></h4><p data-i18n="t1_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🔐</div><h4 data-i18n="t2_title"></h4><p data-i18n="t2_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🏠</div><h4 data-i18n="t3_title"></h4><p data-i18n="t3_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">📋</div><h4 data-i18n="t4_title"></h4><p data-i18n="t4_body"></p></div>
     </div>
   </div>
 </section>
@@ -780,25 +781,33 @@
     </div>
     <div class="products-grid">
       <a href="https://practice.moddrum.com" class="product-card current">
-        <span class="product-icon">📋</span>
+        <span class="product-icon product-icon-practice" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_practice_name"></div>
         <div class="product-desc"  data-i18n="pc_practice_desc"></div>
         <span class="product-badge badge-here" data-i18n="pc_badge_here"></span>
       </a>
       <a href="https://biz.moddrum.com" class="product-card">
-        <span class="product-icon">🏢</span>
+        <span class="product-icon product-icon-biz" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_biz_name"></div>
         <div class="product-desc"  data-i18n="pc_biz_desc"></div>
         <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
       </a>
       <a href="https://connect.moddrum.com" class="product-card">
-        <span class="product-icon">🔗</span>
+        <span class="product-icon product-icon-connect" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m18 12 4-4-4-4v3H3v2h15zM6 12l-4 4 4 4v-3h15v-2H6z"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_connect_name"></div>
         <div class="product-desc"  data-i18n="pc_connect_desc"></div>
         <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
       </a>
       <a href="https://mcp.moddrum.com" class="product-card">
-        <span class="product-icon">🤖</span>
+        <span class="product-icon product-icon-mcp" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4z"/></svg>
+        </span>
         <div class="product-name" data-i18n="pc_mcp_name"></div>
         <div class="product-desc"  data-i18n="pc_mcp_desc"></div>
         <span class="product-badge badge-soon" data-i18n="pc_badge_soon"></span>
@@ -813,9 +822,11 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="https://practice.moddrum.com" class="footer-logo">
-          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
-          </svg>
+          <span class="footer-logo-icon-wrap" aria-hidden="true">
+            <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+            </svg>
+          </span>
           <span class="footer-logo-text">Moddrum Practice</span>
         </a>
         <p class="footer-tagline" data-i18n="footer_tagline"></p>
@@ -1318,6 +1329,81 @@ function setLang(lang) {
 
   // Persist
   try { localStorage.setItem('moddrum_lang', lang); } catch(e) {}
+
+  // Keep dynamic pricing text in sync when language switches.
+  if (window.__pricingData) {
+    renderDynamicPricing(window.__pricingData);
+  }
+}
+
+function formatMoney(value, lang, minFraction, maxFraction) {
+  return new Intl.NumberFormat(lang === 'sl' ? 'sl-SI' : 'en-US', {
+    minimumFractionDigits: minFraction,
+    maximumFractionDigits: maxFraction,
+  }).format(value);
+}
+
+function renderDynamicPricing(pricing) {
+  if (!pricing) return;
+
+  const lang = document.documentElement.lang === 'en' ? 'en' : 'sl';
+  const planPriceRaw = Number(pricing.calculatedPlanPrice);
+  const perCreditRaw = Number(pricing.pricePerCredit);
+  const creditsPerPackRaw = Number(pricing.creditsPerPack);
+
+  if (!Number.isFinite(planPriceRaw) || !Number.isFinite(perCreditRaw) || !Number.isFinite(creditsPerPackRaw)) {
+    return;
+  }
+
+  const planPrice = Number(planPriceRaw.toFixed(2));
+  const perCredit = Number(perCreditRaw.toFixed(2));
+  const creditsPerPack = Math.max(1, Math.round(creditsPerPackRaw));
+
+  const planPriceEl = document.getElementById('pricing-plan-price');
+  if (planPriceEl) {
+    planPriceEl.textContent = formatMoney(planPrice, lang, 0, 2);
+  }
+
+  const creditsPackEl = document.getElementById('pricing-credits-pack');
+  if (creditsPackEl) {
+    creditsPackEl.textContent = String(creditsPerPack);
+  }
+
+  const perCreditIntEl = document.getElementById('pricing-per-credit-int');
+  const perCreditCentsEl = document.getElementById('pricing-per-credit-cents');
+  const roundedPerCredit = perCredit.toFixed(2);
+  const parts = roundedPerCredit.split('.');
+  if (perCreditIntEl && perCreditCentsEl) {
+    perCreditIntEl.textContent = parts[0];
+    perCreditCentsEl.textContent = ',' + parts[1];
+  }
+
+  const creditExampleEl = document.getElementById('pricing-credit-example');
+  if (creditExampleEl) {
+    const extraDocs = 300;
+    const total = planPrice + extraDocs * perCredit;
+    const planText = formatMoney(planPrice, lang, 0, 2);
+    const perCreditText = formatMoney(perCredit, lang, 2, 2);
+    const totalText = formatMoney(total, lang, 0, 2);
+
+    if (lang === 'sl') {
+      creditExampleEl.innerHTML = '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača €' + planText + ' (naročnina + ' + creditsPerPack + ' kreditov) + 300 × €' + perCreditText + ' = <strong>€' + totalText + '/mesec skupaj</strong>.';
+    } else {
+      creditExampleEl.innerHTML = '<strong>Example:</strong> A practice with 400 documents/month pays €' + planText + ' (subscription + ' + creditsPerPack + ' credits) + 300 × €' + perCreditText + ' = <strong>€' + totalText + '/month total</strong>.';
+    }
+  }
+}
+
+async function loadDynamicPricing() {
+  try {
+    const response = await fetch('/api/public/pricing', { cache: 'no-store' });
+    if (!response.ok) return;
+    const pricing = await response.json();
+    window.__pricingData = pricing;
+    renderDynamicPricing(pricing);
+  } catch (e) {
+    // Keep static fallback values when pricing API is unavailable.
+  }
 }
 
 // Init: use stored preference, then browser language, then default to 'sl'
@@ -1332,6 +1418,7 @@ function setLang(lang) {
     }
   } catch(e) {}
   setLang(lang);
+  loadDynamicPricing();
   document.documentElement.style.visibility='';
 })();
 </script>
