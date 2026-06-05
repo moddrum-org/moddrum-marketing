@@ -30,5 +30,8 @@ jobs:
               --network-alias marketing \
               --restart unless-stopped \
               moddrum-marketing
-            docker network connect --alias marketing moddrum_doc-processor-network moddrum-marketing 2>/dev/null || true
+            docker network connect --alias marketing moddrum_moddrum-network moddrum-marketing 2>/dev/null || true
+            docker inspect moddrum-marketing --format '{{.State.Running}}' | grep true
+            docker inspect moddrum-marketing --format '{{json .NetworkSettings.Networks}}' | grep moddrum_moddrum-network
+            curl -fsS -H 'Host: moddrum.com' http://127.0.0.1/ > /dev/null
           EOF
