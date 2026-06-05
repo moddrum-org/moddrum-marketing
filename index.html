@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231e293b'/><path transform='translate(4,4)' fill='white' d='m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z'/></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23334155'/><stop offset='100%25' stop-color='%230f172a'/></linearGradient></defs><rect width='32' height='32' rx='7' fill='url(%23g)'/><path transform='translate(4,4)' fill='white' d='m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z'/></svg>">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,7 +43,17 @@
     .header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--slate-900); }
-    .logo-icon { width: 30px; height: 30px; color: var(--blue); }
+    .logo-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #334155, #0f172a);
+      flex-shrink: 0;
+    }
+    .logo-icon { width: 30px; height: 30px; color: var(--white); }
     .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
     .nav { display: flex; gap: 32px; align-items: center; }
     .nav a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color .15s; }
@@ -139,7 +149,8 @@
     .pr-pill-live { background: rgba(22,163,74,.2); color: #4ade80; border: 1px solid rgba(74,222,128,.35); }
     .pr-pill-soon { background: rgba(255,255,255,.1); color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.18); }
     /* Icon box */
-    .pr-icon { width: 76px; height: 76px; border-radius: 20px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center; font-size: 38px; margin-bottom: 22px; }
+    .pr-icon { width: 76px; height: 76px; border-radius: 20px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center; margin-bottom: 22px; color: var(--white); }
+    .pr-icon svg { width: 40px; height: 40px; fill: currentColor; display: block; }
     /* Name + audience */
     .pr-name { font-size: clamp(28px, 3.2vw, 44px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; color: var(--white); margin-bottom: 10px; }
     .pr-audience { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.5); margin-bottom: 0; }
@@ -221,13 +232,6 @@
     .s-ready { color: var(--blue); }
     .s-wait { color: var(--amber); }
 
-    /* ─── Trust ─── */
-    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .trust-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--slate-200); padding: 28px 24px; text-align: center; }
-    .trust-icon { font-size: 32px; margin-bottom: 12px; }
-    .trust-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--slate-900); }
-    .trust-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
-
     /* ─── CTA ─── */
     .cta-section { background: linear-gradient(160deg, #0d1b3e 0%, #1a2f6b 60%, #0f47a8 100%); padding: 96px 0; text-align: center; color: var(--white); }
     .cta-section h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; }
@@ -239,7 +243,17 @@
     .footer { background: var(--slate-900); padding: 48px 0 32px; }
     .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 32px; }
     .footer-logo { display: flex; align-items: center; gap: 8px; color: var(--white); text-decoration: none; margin-bottom: 14px; }
-    .footer-logo-icon { width: 26px; height: 26px; color: #7eb8ff; }
+    .footer-logo-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #334155, #0f172a);
+      flex-shrink: 0;
+    }
+    .footer-logo-icon { width: 18px; height: 18px; color: var(--white); }
     .footer-logo-text { font-size: 18px; font-weight: 800; }
     .footer-brand { max-width: 280px; }
     .footer-tagline { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.6; }
@@ -267,12 +281,10 @@
       .pr-content,
       .pr-biz .pr-content, .pr-mcp .pr-content { padding: 48px 32px; align-items: center; }
       .pr-content-inner { max-width: 100%; text-align: center; }
-      .trust-grid { grid-template-columns: 1fr 1fr; }
       .footer-top { flex-direction: column; gap: 40px; }
       .footer-links { flex-wrap: wrap; gap: 32px; }
     }
     @media (max-width: 500px) {
-      .trust-grid { grid-template-columns: 1fr; }
       .engine-grid { grid-template-columns: 1fr 1fr; }
       .pr-notify-form { flex-direction: column; }
     }
@@ -286,9 +298,11 @@
   <div class="container">
     <div class="header-inner">
       <a href="/" class="logo">
-        <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
-        </svg>
+        <div class="logo-icon-wrap" aria-hidden="true">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
+          </svg>
+        </div>
         <span class="logo-text">Moddrum</span>
       </a>
       <nav class="nav">
@@ -382,7 +396,9 @@
     <div class="pr-accent">
       <div class="pr-accent-inner">
         <div class="pr-pill pr-pill-live" style="margin:0 auto 24px" data-i18n="status_live"></div>
-        <div class="pr-icon" style="margin:0 auto 22px">📋</div>
+          <div class="pr-icon" style="margin:0 auto 22px" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/></svg>
+          </div>
         <div class="pr-name">Moddrum<br>Practice</div>
         <div class="pr-audience" data-i18n="practice_for"></div>
         <div class="pr-engine-tag" data-i18n="engine_badge"></div>
@@ -429,7 +445,9 @@
     </div>
     <div class="pr-accent">
       <div class="pr-accent-inner">
-        <div class="pr-icon" style="margin:0 auto 22px">🏢</div>
+          <div class="pr-icon" style="margin:0 auto 22px" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92M18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11M13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92"/></svg>
+          </div>
         <div class="pr-name">Moddrum<br>Biz</div>
         <div class="pr-audience" data-i18n="biz_for"></div>
         <div class="pr-engine-tag" data-i18n="engine_badge"></div>
@@ -441,7 +459,9 @@
   <div class="pr-row pr-connect">
     <div class="pr-accent">
       <div class="pr-accent-inner">
-        <div class="pr-icon" style="margin:0 auto 22px">🔗</div>
+          <div class="pr-icon" style="margin:0 auto 22px" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m18 12 4-4-4-4v3H3v2h15zM6 12l-4 4 4 4v-3h15v-2H6z"/></svg>
+          </div>
         <div class="pr-name">Moddrum<br>Connect</div>
         <div class="pr-audience" data-i18n="connect_for"></div>
         <div class="pr-engine-tag" data-i18n="engine_badge"></div>
@@ -489,7 +509,9 @@
     </div>
     <div class="pr-accent">
       <div class="pr-accent-inner">
-        <div class="pr-icon" style="margin:0 auto 22px">🤖</div>
+          <div class="pr-icon" style="margin:0 auto 22px" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2m0 14H4V8h16zm-2-1h-6v-2h6zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4z"/></svg>
+          </div>
         <div class="pr-name">Moddrum<br>MCP</div>
         <div class="pr-audience" data-i18n="mcp_for"></div>
         <div class="pr-engine-tag" data-i18n="engine_badge"></div>
@@ -592,18 +614,6 @@
   </div>
 </section>
 
-<!-- ═══════════ TRUST -->
-<section class="section-sm">
-  <div class="container">
-    <div class="trust-grid">
-      <div class="trust-card"><div class="trust-icon">🇸🇮</div><h4 data-i18n="t1_title"></h4><p data-i18n="t1_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🔐</div><h4 data-i18n="t2_title"></h4><p data-i18n="t2_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">🏠</div><h4 data-i18n="t3_title"></h4><p data-i18n="t3_body"></p></div>
-      <div class="trust-card"><div class="trust-icon">📋</div><h4 data-i18n="t4_title"></h4><p data-i18n="t4_body"></p></div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══════════ CTA -->
 <section class="cta-section">
   <div class="container">
@@ -623,9 +633,11 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="/" class="footer-logo">
-          <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
-          </svg>
+          <span class="footer-logo-icon-wrap" aria-hidden="true">
+            <svg class="footer-logo-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27z"/>
+            </svg>
+          </span>
           <span class="footer-logo-text">Moddrum</span>
         </a>
         <p class="footer-tagline" data-i18n="footer_tagline"></p>
