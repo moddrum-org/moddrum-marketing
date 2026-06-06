@@ -18,20 +18,21 @@ jobs:
       - name: Pull latest and redeploy container
         run: |
           ssh ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} << 'EOF'
+            set -euo pipefail
+
             cd /opt/moddrum/moddrum-marketing
             git pull
-            docker network create moddrum-network 2>/dev/null || true
+            docker network inspect moddrum_moddrum-network > /dev/null 2>&1 || docker network create moddrum_moddrum-network > /dev/null
             docker stop moddrum-marketing 2>/dev/null || true
             docker rm moddrum-marketing 2>/dev/null || true
             docker build -t moddrum-marketing .
             docker run -d \
               --name moddrum-marketing \
-              --network moddrum-network \
+              --network moddrum_moddrum-network \
               --network-alias marketing \
               --restart unless-stopped \
               moddrum-marketing
-            docker network connect --alias marketing moddrum_moddrum-network moddrum-marketing 2>/dev/null || true
-            docker inspect moddrum-marketing --format '{{.State.Running}}' | grep true
-            docker inspect moddrum-marketing --format '{{json .NetworkSettings.Networks}}' | grep moddrum_moddrum-network
-            curl -fsS -H 'Host: moddrum.com' http://127.0.0.1/ > /dev/null
+            docker inspect moddrum-marketing --format '{{.State.Running}}' | grep -qx 'true'
+            docker inspect moddrum-marketing --format '{{json .NetworkSettings.Networks}}' | grep -q 'moddrum_moddrum-network'
+            curl --fail --silent --show-error --max-time 10 -H 'Host: moddrum.com' http://127.0.0.1/ > /dev/null
           EOF
