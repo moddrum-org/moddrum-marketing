@@ -226,6 +226,7 @@
     .pricing-cur { font-size: 22px; font-weight: 700; color: var(--slate-900); }
     .pricing-num { font-size: 60px; font-weight: 900; color: var(--slate-900); line-height: 1; letter-spacing: -2px; }
     .pricing-per { font-size: 15px; color: var(--slate-500); }
+    .price-vat-note { font-size: 13px; color: var(--slate-500); margin-bottom: 8px; }
     .pricing-tagline { font-size: 14px; color: var(--slate-600); margin-bottom: 28px; line-height: 1.5; }
     .included-credit { background: var(--blue-light); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 24px; }
     .included-credit-num { font-size: 28px; font-weight: 900; color: var(--blue); line-height: 1; }
@@ -705,10 +706,14 @@
         <div class="pricing-left">
           <div class="pricing-plan-name" data-i18n="plan_name"></div>
           <div class="pricing-amount">
-            <span class="pricing-cur">€</span>
-            <span class="pricing-num" id="pricing-plan-price">19</span>
+            <span class="pricing-cur" data-price-currency>€</span>
+            <span class="pricing-num" id="pricing-plan-price">39</span>
             <span class="pricing-per" data-i18n="per_month"></span>
           </div>
+          <!-- VAT label: rendered from taxBehavior + vatRatePct returned by /api/public/pricing.
+               The text below is the static fallback for an unreachable API and must match the
+               shipped default (exclusive, 22, EUR). Do not hardcode a second VAT string. -->
+          <div class="price-vat-note" id="pricing-plan-vat">Cene so brez DDV · + 22 % DDV</div>
           <p class="pricing-tagline" data-i18n="plan_tagline"></p>
           <div class="included-credit">
             <div class="included-credit-num" id="pricing-credits-pack">100</div>
@@ -726,11 +731,12 @@
           <p class="pricing-right-sub" data-i18n="extra_sub"></p>
           <div class="flat-rate-display">
             <div class="flat-rate-amount">
-              <span class="flat-rate-cur">€</span>
+              <span class="flat-rate-cur" data-price-currency>€</span>
               <span class="flat-rate-num" id="pricing-per-credit-int">0</span>
-              <span class="flat-rate-cents" id="pricing-per-credit-cents">,20</span>
+              <span class="flat-rate-cents" id="pricing-per-credit-cents">,30</span>
             </div>
             <div class="flat-rate-label" data-i18n="per_doc_label"></div>
+            <div class="price-vat-note" id="pricing-credit-vat">Cene so brez DDV · + 22 % DDV</div>
             <div class="flat-rate-badge" data-i18n="per_doc_badge"></div>
           </div>
           <div class="credit-calc"><p data-i18n-html="credit_example" id="pricing-credit-example"></p></div>
@@ -1035,7 +1041,7 @@ const TRANSLATIONS = {
     extra_sub: 'Dokupite točno toliko kreditov, kot jih potrebujete. Krediti ne potečejo — brez roka veljavnosti.',
     per_doc_label: 'za vsak dodaten dokument',
     per_doc_badge: 'Enaka cena za 1 ali 10.000 dokumentov',
-    credit_example: '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača €19 (naročnina + 100 kreditov) + 300 × €0,20 = <strong>€79/mesec skupaj</strong>.',
+    credit_example: '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača €39 (naročnina + 100 kreditov) + 300 × €0,30 = <strong>€129/mesec skupaj</strong>.',
     pricing_note: '14 dni brezplačno · Ni potrebna kartica · Prekini kadarkoli',
 
     t1_title: 'Narejen za Slovenijo', t1_body: 'eSLog 2.00, CAMT.053, MiniMax SI, DDV-O — vse po slovenskem standardu in zakonodaji.',
@@ -1255,7 +1261,7 @@ const TRANSLATIONS = {
     extra_sub: 'Purchase exactly as many credits as you need. Credits never expire — they last until you use them.',
     per_doc_label: 'per additional document',
     per_doc_badge: 'Same price for 1 or 10,000 documents',
-    credit_example: '<strong>Example:</strong> A practice with 400 documents/month pays €19 (subscription + 100 credits) + 300 × €0.20 = <strong>€79/month total</strong>.',
+    credit_example: '<strong>Example:</strong> A practice with 400 documents/month pays €39 (subscription + 100 credits) + 300 × €0.30 = <strong>€129/month total</strong>.',
     pricing_note: '14 days free · No card required · Cancel any time',
 
     t1_title: 'Built for Slovenia', t1_body: 'eSLog 2.00, CAMT.053, MiniMax SI, VAT forms — all compliant with Slovenian standards and regulations.',
@@ -1331,6 +1337,7 @@ function setLang(lang) {
   try { localStorage.setItem('moddrum_lang', lang); } catch(e) {}
 
   // Keep dynamic pricing text in sync when language switches.
+  renderTaxLabels();
   if (window.__pricingData) {
     renderDynamicPricing(window.__pricingData);
   }
@@ -1343,10 +1350,76 @@ function formatMoney(value, lang, minFraction, maxFraction) {
   }).format(value);
 }
 
+// The ONE place a VAT wording is written down. Everything else reads it.
+//
+// Whether a price is shown net or all-in is a SETTING on the platform, not copy on this
+// page: /api/public/pricing returns taxBehavior, vatRatePct and currency, and the same
+// stored value is what Stripe is given at checkout. So the number a prospect reads here,
+// the number a customer sees in the app, and the number actually charged cannot disagree.
+//
+// The values below are the only hardcoded VAT wording allowed anywhere: the fallback used
+// when the API is unreachable. They must match the platform's shipped default.
+const PRICING_FALLBACK = { taxBehavior: 'exclusive', vatRatePct: 22, currency: 'EUR' };
+
+function currencySymbol(code) {
+  return code === 'EUR' ? '€' : (code || '');
+}
+
+// Take whatever the API returned (or nothing) and always end up with a usable answer.
+function resolveTaxDisplay(pricing) {
+  const data = pricing || {};
+  const rate = Number(data.vatRatePct);
+  const currency = typeof data.currency === 'string' && data.currency.trim()
+    ? data.currency.trim().toUpperCase()
+    : PRICING_FALLBACK.currency;
+  return {
+    behavior: data.taxBehavior === 'inclusive' || data.taxBehavior === 'exclusive'
+      ? data.taxBehavior
+      : PRICING_FALLBACK.taxBehavior,
+    rate: Number.isFinite(rate) && rate >= 0 ? rate : PRICING_FALLBACK.vatRatePct,
+    currency: currency,
+  };
+}
+
+function vatLabelText(lang, tax) {
+  const rate = formatMoney(tax.rate, lang, 0, 2);
+  if (lang === 'sl') {
+    return tax.behavior === 'inclusive'
+      ? 'Cene vključujejo ' + rate + ' % DDV'
+      : 'Cene so brez DDV · + ' + rate + ' % DDV';
+  }
+  return tax.behavior === 'inclusive'
+    ? 'Prices include ' + rate + '% VAT'
+    : 'Prices exclude VAT · + ' + rate + '% VAT';
+}
+
+function renderTaxLabels() {
+  const lang = document.documentElement.lang === 'en' ? 'en' : 'sl';
+  const tax = resolveTaxDisplay(window.__pricingData);
+  const text = vatLabelText(lang, tax);
+
+  const noteIds = ['pricing-plan-vat', 'pricing-credit-vat'];
+  for (let i = 0; i < noteIds.length; i++) {
+    const el = document.getElementById(noteIds[i]);
+    if (el) el.textContent = text;
+  }
+
+  const symbol = currencySymbol(tax.currency);
+  const currencyEls = document.querySelectorAll('[data-price-currency]');
+  for (let j = 0; j < currencyEls.length; j++) {
+    currencyEls[j].textContent = symbol;
+  }
+}
+
 function renderDynamicPricing(pricing) {
+  // Do this first and unconditionally: the VAT label must be right even if the numbers
+  // below turn out to be unusable.
+  renderTaxLabels();
+
   if (!pricing) return;
 
   const lang = document.documentElement.lang === 'en' ? 'en' : 'sl';
+  const cur = currencySymbol(resolveTaxDisplay(pricing).currency);
   const planPriceRaw = Number(pricing.calculatedPlanPrice);
   const perCreditRaw = Number(pricing.pricePerCredit);
   const creditsPerPackRaw = Number(pricing.creditsPerPack);
@@ -1387,9 +1460,9 @@ function renderDynamicPricing(pricing) {
     const totalText = formatMoney(total, lang, 0, 2);
 
     if (lang === 'sl') {
-      creditExampleEl.innerHTML = '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača €' + planText + ' (naročnina + ' + creditsPerPack + ' kreditov) + 300 × €' + perCreditText + ' = <strong>€' + totalText + '/mesec skupaj</strong>.';
+      creditExampleEl.innerHTML = '<strong>Primer:</strong> Praksa s 400 dokumenti/mesec plača ' + cur + planText + ' (naročnina + ' + creditsPerPack + ' kreditov) + 300 × ' + cur + perCreditText + ' = <strong>' + cur + totalText + '/mesec skupaj</strong>.';
     } else {
-      creditExampleEl.innerHTML = '<strong>Example:</strong> A practice with 400 documents/month pays €' + planText + ' (subscription + ' + creditsPerPack + ' credits) + 300 × €' + perCreditText + ' = <strong>€' + totalText + '/month total</strong>.';
+      creditExampleEl.innerHTML = '<strong>Example:</strong> A practice with 400 documents/month pays ' + cur + planText + ' (subscription + ' + creditsPerPack + ' credits) + 300 × ' + cur + perCreditText + ' = <strong>' + cur + totalText + '/month total</strong>.';
     }
   }
 }
